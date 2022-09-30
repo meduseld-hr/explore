@@ -3,16 +3,20 @@ import ReactDOM from 'react-dom/client'
 import Root from './routes/Root';
 import './index.css'
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
-import Planner from './routes/Planner';
-import Places from './routes/Places';
 import Profile from './routes/Profile';
+import Landing from './routes/Landing';
+import Trips from './routes/Trips';
+import Dashboard from './routes/Dashboard';
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route path='planner' element={<Planner/>}/>
-      <Route path='places' element={<Places/>}/>
+      <Route path='landing' element={<Landing/>}/>
       <Route path='profile' element={<Profile/>}/>
+      <Route path='trips' element={<Trips/>} />
+      <Route path='dashboard' element={<Dashboard/>}>
+      </Route>
     </Route>
   )
 )

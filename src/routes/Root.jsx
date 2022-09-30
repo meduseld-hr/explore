@@ -1,7 +1,21 @@
 import styled from 'styled-components';
 import { Link, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import api from '../functions/api';
 
 export default function Root() {
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    api.get('/profile')
+    .then((response) => {
+      setUser(response.data)
+      console.log(response.data);
+    })
+    .catch(err => console.log(err))
+  }, [])
+
   return (
     <App>
       <Header>
@@ -10,6 +24,7 @@ export default function Root() {
           <Link to={'planner'}>Planner</Link>
           <Link to={'profile'}>Profile</Link>
           <Link to={'places'}>Places</Link>
+          <Link>Login</Link>
         </Links>
       </Header>
       <Outlet/>

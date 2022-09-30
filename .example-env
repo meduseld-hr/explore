@@ -1,0 +1,5 @@
+PGHOST='localhost'
+PGUSER='client'
+PGDATABASE='explore'
+PGPASSWORD='database'
+PGPORT=5432

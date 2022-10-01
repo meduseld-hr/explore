@@ -27,10 +27,6 @@ const config = {
 app.use(express.static(path.join(__dirname, '../dist')));
 app.use(morgan('dev'));
 app.use(auth(config));
-app.use((req, res, next) => {
-  console.log('REQUEST:', req);
-  next();
-})
 
 app.get('/api/profile', requiresAuth(), (req, res) => {
   console.log(req.oidc.user);

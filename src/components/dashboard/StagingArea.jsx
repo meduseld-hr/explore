@@ -15,5 +15,5 @@ const StagingAreaContainer = styled.div`
   height: 100%;
   display: flex;
   margin: .5em;
-  background-color: blue;
+  background-color: #9e9e9e;
 `

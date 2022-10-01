@@ -26,8 +26,8 @@ const config = {
 const server = http.Server(app);
 const io = socketio(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT"]
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT']
   }
 });
 
@@ -42,6 +42,9 @@ app.get('/api/profile', requiresAuth(), (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('connected to dashboard');
+  socket.on('chat message', (message) => {
+    io.emit('chat message', message);
+  })
   socket.on('disconnect', () => {
     console.log('disconnected from dashboard');
     io.emit('leave', socket.id);

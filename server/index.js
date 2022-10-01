@@ -5,7 +5,6 @@ const mountRoutes = require('./routes')
 const { auth, requiresAuth } = require('express-openid-connect');
 require('dotenv').config();
 
-
 //VARIABLE INITIALIZATION
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,13 +29,13 @@ app.use(auth(config));
 app.use((req, res, next) => {
   console.log('REQUEST:', req);
   next();
-})
+});
 
 app.get('/api/profile', requiresAuth(), (req, res) => {
   console.log(req.oidc.user);
   res.send(JSON.stringify(req.oidc.user))
-})
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-})
+});

@@ -47,7 +47,7 @@ export default function ProfileInfo() {
       </div>
       <button onClick={() => { setEditInProgress(true) }}>Update Profile</button>
       {editInProgress ? <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} /> : <div></div>}
-      {trips.map((trip) => { return (<TripTiles trip={trip} />) })}
+      {trips.map((trip) => { return (<TripTiles key={trip.id} trip={trip} />) })}
     </div>
   )
 }

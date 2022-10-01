@@ -1,0 +1,40 @@
+import React from "react";
+import styled from "styled-components";
+
+export default function TripDetail () {
+
+  return (
+    <TripDetailContainer>
+      <ColContainer>
+        <Container>
+          Where Trip Breakdown Goes
+        </Container>
+        <ColContainer>
+          <Container>
+            Where Map Goes
+          </Container>
+          <Container>
+            Where Chat Goes
+          </Container>
+        </ColContainer>
+      </ColContainer>
+    </TripDetailContainer>
+  )
+}
+
+const TripDetailContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin: .5em;
+  background-color: #9e9e9e;
+`
+
+const Container = styled.div`
+  display: flex;
+  border: 2px solid black;
+`
+
+const ColContainer = styled.div`
+  flex-direction: column;
+`

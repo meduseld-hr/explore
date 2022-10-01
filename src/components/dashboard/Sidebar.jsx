@@ -9,6 +9,9 @@ export default function SideBar () {
         src="Logo_Light_v2.png"
         alt="Explore Logo"
       ></Img>
+      <Container>
+        This is where either Trips or Stops go
+      </Container>
       <EndContainer>
         <DarkmodeToggle>☀</DarkmodeToggle>
       </EndContainer>
@@ -26,9 +29,14 @@ const SideBarContainer = styled.div`
   margin: .5em;
   background-color: #c8c8c8;
 `
+const Container = styled.div`
+  display: flex;
+  border: 2px solid black;
+`
+
 const EndContainer = styled.div`
   display: flex;
-  flex-direction: flex-end;
+  align-items: flex-end;
 `
 
 const Img = styled.img`

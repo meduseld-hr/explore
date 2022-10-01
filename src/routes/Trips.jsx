@@ -11,7 +11,7 @@ export default function Trips () {
   return (
     <Container>
       <Sidebar>
-        <Search type="text" value={search}/>
+        <Search type="text" value={search} onChange={e => setSearch(e.target.value)}/>
         <PlanSelector>
           <Selection>Your plans<input type='checkbox'/></Selection>
           <Selection>Shared plans<input type='checkbox'/></Selection>

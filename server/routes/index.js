@@ -1,5 +1,5 @@
-const plans = require('./plans')
+const trips = require('./trips')
 
 module.exports = app => {
-  app.use('/plans', plans)
+  app.use('/api/trips', trips)
 }

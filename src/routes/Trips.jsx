@@ -1,6 +1,7 @@
 import { useState } from "react"
 import styled from "styled-components"
-import TripSidebarCard from "./trips/TripSidebarCard";
+import TripRecommendations from "../components/trips/TripRecommendations";
+import TripSidebarCard from "../components/trips/TripSidebarCard";
 
 
 export default function Trips () {
@@ -21,7 +22,8 @@ export default function Trips () {
         <TripSidebarCard/>
       </Sidebar>
       <Dashboard>
-        Trips go here
+        <TripRecommendations type='recommended'/>
+        <TripRecommendations type='friends'/>
       </Dashboard>
     </Container>
   )

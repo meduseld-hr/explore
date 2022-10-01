@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import styled from "styled-components";
 import { UserContext } from "../contexts/user";
-import Chat from '../components/dashboard/Chat.jsx';
 import SideBar from "../components/dashboard/Sidebar.jsx"
 import StagingArea from "../components/dashboard/StagingArea.jsx"
 
@@ -11,7 +10,6 @@ export default function Dashboard () {
     <DashContainer>
       <SideBar/>
       <StagingArea/>
-      <Chat />
     </DashContainer>
   )
 }

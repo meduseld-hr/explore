@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import Chat from './Chat.jsx';
 
 export default function StagingArea () {
 
   return (
     <StagingAreaContainer>
       Staging Area
+      <Chat />
     </StagingAreaContainer>
   )
 }

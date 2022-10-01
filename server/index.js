@@ -10,9 +10,7 @@ const socketio = require('socket.io');
 //VARIABLE INITIALIZATION
 const app = express();
 const PORT = process.env.PORT || 3000;
-mountRoutes(app);
 const config = {
-  authRequired: false,
   auth0Logout: true,
   secret: process.env.SECRET,
   baseURL: 'http://localhost:3000/',
@@ -34,9 +32,15 @@ const io = socketio(server, {
 //MIDDLEWARE
 app.use(express.static(path.join(__dirname, '../dist')));
 app.use(morgan('dev'));
-app.use(auth(config));
+//ANY ROUTES WITHOUT AUTH
 
-app.get('/api/profile', requiresAuth(), (req, res) => {
+
+//ROUTES WITH AUTH
+app.use(auth(config));
+mountRoutes(app);
+
+app.get('/api/profile', (req, res) => {
+  console.log(req.oidc.user);
   res.send(JSON.stringify(req.oidc.user))
 });
 

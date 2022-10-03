@@ -9,7 +9,7 @@ import Trips from './routes/Trips';
 import Dashboard from './routes/Dashboard';
 import Chat from './components/dashboard/Chat';
 import PostTrip from './components/dashboard/Post-Trip/PostTrip';
-import MapContainer from './components/dashboard/Expanded-Map/MapContainer';
+import Map from './components/dashboard/Expanded-Map/Map.jsx';
 import Details from './components/dashboard/Details';
 
 
@@ -23,7 +23,7 @@ const router = createBrowserRouter(
         <Route path='chat' element={<Chat/>}/>
         <Route path='posttrip' element={<PostTrip/>}/>
         <Route path='details' element={<Details/>}/>
-        <Route path='map' element={<MapContainer/>}/>
+        <Route path='map' element={<Map/>}/>
       </Route>
     </Route>
   )

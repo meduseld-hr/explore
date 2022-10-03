@@ -7,9 +7,7 @@ import {
 
 const MAPS_SECRET = "AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA";
 
-// const libraries = ["places"];
-
-export default function App() {
+export default function Map() {
   //setting libraries variable so that console doesn't give warning anymore, per stackOverflow
   const [libraries] = useState(['places']);
   const {isLoaded, loadError} = useLoadScript({
@@ -20,8 +18,7 @@ export default function App() {
 
   if(loadError) {
     return "Error loading maps";
-  }
-  if(!isLoaded) {
+  }else if(!isLoaded) {
     return "Loading Maps";
   }
 

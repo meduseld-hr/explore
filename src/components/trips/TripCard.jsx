@@ -31,9 +31,10 @@ export default function TripCard({ title = '', image = 'https://cdn.britannica.c
 }
 
 const Card = styled.div`
-  background-color: #c4c4c4;
+  background-color: #dddddd;
   height: 20em;
   width: 24%;
+  min-width: 320px;
   display: flex;
   flex-direction: column;
   border-radius: 1em;

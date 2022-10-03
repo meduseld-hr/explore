@@ -3,8 +3,10 @@ import styled from "styled-components";
 import UserPhotoContainer from "./UserPhotoContainer.jsx";
 import PlacesContainer from "./PlacesContainer.jsx";
 import ChatContainer from "./ChatContainer.jsx";
+import { useParams } from "react-router-dom";
 
 const PostTrip = () => {
+  const {tripId} = useParams();
   return (
     <PostTripContainer class="parent">
       <UserPhotoContainer />

@@ -10,10 +10,10 @@ export default function TripRecommendations({type}) {
         {type} trips
       </Title>
       <Cards>
-        <TripCard/>
-        <TripCard/>
-        <TripCard/>
-        <TripCard/>
+        <TripCard title='rome, italy' image='https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg'/>
+        <TripCard title={'paris, france'} image='https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg'/>
+        <TripCard title='new orleans, louisiana'/>
+        <TripCard title="tokyo, japan"/>
       </Cards>
     </Container>
   )
@@ -28,5 +28,7 @@ const Container = styled.div`
 `
 const Cards = styled.div`
   display: flex;
-  align-content: space-between;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: .5em;
 `

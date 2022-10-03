@@ -6,19 +6,19 @@ const router = new Router();
 
 module.exports = router;
 
-// GET ALL STOPS FOR A SPECIFIED TRIP
+// GET ALL STOPS AND MESSAGES FOR A SPECIFIED TRIP
 
 router.get('/:tripId', (req, res) => {
   const { tripId } = req.params
   const userId = req.oidc.user.sub
 
-  db.getStops(tripId, userId)
-  .then((stops) => {
-    res.status(200).send(stops)
+  Promise.all([db.getStops(tripId, userId), db.getMessages(tripId)])
+  .then((data) => {
+    res.status(200).send(data);
   })
   .catch((err) => {
-    res.status(404).end()
-  })
+    res.status(404).end();
+  });
 })
 
 // POST A NEW STOP TO A TRIP
@@ -80,3 +80,23 @@ router.put('/order', (req, res) => {
     res.status(404).end()
   })
 })
+
+// POST CHAT MESSAGES FOR A SPECIFIED TRIP
+
+router.post('/:tripId', (req, res) => {
+  const messageData = {
+    body: req.body.body,
+    tripId: req.params.tripId,
+    userId: req.oidc.user.sub,
+    timeStamp: Math.floor(req.body.timeStamp / 1000)
+  }
+  db.addMessage(messageData)
+    .then(() => {
+      res.status(200).end();
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(501).end();
+    })
+
+});

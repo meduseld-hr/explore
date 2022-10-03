@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const ChatContainer = () => {
-  return <Chat>Chat here</Chat>;
+const CommentContainer = () => {
+  return <CommentGrid>Comments here</CommentGrid>;
 };
 
-const Chat = styled.div`
+const CommentGrid = styled.div`
   grid-area: 3 / 2 / 7 / 3;
   width: 100%;
   height: 100%;
@@ -13,4 +13,4 @@ const Chat = styled.div`
   border: solid;
 `;
 
-export default ChatContainer;
+export default CommentContainer;

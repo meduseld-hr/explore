@@ -144,6 +144,30 @@ pool.changeStopOrder = ({ stopId, tripId, newOrder }, userId) => {
     .catch((err) => console.log(`Error updating order for stop: `, stopId, err))
 }
 
+pool.getMessages = (tripId) => {
+  return pool
+    .query(
+      `
+      SELECT * FROM messages
+      WHERE trip_id = $1
+      `
+      , [tripId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error getting messages for trip: `, err));
+}
 
+pool.addMessage = ({body, tripId, userId, timeStamp}) => {
+  return pool
+    .query(
+      `
+      INSERT INTO messages (body, trip_id, user_id, time_stamp)
+      VALUES ($1, $2, $3, TO_TIMESTAMP($4))
+      `
+      , [body, tripId, userId, timeStamp]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error adding message to trip: `, err));
+}
 
 module.exports = pool;

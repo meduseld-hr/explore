@@ -7,6 +7,8 @@ import Profile from './routes/Profile';
 import Landing from './routes/Landing';
 import Trips from './routes/Trips';
 import Dashboard from './routes/Dashboard';
+import Chat from './components/dashboard/Chat';
+import PostTrip from './components/dashboard/Post-Trip/PostTrip';
 
 
 const router = createBrowserRouter(
@@ -15,7 +17,9 @@ const router = createBrowserRouter(
       <Route path='landing' element={<Landing/>}/>
       <Route path='profile' element={<Profile/>}/>
       <Route path='trips' element={<Trips/>} />
-      <Route path='dashboard' element={<Dashboard/>}>
+      <Route path='dashboard/:tripId/' element={<Dashboard/>}>
+        <Route path='chat' element={<Chat/>}/>
+        <Route path='posttrip' element={<PostTrip/>}/>
       </Route>
     </Route>
   )

@@ -19,6 +19,13 @@ const Chat = () => {
         [...messages, message]
       ));
     });
+    axios.get('api/dashboard/2')
+      .then((response) => {
+        setMessages(response.data[1]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     return () => {
       socket.current.disconnect();
     }
@@ -40,8 +47,14 @@ const Chat = () => {
       <form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          socket.current.emit('chat message', {body});
-          setBody('');
+          axios.post(`/api/dashboard/2`, {body: body, timeStamp: Date.now()})
+            .then(() => {
+              socket.current.emit('chat message', {body});
+              setBody('');
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       }}>
         <div>

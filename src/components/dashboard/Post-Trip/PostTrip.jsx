@@ -2,16 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import UserPhotoContainer from "./UserPhotoContainer.jsx";
 import PlacesContainer from "./PlacesContainer.jsx";
-import ChatContainer from "./ChatContainer.jsx";
+import CommentContainer from "./CommentContainer.jsx";
 import { useParams } from "react-router-dom";
 
 const PostTrip = () => {
-  const {tripId} = useParams();
+  const { tripId } = useParams();
   return (
     <PostTripContainer>
       <UserPhotoContainer />
       <PlacesContainer />
-      <ChatContainer />
+      <CommentContainer />
     </PostTripContainer>
   );
 };

@@ -30,6 +30,8 @@ const SideBarContainer = styled.div`
 `
 const Container = styled.div`
   display: flex;
+  flex: 1;
+  width: 100%;
   border: 2px solid black;
 `
 

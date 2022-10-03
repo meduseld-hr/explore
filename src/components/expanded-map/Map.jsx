@@ -64,14 +64,14 @@ return (
           return <MarkerF
           key={index}
           position={{lat: marker.coord.lat, lng: marker.coord.lng}}
-          // onClick={(e) => {
-          //   console.log(e.latLng._De);
-          //   return
-          //   <InfoWindow
-          //     position={{lat: 30.258776290155463, lng: -97.89280590399123}}>
-          //       <div style={{background: `white`}}><h1>YO</h1></div>
-          //     </InfoWindow>
-          // }}
+          onClick={(e) => {
+            console.log(e.latLng._De);
+            return
+            <InfoWindow
+              position={{lat: 30.258776290155463, lng: -97.89280590399123}}>
+                <div style={{background: `white`}}><h1>YO</h1></div>
+              </InfoWindow>
+          }}
           />
         })}
 
@@ -82,27 +82,11 @@ return (
         // }
         >
           <Autocomplete>
-            <input
-            type="text"
-            placeholder="Enter Origin Here:"
-            style={{
-              boxSizing: `border-box`,
-              border: `1px solid transparent`,
-              width: `200px`,
-              height: `32px`,
-              padding: `0 12px`,
-              borderRadius: `3px`,
-              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-              fontSize: `14px`,
-              outline: `none`,
-              textOverflow: `ellipses`,
-              position: "absolute",
-              left: "40%",
-              marginLeft: "-120px",
-              marginRight: "-120px"
-            }}
-            ref={originRef}
-            />
+            <OriginInput
+              type="text"
+              placeholder="Enter Origin Here:"
+              ref={originRef}
+              />
           </Autocomplete>
 
         </StandaloneSearchBox>
@@ -113,35 +97,67 @@ return (
         // }
         >
           <Autocomplete>
-            <input
-            type="text"
-            placeholder="Enter Destination Here:"
-            style={{
-              boxSizing: `border-box`,
-              border: `1px solid transparent`,
-              width: `200px`,
-              height: `32px`,
-              padding: `0 12px`,
-              borderRadius: `3px`,
-              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-              fontSize: `14px`,
-              outline: `none`,
-              textOverflow: `ellipses`,
-              position: "absolute",
-              left: "65%",
-              marginLeft: "-120px",
-              marginRight: "-120px"
-            }}
-            ref={destinationRef}
-            />
+
+            <DestinationInput
+              type="text"
+              placeholder="Enter Destination Here:"
+              ref={destinationRef}/>
           </Autocomplete>
         </StandaloneSearchBox>
+
+        <SearchButton type="submit" title="Search"/>
+
       </GoogleMap>
     </MapStyle>
   </Container>
 
   )
 }
+
+const OriginInput = styled.input`
+  boxSizing: border-box;
+  border: 1px solid transparent;
+  width: 180px;
+  height: 32px;
+  padding: 0 12px;
+  borderRadius: 3px;
+  boxShadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  fontSize: 14px;
+  outline: none;
+  textOverflow: ellipses;
+  position: absolute;
+  left: 30%;
+  marginLeft: -120px;
+  marginRight: -120px;
+`;
+
+const DestinationInput = styled.input`
+  boxSizing: border-box;
+  border: 1px solid transparent;
+  width: 180px;
+  height: 32px;
+  padding: 0 12px;
+  borderRadius: 3px;
+  boxShadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  fontSize: 14px;
+  outline: none;
+  textOverflow: ellipses;
+  position: absolute;
+  left: 53%;
+  marginLeft: -120px;
+  marginRight: -120px;
+`;
+  // ref={${destinationRef}}
+
+
+const SearchButton = styled.input`
+  height: 32px;
+  fontSize: 14px;
+  position: absolute;
+  left: 75%;
+  marginLeft: -10px;
+  marginRight: -10px;
+`;
 
 const Container = styled.div`
   display: flex;

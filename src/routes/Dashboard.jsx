@@ -6,7 +6,6 @@ const MAPS_SECRET = "AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA";
 import styled from "styled-components";
 
 
-
 export default function Dashboard () {
   const user = useContext(UserContext);
   // Loads the map using API KEY

@@ -1,4 +1,4 @@
-<img src="public/Logo_Light_v2.png" alt="Explore Logo" width="200"/><br>
+<img src="public/Logo_Light_v2.png" alt="Explore Logo" width="250"/><br>
 #
 Upon completion of this project, the application will provide users a service that allows them to create, edit, and organize trips.<br/>
 The app will be capable of rendering a map view along with the list of destinations of each trip and the details of each destination. There will also be a homepage that shows recommended and highly rated trips as well as a list of all the user’s trips.<br/>
@@ -42,18 +42,17 @@ The color theme of the app is intended to have a friendly, inviting, contemporar
 
 
 ## Team
-### Full-Stack Developers:<br/>
-Nicholas Adam<br/>
-Jeremy Biagiotti<br/>
-Joseph Chou<br/>
-Brian Crouse<br/>
-Grant Deedler<br/> 
-Daniel Elliot<br/>
-Cathy Mosinski<br/>
-| | | |
-|:---------------------:|:---------------------:|:---------------------:|
 |Architecture Owner|Product Manager|UI Owner|
-|Grant Deedler|Cathy Mosinski|Brian Crouse|
+|:---:|:---:|:---:|
+|[Grant Deedler](https://github.com/gdeedler)|[Cathy Mosinski](https://github.com/CatMo9)|[Brian Crouse](https://github.com/ItsCrousie)|
+### Full-Stack Developers:<br/>
+[Nicholas Adam](https://github.com/nicholaspix)<br>
+[Jeremy Biagiotti](https://github.com/Jremedyy)<br>
+[Joseph Chou](https://github.com/JosephChou124)<br>
+[Brian Crouse](https://github.com/ItsCrousie)<br>
+[Grant Deedler](https://github.com/gdeedler)<br> 
+[Daniel Elliot](https://github.com/delliott33)<br>
+[Cathy Mosinski](https://github.com/CatMo9)<br>
 
 ## Tech Used
 ![Vite](https://img.shields.io/badge/-Vite-8034af?logo=vite&logoColor=white&style=flat-square)

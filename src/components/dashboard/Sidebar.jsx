@@ -6,7 +6,7 @@ export default function SideBar ({children}) {
   return (
     <SideBarContainer>
       <Img
-        src="Logo_Light_v2.png"
+        src="/Logo_Light_v2.png"
         alt="Explore Logo"
       ></Img>
       <Container>

@@ -37,7 +37,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 1em;
-  overflow: auto;
+  overflow: hidden;
 `;
 const Title = styled.div`
   font-size: 1.7em;
@@ -47,7 +47,7 @@ const Title = styled.div`
 `;
 const Info = styled.div`
   display: flex;
-  overflow: auto;
+  overflow: hidden;
   position: relative;
 `
 const Image = styled.img`

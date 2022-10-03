@@ -27,9 +27,9 @@ export default function Root() {
             <Link to={'landing'}>Landing</Link>
             <Link to={'trips'}>Trips</Link>
             {user ? (
-              <a href={window.location.origin + '/api/logout'}>Logout</a>
+              <a href={`${window.location.origin}/api/logout?redirect_uri=${window.location.origin}`}>Logout</a>
             ) : (
-              <a href={window.location.origin + '/api/login'}>Login</a>
+              <a href={`${window.location.origin}/api/login?redirect_uri=${window.location.origin}`}>Login</a>
             )}
           </Links>
         </Header>
@@ -40,7 +40,6 @@ export default function Root() {
 }
 
 const App = styled.div`
-  max-width: 1000px;
   margin: auto;
   display: flex;
   flex-direction: column;

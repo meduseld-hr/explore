@@ -5,12 +5,14 @@ import api from '../../functions/api';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
+import {useParams} from "react-router-dom";
 
 TimeAgo.addDefaultLocale(en);
 
 const Chat = () => {
 
   const user = useContext(UserContext);
+  const {tripId} = useParams();
 
   const [body, setBody] = useState('');
   const [messages, setMessages] = useState([]);
@@ -25,9 +27,8 @@ const Chat = () => {
         [...messages, message]
       ));
     });
-    api.get('/dashboard/2')
+    api.get(`/dashboard/${tripId}`)
       .then((response) => {
-        console.log(response.data);
         setMessages(response.data[1]);
       })
       .catch((err) => {
@@ -61,7 +62,7 @@ const Chat = () => {
       <form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          api.post(`/dashboard/2`, {body, timeStamp: Date.now()})
+          api.post(`/dashboard/${tripId}`, {body, timeStamp: Date.now()})
             .then(() => {
               socket.current.emit('chat message', {
                 body,

@@ -40,7 +40,6 @@ export default function Root() {
 }
 
 const App = styled.div`
-  max-width: 1200px;
   margin: auto;
   display: flex;
   flex-direction: column;

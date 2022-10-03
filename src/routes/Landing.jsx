@@ -1,9 +1,9 @@
+import LandingPage from "../components/landing/LandingPage.jsx"
 
-
-export default function Landing () {
+export default function Landing() {
   return (
     <div>
-      Landing is here
+      <LandingPage />
     </div>
   )
 }

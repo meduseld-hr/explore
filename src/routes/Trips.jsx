@@ -2,6 +2,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import TripRecommendations from "../components/trips/TripRecommendations";
 import TripSidebarCard from "../components/trips/TripSidebarCard";
+import SideBar from "../components/dashboard/Sidebar";
 
 
 export default function Trips () {
@@ -10,17 +11,19 @@ export default function Trips () {
 
   return (
     <Container>
-      <Sidebar>
-        <Search type="text" value={search} onChange={e => setSearch(e.target.value)}/>
-        <PlanSelector>
-          <Selection>Your plans<input type='checkbox'/></Selection>
-          <Selection>Shared plans<input type='checkbox'/></Selection>
-        </PlanSelector>
-        <TripSidebarCard/>
-        <TripSidebarCard/>
-        <TripSidebarCard/>
-        <TripSidebarCard/>
-      </Sidebar>
+      <SideBar>
+        <SidebarWrapper>
+          <Search type="text" value={search} onChange={e => setSearch(e.target.value)}/>
+          <PlanSelector>
+            <Selection>Your plans<input type='checkbox'/></Selection>
+            <Selection>Shared plans<input type='checkbox'/></Selection>
+          </PlanSelector>
+          <TripSidebarCard/>
+          <TripSidebarCard/>
+          <TripSidebarCard/>
+          <TripSidebarCard/>
+        </SidebarWrapper>
+      </SideBar>
       <Dashboard>
         <TripRecommendations type='recommended'/>
         <TripRecommendations type='friends'/>
@@ -35,7 +38,8 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 30% auto;
 `
-const Sidebar = styled.div`
+const SidebarWrapper = styled.div`
+  width: 100%;
   grid-column: 1;
   display: flex;
   flex-direction: column;

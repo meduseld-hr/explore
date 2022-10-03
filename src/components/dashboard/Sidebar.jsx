@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function SideBar () {
+export default function SideBar ({children}) {
 
   return (
     <SideBarContainer>
@@ -10,7 +10,7 @@ export default function SideBar () {
         alt="Explore Logo"
       ></Img>
       <Container>
-        This is where either Trips or Stops go
+        {children}
       </Container>
       <EndContainer>
         <DarkmodeToggle>☀</DarkmodeToggle>
@@ -26,7 +26,6 @@ const SideBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin: .5em;
   background-color: #c8c8c8;
 `
 const Container = styled.div`

@@ -30,7 +30,16 @@ pool.getTrips = (userId) => {
     )
     .then((response) => response.rows)
     .catch((err) => console.log('Error retrieving trips', err));
-},
+}
+
+pool.addTrip = ({}, userId) => {
+  return pool
+    .query(
+    `
+
+    `
+  )
+}
 
 // STOPS
 
@@ -114,7 +123,7 @@ pool.changeStopOrder = ({ stopId, tripId, newOrder }, userId) => {
       UPDATE stops s
       SET stop_order = stop_order + 1
       FROM trips_users tu
-      WHERE s.trip_id = tu.trip_id AND s.trip_id = 1 AND tu.user_Id = 'google-oauth2|111292932479104846795' AND s.stop_order >= 5
+      WHERE s.trip_id = tu.trip_id AND s.trip_id = $2 AND tu.user_Id = $3 AND s.stop_order >= $1
       `
       , [newOrder, tripId, userId]
     )

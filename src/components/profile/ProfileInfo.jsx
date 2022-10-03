@@ -41,13 +41,21 @@ export default function ProfileInfo() {
     <div style={{ maxWidth: "70%" }}>
       <div style={{ display: "flex", flexDirection: "row" }}>
         {/* user.picture??? */}
-        <img style={{ height: "10vw", width: "10vw" }} src={"https://picsum.photos/200"} alt="profile pic" />
+        <img
+          style={{ height: "10vw", width: "10vw" }}
+          src={"https://picsum.photos/200"}
+          alt="profile pic"
+        />
         {/* user.nickname */}
         <p>Username: "THIS IS MY PLACEHOLDER NICKNAME"</p>
       </div>
       <button onClick={() => { setEditInProgress(true) }}>Update Profile</button>
-      {editInProgress ? <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} /> : <div></div>}
-      {trips.map((trip) => { return (<TripTiles key={trip.id} trip={trip} />) })}
+      {editInProgress ?
+        <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} />
+        : <div></div>}
+      {trips.map((trip) => {
+        return (<TripTiles key={trip.id} trip={trip} />)
+      })}
     </div>
   )
 }

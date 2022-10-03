@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 const PostTrip = () => {
   const {tripId} = useParams();
   return (
-    <PostTripContainer class="parent">
+    <PostTripContainer>
       <UserPhotoContainer />
       <PlacesContainer />
       <ChatContainer />

@@ -2,13 +2,15 @@ import styled from 'styled-components';
 
 export default function EditProfileModal({ onSubmit, setEditInProgress }) {
   return <div>
-    <GreyBackground onClick={() => { setEditInProgress(false) }}></GreyBackground>
+    <GreyBackground onClick={() => { setEditInProgress(false) }} />
     <TopModal>
       <form>
         <label htmlFor="nickname">Update Nickname</label>
-        <input type="text" /> <br /><br />
+        <input type="text" />
+        <br /><br />
         <label htmlFor="picture">Update PictureURL PLACEHOLDER</label>
-        <input type="text" /><br /><br />
+        <input type="text" />
+        <br /><br />
         <input type="submit" onClick={(e) => { onSubmit(e) }} />
       </form>
     </TopModal>

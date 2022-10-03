@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import {UserContext} from '../../contexts/user';
-import axios from 'axios';
+import api from '../../functions/api';
 
 const Chat = () => {
 
@@ -19,8 +19,9 @@ const Chat = () => {
         [...messages, message]
       ));
     });
-    axios.get('api/dashboard/2')
+    api.get('/dashboard/2')
       .then((response) => {
+        console.log(response.data);
         setMessages(response.data[1]);
       })
       .catch((err) => {
@@ -47,7 +48,7 @@ const Chat = () => {
       <form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          axios.post(`/api/dashboard/2`, {body: body, timeStamp: Date.now()})
+          api.post(`/dashboard/2`, {body: body, timeStamp: Date.now()})
             .then(() => {
               socket.current.emit('chat message', {body});
               setBody('');

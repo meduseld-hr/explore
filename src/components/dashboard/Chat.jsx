@@ -3,9 +3,10 @@ import {UserContext} from '../../contexts/user';
 import api from '../../functions/api';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import ReactTimeAgo from 'react-time-ago';
 
 TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo('en-US')
+const timeAgo = new TimeAgo('en-US');
 
 const Chat = () => {
 
@@ -20,14 +21,13 @@ const Chat = () => {
       withCredentials: false
     });
     socket.current.on('chat message', (message) => {
-      console.log(message);
       setMessages((messages) => (
         [...messages, message]
       ));
     });
     api.get('/dashboard/2')
       .then((response) => {
-        console.log(response.data[1]);
+        console.log(response.data);
         setMessages(response.data[1]);
       })
       .catch((err) => {
@@ -44,7 +44,7 @@ const Chat = () => {
         {messages.map((message, index) => (
           <div key={index}>
             <div>{message.body}</div>
-            <div>{timeAgo.format(message.time_stamp * 1000)}</div>
+            <ReactTimeAgo date={message.time_stamp * 1000} locale='en-US' />
             <div>
               <img src={user.picture} height='32' />
               <div>{user.given_name}</div>

@@ -2,6 +2,12 @@ import React, {useState, useEffect, useRef, useContext} from 'react';
 import styled from 'styled-components';
 import {UserContext} from '../../contexts/user';
 import api from '../../functions/api';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
+import ReactTimeAgo from 'react-time-ago';
+
+TimeAgo.addDefaultLocale(en);
+const timeAgo = new TimeAgo('en-US');
 
 const Chat = () => {
 
@@ -42,6 +48,7 @@ const Chat = () => {
             <MessageBody>
               <strong>{user.given_name}</strong>
               <div>{message.body}</div>
+            <ReactTimeAgo date={message.time_stamp * 1000} locale='en-US' />
             </MessageBody>
           </Message>
         ))}
@@ -49,9 +56,14 @@ const Chat = () => {
       <form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          api.post(`/dashboard/2`, {body: body, timeStamp: Date.now()})
+          api.post(`/dashboard/2`, {body, timeStamp: Date.now()})
             .then(() => {
-              socket.current.emit('chat message', {body});
+              socket.current.emit('chat message', {
+                body,
+                time_stamp: Date.now() / 1000,
+                given_name: user.given_name,
+                picture: user.picture
+              });
               setBody('');
             })
             .catch((err) => {

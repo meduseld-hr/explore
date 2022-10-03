@@ -29,4 +29,6 @@ const Container = styled.div`
 const Cards = styled.div`
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: .5em;
 `

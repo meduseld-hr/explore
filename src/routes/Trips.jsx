@@ -18,6 +18,12 @@ export default function Trips () {
             <Selection>Your plans<input type='checkbox'/></Selection>
             <Selection>Shared plans<input type='checkbox'/></Selection>
           </PlanSelector>
+          <div>Your Plans</div>
+          <TripSidebarCard/>
+          <TripSidebarCard/>
+          <TripSidebarCard/>
+          <TripSidebarCard/>
+          <div>Shared Plans</div>
           <TripSidebarCard/>
           <TripSidebarCard/>
           <TripSidebarCard/>
@@ -27,6 +33,7 @@ export default function Trips () {
       <Dashboard>
         <TripRecommendations type='recommended'/>
         <TripRecommendations type='friends'/>
+        <TripRecommendations type='popular'/>
       </Dashboard>
     </Container>
   )
@@ -43,6 +50,7 @@ const SidebarWrapper = styled.div`
   grid-column: 1;
   display: flex;
   flex-direction: column;
+  gap: .5em;
 `
 const Dashboard = styled.div`
   grid-column: 2;

@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import PostTrip from "./Post-Trip/PostTrip.jsx";
-import Chat from './Chat.jsx';
+import { Outlet } from "react-router-dom";
+
 import { useContext } from "react";
 // import { UserContext } from "../contexts/user";
 import { useLoadScript, GoogleMap, LoadScript} from '@react-google-maps/api';
@@ -16,16 +17,10 @@ export default function StagingArea() {
     libraries: ["places"],
   })
 
-  //returns Loading placeholder while map is being loaded
-  if (!isLoaded) {
-    return <div>Loading...</div>
-  }
 
   return (
     <StagingAreaContainer>
-      <PostTrip />
-      <Chat />
-      {/* <Map /> */}
+      <Outlet/>
     </StagingAreaContainer>
   );
 }

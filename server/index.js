@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const path = require('path');
 const mountRoutes = require('./routes')
+const axios = require('axios');
 const { auth, requiresAuth } = require('express-openid-connect');
 require('dotenv').config();
 
@@ -36,6 +37,8 @@ app.get('/api/profile', requiresAuth(), (req, res) => {
   console.log(req.oidc.user);
   res.send(JSON.stringify(req.oidc.user))
 })
+
+
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

@@ -9,9 +9,10 @@ module.exports = router;
 // GET ALL STOPS AND MESSAGES FOR A SPECIFIED TRIP
 
 router.get('/:tripId', (req, res) => {
-  const { tripId } = req.params;
+  const { tripId } = req.params
+  const userId = req.oidc.user.sub
 
-  Promise.all([db.getStops(tripId), db.getMessages(tripId)])
+  Promise.all([db.getStops(tripId, userId), db.getMessages(tripId)])
   .then((data) => {
     res.status(200).send(data);
   })
@@ -24,8 +25,9 @@ router.get('/:tripId', (req, res) => {
 
 router.post('/', (req, res) => {
   const stopData = req.body
+  const userId = req.oidc.user.sub
 
-  db.addStop(stopData)
+  db.addStop(stopData, userId)
   .then(() => {
     res.status(201).end()
   })
@@ -38,8 +40,9 @@ router.post('/', (req, res) => {
 
 router.delete('/:stopId', (req, res) => {
   const { stopId } = req.params
+  const userId = req.oidc.user.sub
 
-  db.deleteStop(stopId)
+  db.deleteStop(stopId, userId)
   .then((deletedData) => {
     res.status(200).send(deletedData)
   })
@@ -52,8 +55,9 @@ router.delete('/:stopId', (req, res) => {
 
 router.put('/time', (req, res) => {
   const stopData = req.body
+  const userId = req.oidc.user.sub
 
-  db.changeStopTime(stopData)
+  db.changeStopTime(stopData, userId)
   .then(() => {
     res.status(201).end()
   })
@@ -66,8 +70,9 @@ router.put('/time', (req, res) => {
 
 router.put('/order', (req, res) => {
   const stopData = req.body
+  const userId = req.oidc.user.sub
 
-  db.changeStopOrder(stopData)
+  db.changeStopOrder(stopData, userId)
   .then(() => {
     res.status(201).end()
   })

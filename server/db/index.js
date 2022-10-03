@@ -93,7 +93,7 @@ pool.getMessages = (tripId) => {
   return pool
     .query(
       `
-      SELECT * FROM messages
+      SELECT body, trip_id, (SELECT extract(epoch from time_stamp)) AS time_stamp FROM messages
       WHERE trip_id = $1
       `
       , [tripId]

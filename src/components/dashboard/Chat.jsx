@@ -1,6 +1,11 @@
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import {UserContext} from '../../contexts/user';
 import api from '../../functions/api';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
+
+TimeAgo.addDefaultLocale(en);
+const timeAgo = new TimeAgo('en-US')
 
 const Chat = () => {
 
@@ -15,13 +20,14 @@ const Chat = () => {
       withCredentials: false
     });
     socket.current.on('chat message', (message) => {
+      console.log(message);
       setMessages((messages) => (
         [...messages, message]
       ));
     });
     api.get('/dashboard/2')
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data[1]);
         setMessages(response.data[1]);
       })
       .catch((err) => {
@@ -38,6 +44,7 @@ const Chat = () => {
         {messages.map((message, index) => (
           <div key={index}>
             <div>{message.body}</div>
+            <div>{timeAgo.format(message.time_stamp * 1000)}</div>
             <div>
               <img src={user.picture} height='32' />
               <div>{user.given_name}</div>
@@ -48,9 +55,14 @@ const Chat = () => {
       <form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          api.post(`/dashboard/2`, {body: body, timeStamp: Date.now()})
+          api.post(`/dashboard/2`, {body, timeStamp: Date.now()})
             .then(() => {
-              socket.current.emit('chat message', {body});
+              socket.current.emit('chat message', {
+                body,
+                time_stamp: Date.now() / 1000,
+                given_name: user.given_name,
+                picture: user.picture
+              });
               setBody('');
             })
             .catch((err) => {

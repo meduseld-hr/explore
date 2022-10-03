@@ -1,7 +1,7 @@
 import {useState, useMemo, useCallback, useRef} from 'react';
 import {
   GoogleMap,
-  Marker,
+  MarkerF,
   DirectionsRenderer,
   Circle,
   MarkerClusterer,
@@ -18,12 +18,12 @@ const DirectionsResult = google.maps.DirectionsResult;
 const MapOptions = google.maps.MapOptions;
 
 const mapRef = useRef();
-const center = useMemo(() => ({lat: 30.27466235839214, lng: -97.74035019783334}), []);
+const [center, setCenter] = useState({lat: 30.27466235839214, lng: -97.74035019783334});
 const options = useMemo(() => ({
   disableDefaultUI: false,
   clickableIcons: true,
 }), []);
-const onLoad = useCallback((map) => (mapRef.current = map), []);//memoizes map
+// const onLoad = useCallback((map) => (mapRef.current = map), []);//memoizes map
 
 return (
   <Container>
@@ -39,9 +39,9 @@ return (
         center={center}
         mapContainerClassName="map-container"
         options={options}
-        onLoad={onLoad}
+        // onLoad={onLoad}
       >
-        <Marker position={center}/>
+        <MarkerF position={center} z-index={100} onLoad={() => {console.log("HELLO THERE")}}/>
       </GoogleMap>
     </MapStyle>
 

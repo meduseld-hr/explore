@@ -2,6 +2,7 @@ import {useState, useMemo, useCallback, useRef} from 'react';
 import {
   GoogleMap,
   MarkerF,
+  DirectionsService,
   DirectionsRenderer,
   Circle,
   MarkerClusterer,
@@ -18,12 +19,19 @@ const DirectionsResult = google.maps.DirectionsResult;
 const MapOptions = google.maps.MapOptions;
 
 const mapRef = useRef();
-const [center, setCenter] = useState({lat: 30.27466235839214, lng: -97.74035019783334});
 const options = useMemo(() => ({
   disableDefaultUI: false,
   clickableIcons: true,
 }), []);
-// const onLoad = useCallback((map) => (mapRef.current = map), []);//memoizes map
+const onLoad = useCallback((map) => (mapRef.current = map), []);//memoizes map
+
+
+const [center, setCenter] = useState({lat: 30.27466235839214, lng: -97.74035019783334});
+const [markerArray, setMarkerArray] = useState([
+  {coord: {lat: 30.27466235839214, lng: -97.74035019783334}, name: "Texas Capitol"},
+  {coord: {lat: 30.258776290155463, lng: -97.89280590399123}, name: "Home"},
+  {coord: {lat: 30.2665479871577, lng: -97.76877103015458}, name: "Zilker Park"},
+]);
 
 return (
   <Container>
@@ -39,9 +47,12 @@ return (
         center={center}
         mapContainerClassName="map-container"
         options={options}
-        // onLoad={onLoad}
+        onLoad={onLoad}
       >
-        <MarkerF position={center} z-index={100} onLoad={() => {console.log("HELLO THERE")}}/>
+        {markerArray.map(marker => {
+          return <MarkerF position={{lat: marker.coord.lat, lng: marker.coord.lng}}/>
+        })}
+
       </GoogleMap>
     </MapStyle>
 

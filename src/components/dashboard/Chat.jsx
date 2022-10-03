@@ -6,7 +6,6 @@ import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 
 TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo('en-US');
 
 const Chat = () => {
 
@@ -40,14 +39,14 @@ const Chat = () => {
 
   return (
     <div>
-      <div>
+      <div id='messages'>
         {messages.map((message, index) => (
           <div key={index}>
             <div>{message.body}</div>
             <ReactTimeAgo date={message.time_stamp * 1000} locale='en-US' />
             <div>
-              <img src={user.picture} height='32' />
-              <div>{user.given_name}</div>
+              <img src={message.picture} height='32' />
+              <div>{message.nickname}</div>
             </div>
           </div>
         ))}
@@ -60,7 +59,7 @@ const Chat = () => {
               socket.current.emit('chat message', {
                 body,
                 time_stamp: Date.now() / 1000,
-                given_name: user.given_name,
+                nickname: user.nickname,
                 picture: user.picture
               });
               setBody('');

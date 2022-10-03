@@ -43,10 +43,10 @@ const Chat = () => {
       <MessageCont>
         {messages.map((message, index) => (
           <Message key={index}>
-            <Pfp src={user.picture} />
+            <Pfp src={message.picture} />
             <MessageBody>
               <MessageHead>
-                <strong>{user.given_name}</strong>
+                <strong>{message.nickname}</strong>
                 <ReactTimeAgo
                   date={message.time_stamp * 1000}
                   locale='en-US'

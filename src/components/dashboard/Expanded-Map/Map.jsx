@@ -15,7 +15,6 @@ import Places from "./Places.jsx";
 import Distance from "./Distance.jsx";
 import styled from "styled-components";
 
-
 export default function Map() {
 //Google Maps Shortcuts
 const LatLngLiteral = google.maps.LatLng.Literal;

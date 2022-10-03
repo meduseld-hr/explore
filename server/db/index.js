@@ -148,7 +148,11 @@ pool.getMessages = (tripId) => {
   return pool
     .query(
       `
-      SELECT * FROM messages
+      SELECT body, trip_id,
+      (SELECT extract(epoch from time_stamp)) AS time_stamp,
+      (SELECT nickname FROM users WHERE id = user_id) AS nickname,
+      (SELECT picture FROM users WHERE id = user_id) AS picture
+      FROM messages
       WHERE trip_id = $1
       `
       , [tripId]

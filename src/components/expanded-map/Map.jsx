@@ -2,10 +2,14 @@ import {useState, useMemo, useCallback, useRef} from 'react';
 import {
   GoogleMap,
   MarkerF,
+  Polygon,
   DirectionsService,
   DirectionsRenderer,
   Circle,
   MarkerClusterer,
+  StandaloneSearchBox,
+  InfoWindow,
+  Autocomplete
 } from "@react-google-maps/api";
 import Places from "./Places.jsx";
 import Distance from "./Distance.jsx";
@@ -30,8 +34,15 @@ const [center, setCenter] = useState({lat: 30.27466235839214, lng: -97.740350197
 const [markerArray, setMarkerArray] = useState([
   {coord: {lat: 30.27466235839214, lng: -97.74035019783334}, name: "Texas Capitol"},
   {coord: {lat: 30.258776290155463, lng: -97.89280590399123}, name: "Home"},
-  {coord: {lat: 30.2665479871577, lng: -97.76877103015458}, name: "Zilker Park"},
+  // {coord: {lat: 30.2665479871577, lng: -97.76877103015458}, name: "Zilker Park"},
 ]);
+const [directionsResponse, setDirectionsResponse] = useState(null);
+const [distance, setDirections] = useState('');
+const [duration, setDuration] = useState('');
+
+const originRef = useRef();
+const destinationRef = useRef();
+
 
 return (
   <Container>
@@ -49,16 +60,87 @@ return (
         options={options}
         onLoad={onLoad}
       >
-        {markerArray.map(marker => {
-          return <MarkerF position={{lat: marker.coord.lat, lng: marker.coord.lng}}/>
+        {markerArray.map((marker, index) => {
+          return <MarkerF
+          key={index}
+          position={{lat: marker.coord.lat, lng: marker.coord.lng}}
+          // onClick={(e) => {
+          //   console.log(e.latLng._De);
+          //   return
+          //   <InfoWindow
+          //     position={{lat: 30.258776290155463, lng: -97.89280590399123}}>
+          //       <div style={{background: `white`}}><h1>YO</h1></div>
+          //     </InfoWindow>
+          // }}
+          />
         })}
 
+        <StandaloneSearchBox
+        //   onLoad={onLoad}
+        //   onPlacesChanged={
+        //     onPlacesChanged
+        // }
+        >
+          <Autocomplete>
+            <input
+            type="text"
+            placeholder="Enter Origin Here:"
+            style={{
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `200px`,
+              height: `32px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`,
+              position: "absolute",
+              left: "40%",
+              marginLeft: "-120px",
+              marginRight: "-120px"
+            }}
+            ref={originRef}
+            />
+          </Autocomplete>
+
+        </StandaloneSearchBox>
+        <StandaloneSearchBox
+        //   onLoad={onLoad}
+        //   onPlacesChanged={
+        //     onPlacesChanged
+        // }
+        >
+          <Autocomplete>
+            <input
+            type="text"
+            placeholder="Enter Destination Here:"
+            style={{
+              boxSizing: `border-box`,
+              border: `1px solid transparent`,
+              width: `200px`,
+              height: `32px`,
+              padding: `0 12px`,
+              borderRadius: `3px`,
+              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+              fontSize: `14px`,
+              outline: `none`,
+              textOverflow: `ellipses`,
+              position: "absolute",
+              left: "65%",
+              marginLeft: "-120px",
+              marginRight: "-120px"
+            }}
+            ref={destinationRef}
+            />
+          </Autocomplete>
+        </StandaloneSearchBox>
       </GoogleMap>
     </MapStyle>
-
   </Container>
 
-    )
+  )
 }
 
 const Container = styled.div`

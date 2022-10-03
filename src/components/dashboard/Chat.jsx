@@ -46,9 +46,15 @@ const Chat = () => {
           <Message key={index}>
             <Pfp src={user.picture} />
             <MessageBody>
-              <strong>{user.given_name}</strong>
+              <MessageHead>
+                <strong>{user.given_name}</strong>
+                <ReactTimeAgo
+                  date={message.time_stamp * 1000}
+                  locale='en-US'
+                  style={timeStyle}
+                />
+              </MessageHead>
               <div>{message.body}</div>
-            <ReactTimeAgo date={message.time_stamp * 1000} locale='en-US' />
             </MessageBody>
           </Message>
         ))}
@@ -88,6 +94,7 @@ const MessageCont = styled.div`
   overflow: auto;
   gap: 1em;
 `
+
 const Message = styled.div`
   display: flex;
   flex-direction: row;
@@ -98,10 +105,22 @@ const MessageBody = styled(Message)`
   flex-direction: column;
   align-items: flex-start;
 `
+
+const MessageHead = styled.div`
+  display: flex;
+  align-items: baseline;
+  gap: .25em;
+`
+
 const Pfp = styled.img`
   height: 3em;
   border-radius: 1.5em;
   padding-right: 0.5em;
 `
+
+const timeStyle = {
+  fontSize: ".75em",
+  fontStyle: "italic"
+}
 
 export default Chat;

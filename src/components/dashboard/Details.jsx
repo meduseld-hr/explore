@@ -5,23 +5,25 @@ import Chat from './Chat'
 export default function Details() {
 
   return (
-    <Container>
+    <ColContainer>
       <DetailsCont>where the deetz go</DetailsCont>
-      <div>replace with map</div>
-      <Chat />
-    </Container>
+      <Container>
+        <div>replace with map</div>
+        <Chat />
+      </Container>
+    </ColContainer>
   )
 }
 
 const Container = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+`
+
+const ColContainer = styled.div`
+  flex-direction: column;
+  justify-content: space-between;
 `
 
 const DetailsCont = styled(Container)`
-  grid-area: 1 / span 2;
-`
-const B = styled.div`
-  border: 1px solid green;
+
 `

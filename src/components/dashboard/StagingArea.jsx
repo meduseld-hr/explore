@@ -21,6 +21,7 @@ export default function StagingArea() {
   return (
     <StagingAreaContainer>
       <Outlet/>
+      <Map/>
     </StagingAreaContainer>
   );
 }

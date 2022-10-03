@@ -41,6 +41,7 @@ return (
         options={options}
         onLoad={onLoad}
       >
+        <Marker position={center}/>
       </GoogleMap>
     </MapStyle>
 

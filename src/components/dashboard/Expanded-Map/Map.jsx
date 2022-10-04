@@ -5,6 +5,7 @@ import {
   Marker,
   InfoWindow,
   Autocomplete,
+  DirectionsRenderer
 } from "@react-google-maps/api";
 import { Loader } from '@googlemaps/js-api-loader';
 import usePlacesAutocomplete, {
@@ -14,7 +15,9 @@ import usePlacesAutocomplete, {
 import styled from 'styled-components';
 import _ from 'lodash';
 
-const MAPS_SECRET = "AIzaSyBSN7vnZvFPDtAVLBzu8LB0N_MEn5fzHXc";
+const MAPS_SECRET = "AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA";
+
+const libraries = ["places"];
 
 export default function App() {
   //setting libraries variable so that console doesn't give warning anymore, per stackOverflow
@@ -76,6 +79,7 @@ export default function App() {
       ref={mapRef}
       options={mapOptions}
     >
+
       {markers.map((marker, index) => (
         <InfoWindow
           key={index}
@@ -84,31 +88,39 @@ export default function App() {
       ))}
 
 
+
       <Autocomplete>
         <div>
-            <OriginInput
-              type="text"
-              placeholder="Find a location:"
-              ref={searchRef}
-            />
-
-
+          <SearchInput
+            type="text"
+            placeholder="Find a location:"
+            ref={searchRef}
+          />
         </div>
       </Autocomplete>
+
       <SearchButton
         type="submit"
-        title="Search"
+        value="Search"
         onClick={(e) => {
           console.log(searchRef.current.value);
           setLocationSearch(searchRef.current.value);
           searchRef.current.value = '';
-      }}
-        />
 
-      {/* <DestinationInput
-        type="text"
-        placeholder="Enter Destination Here:"
-      /> */}
+          //Add Marker to Map
+          //Pan to Marker on Map
+      }}
+      />
+
+      <AddStopButton
+        type="submit"
+        value="Add Stop"
+        onClick={(e) => {
+
+          //POST stop to trip
+          //Pan to trip route on Map
+        }}
+      />
 
     </GoogleMap>
   </div>;
@@ -131,7 +143,16 @@ const SearchButton = styled.input`
   marginRight: -10px;
 `;
 
-const OriginInput = styled.input`
+const AddStopButton = styled.input`
+  height: 32px;
+  fontSize: 14px;
+  position: absolute;
+  left: 60%;
+  marginLeft: -10px;
+  marginRight: -10px;
+`;
+
+const SearchInput = styled.input`
   boxSizing: border-box;
   border: 1px solid transparent;
   width: 180px;

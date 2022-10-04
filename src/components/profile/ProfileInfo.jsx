@@ -1,7 +1,9 @@
 import TripTiles from "./TripTiles.jsx";
 import EditProfileModal from "./EditProfileModal.jsx";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/user";
+import styled from 'styled-components';
+import api from '../../functions/api';
 
 const dummyDataTripsUsers = {
   results: [
@@ -25,30 +27,69 @@ const dummyDataTripsUsers = {
 
 
 
-export default function ProfileInfo() {
+export default function ProfileInfo({setOpenProfile}) {
   const trips = dummyDataTripsUsers.results;
   const user = useContext(UserContext);
   let [editInProgress, setEditInProgress] = useState(false);
-  const onSubmit = (e) => {
+  let [profilePic, setProfilePic] = useState(user.picture);
+  let [username, setUsername] = useState(user.nickname);
+
+  useEffect(()=>{
+    api.get(`/profileInfo/info`)
+      .then((response)=>{
+        console.log('profile data', response.data[0])
+        let pic = response.data[0].picture
+        let nickname = response.data[0].nickname
+        setProfilePic(pic);
+        setUsername(nickname);
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+
+  const onSubmit = (e, field) => {
     e.preventDefault();
-    console.log('target is -->', e);
-    console.log(e.target.form[0].value, 'is the nickname')
-    console.log(e.target.form[1].value, 'is the picture url placeholder')
+    // console.log('target is -->', e);
+    // console.log(e.target.form[0].value, 'is the changeValue')
+    // console.log(field, 'is the field')
+    let changeValue = e.target.form[0].value;
+    if (field === "nickname") {
+      api.patch(`/profileInfo/updateNickname`, {
+        "nickname": changeValue
+      })
+        .then((response)=> {
+          console.log(response.data)
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
+
+    } else if (field === "picture") {
+      api.patch(`/profileInfo/updateProfilePic`, {
+        "picture": changeValue
+      })
+      .then((response)=> {
+        console.log(response.data)
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
+    }
   }
 
-  // console.log('user is -->', user)
   return (
-    <div style={{ maxWidth: "70%" }}>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        {/* user.picture??? */}
+    <div>
+    <GreyBackground onClick={()=> {setOpenProfile(false)}}/>
+    <TopModal>
+      <RowContainer>
         <img
           style={{ height: "10vw", width: "10vw" }}
-          src={"https://picsum.photos/200"}
+          src={profilePic}
           alt="profile pic"
         />
-        {/* user.nickname */}
-        <p>Username: "THIS IS MY PLACEHOLDER NICKNAME"</p>
-      </div>
+        <p>Username: {username}</p>
+      </RowContainer>
       <button onClick={() => { setEditInProgress(true) }}>Update Profile</button>
       {editInProgress ?
         <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} />
@@ -56,7 +97,35 @@ export default function ProfileInfo() {
       {trips.map((trip) => {
         return (<TripTiles key={trip.id} trip={trip} />)
       })}
+    </TopModal>
+
     </div>
   )
 }
 
+const RowContainer = styled.div`
+  display: "flex";
+  flex-direction: "row";
+`
+
+const GreyBackground = styled.div`
+  background: rgba(0, 0, 0, .5);
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 100;
+  cursor: pointer;
+`;
+
+const TopModal = styled.div`
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+z-index: 101;
+width: 80vw;
+height: 70vh;
+overflow: auto;
+background-color: white;
+padding: 10px;
+`;

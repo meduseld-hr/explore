@@ -8,10 +8,13 @@ export default function EditProfileModal({ onSubmit, setEditInProgress }) {
         <label htmlFor="nickname">Update Nickname</label>
         <input type="text" />
         <br /><br />
+        <input type="submit" value="Update Nickname" onClick={(e) => { onSubmit(e, "nickname") }} />
+      </form>
+      <form>
         <label htmlFor="picture">Update PictureURL PLACEHOLDER</label>
         <input type="text" />
         <br /><br />
-        <input type="submit" onClick={(e) => { onSubmit(e) }} />
+        <input type="submit" value="Update Picture" onClick={(e) => { onSubmit(e, "picture") }} />
       </form>
     </TopModal>
   </div>

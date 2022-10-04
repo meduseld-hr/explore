@@ -174,4 +174,64 @@ pool.addMessage = ({body, tripId, userId, timeStamp}) => {
     .catch((err) => console.log(`Error adding message to trip: `, err));
 }
 
+
+pool.getUserInfo = (userId) => {
+  return pool
+    .query(
+      `
+    SELECT *
+    FROM users
+    WHERE id = $1
+  `,
+  [userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error retrieving trips', err));
+},
+
+pool.insertUser = (userId, nickname, picture, givenName) => {
+  return pool
+    .query(
+      `
+    INSERT INTO users (id, nickname, picture, given_name)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT DO NOTHING
+    RETURNING nickname, picture
+  `,
+  [userId, nickname, picture, givenName]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error creating userInfo', err));
+},
+
+pool.updateUserName = (userId, updatedValue) => {
+  return pool
+    .query(
+      `
+      UPDATE users
+      SET nickname = $1
+      WHERE id = $2
+      RETURNING nickname, picture
+      `,
+      [updatedValue, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error updating userInfo', err));
+},
+
+pool.updateUserPic = (userId, updatedValue) => {
+  return pool
+    .query(
+      `
+      UPDATE users
+      SET picture = $1
+      WHERE id = $2
+      RETURNING nickname, picture
+      `,
+      [updatedValue, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error updating userInfo', err));
+},
+
 module.exports = pool;

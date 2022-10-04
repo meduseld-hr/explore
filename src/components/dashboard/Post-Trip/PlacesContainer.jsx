@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import TileHolder from "./TileHolder.jsx";
+import axios from "axios";
 
 const PlacesContainer = () => {
+  useEffect(() => {
+    let options = {
+      method: "GET",
+      url: "/api/trips",
+    };
+    axios(options)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <ReviewContainer>
       <Title>Review your Trip:</Title>

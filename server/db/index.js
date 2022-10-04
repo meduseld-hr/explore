@@ -148,7 +148,7 @@ pool.getMessages = (tripId) => {
   return pool
     .query(
       `
-      SELECT body, trip_id,
+      SELECT body,
       (SELECT extract(epoch from time_stamp)) AS time_stamp,
       (SELECT nickname FROM users WHERE id = user_id) AS nickname,
       (SELECT picture FROM users WHERE id = user_id) AS picture
@@ -187,7 +187,7 @@ pool.getUserInfo = (userId) => {
     )
     .then((response) => response.rows)
     .catch((err) => console.log('Error retrieving trips', err));
-},
+}
 
 pool.insertUser = (userId, nickname, picture, givenName) => {
   return pool
@@ -202,7 +202,7 @@ pool.insertUser = (userId, nickname, picture, givenName) => {
     )
     .then((response) => response.rows)
     .catch((err) => console.log('Error creating userInfo', err));
-},
+}
 
 pool.updateUserName = (userId, updatedValue) => {
   return pool
@@ -217,7 +217,7 @@ pool.updateUserName = (userId, updatedValue) => {
     )
     .then((response) => response.rows)
     .catch((err) => console.log('Error updating userInfo', err));
-},
+}
 
 pool.updateUserPic = (userId, updatedValue) => {
   return pool
@@ -232,6 +232,36 @@ pool.updateUserPic = (userId, updatedValue) => {
     )
     .then((response) => response.rows)
     .catch((err) => console.log('Error updating userInfo', err));
-},
+}
+
+pool.getComments = (tripId) => {
+  return pool
+  .query(
+    `
+    SELECT body, photos,
+    (SELECT extract(epoch from time_stamp)) AS time_stamp,
+    (SELECT nickname FROM users WHERE id = user_id) AS nickname,
+    (SELECT picture FROM users WHERE id = user_id) AS picture
+    FROM comments
+    WHERE trip_id = $1
+    `
+    , [tripId]
+  )
+  .then((response) => response.rows)
+  .catch((err) => console.log(`Error getting comments for trip: `, err));
+}
+
+pool.addComment = ({body, tripId, userId, timeStamp}) => {
+  return pool
+    .query(
+      `
+      INSERT INTO comments (body, trip_id, user_id, time_stamp)
+      VALUES ($1, $2, $3, TO_TIMESTAMP($4))
+      `
+      , [body, tripId, userId, timeStamp]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error adding comment to trip: `, err));
+}
 
 module.exports = pool;

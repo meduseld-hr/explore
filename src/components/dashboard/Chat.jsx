@@ -79,7 +79,7 @@ const Chat = () => {
       <form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          api.post(`/dashboard/${tripId}`, {body, timeStamp: Date.now()})
+          api.post(`/dashboard/${tripId}/chat`, {body, timeStamp: Date.now()})
             .then(() => {
               socket.current.emit('chat message', {
                 body,

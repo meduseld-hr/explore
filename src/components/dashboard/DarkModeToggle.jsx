@@ -25,7 +25,7 @@ const Switch = styled.div`
     height: 28px;
     border-radius: 35px;
     top: 50%;
-    left: 4px;
+    left: 0px;
     background: white;
     border: solid;
     border-width: thin;

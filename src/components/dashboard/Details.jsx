@@ -16,9 +16,9 @@ export default function Details() {
               <Btn><PlusIcon icon={faPlus}></PlusIcon></Btn>
             </Cont>
             <Cont>
-              <Cont>
+              <PicContainer>
                 Picture Grid
-              </Cont>
+              </PicContainer>
               <Cont>
                 Info
               </Cont>
@@ -54,20 +54,38 @@ const ColCont = styled(Cont)`
 `
 
 const SmallCont = styled.div`
+  width: 50%;
   height: 50%;
   display: flex;
   flex: 1 0 50%;
+  padding: 1em;
   border: 1px solid black;
+  border-radius: 2em;
+`
+const PicContainer = styled.div`
+  flex: 1;
+  height: 50%;
+  width: 50%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+`
+
+const InfoContainer = styled.div`
+  flex: 1;
+  height: 50%;
+  width: 50%;
 `
 
 const Btn = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: 2em;
   height: 2em;
   border: 2px solid black;
   border-radius: 1em;
+  background-color: white;
 `
 
 const PlusIcon = styled(FontAwesomeIcon)`

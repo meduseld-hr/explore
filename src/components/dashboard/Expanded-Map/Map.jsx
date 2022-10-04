@@ -59,7 +59,7 @@ export default function App() {
     const loader = new Loader({apiKey:MAPS_SECRET})
     loader.load().then(() => {
       const service = new google.maps.places.PlacesService(mapRef.current.state.map);
-      service.nearbySearch({bounds: bounds}, (places) => {
+      service.nearbySearch({bounds: bounds, type: 'tourist_attraction'}, (places) => {
         setMarkers(places);
       });
     })
@@ -78,39 +78,12 @@ export default function App() {
     >
 
       {markers.map((marker, index) => (
-      <div>
-
-        {/* <Marker
-          key={index}
-          position={{lat: marker.lat, lng: marker.lng}}
-          label={marker.name}
-          icon={marker.icon}
-        /> */}
         <InfoWindow
-        position={marker.geometry.location}
-        key={index}
-        >
-          <div>
-            {marker.name}
-          </div>
-        </InfoWindow>
-      </div>
-
-
-
+          key={index}
+          position={marker.geometry.location}
+        ><Info marker={marker}/></InfoWindow>
       ))}
-{/*
-      {selected ? (
-      <InfoWindow
-        position={{lat: selected.lat, lng: selected.lng}}
-        onCloseClick={() => {
-          setSelected(null);
-        }}
-      >
-        <div>
 
-        </div>
-      </InfoWindow>) : null} */}
 
 
       <Autocomplete>
@@ -148,6 +121,14 @@ export default function App() {
 
     </GoogleMap>
   </div>;
+}
+
+const Info = ({marker: {name}}) => {
+  return (
+    <Popup>
+      {name}
+    </Popup>
+  )
 }
 
 const SearchButton = styled.input`
@@ -189,3 +170,6 @@ const mapContainerStyle = {
   width: '100vw',
   height: '100vh',
 };
+const Popup = styled.div`
+
+`

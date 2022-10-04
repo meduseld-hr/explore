@@ -31,6 +31,7 @@ const io = socketio(server, {
 
 //MIDDLEWARE
 app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.json());
 app.use(morgan('dev'));
 //ANY ROUTES WITHOUT AUTH
 
@@ -48,7 +49,7 @@ io.on('connection', (socket) => {
   console.log('connected to dashboard');
   socket.on('chat message', (message) => {
     io.emit('chat message', message);
-  })
+  });
   socket.on('disconnect', () => {
     console.log('disconnected from dashboard');
     io.emit('leave', socket.id);

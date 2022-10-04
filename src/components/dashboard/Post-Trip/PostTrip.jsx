@@ -2,16 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import UserPhotoContainer from "./UserPhotoContainer.jsx";
 import PlacesContainer from "./PlacesContainer.jsx";
-import ChatContainer from "./ChatContainer.jsx";
+import CommentContainer from "./CommentContainer.jsx";
 import { useParams } from "react-router-dom";
 
 const PostTrip = () => {
-  const {tripId} = useParams();
+  const { tripId } = useParams();
   return (
     <PostTripContainer>
       <UserPhotoContainer />
       <PlacesContainer />
-      <ChatContainer />
+      <CommentContainer />
     </PostTripContainer>
   );
 };
@@ -19,7 +19,7 @@ const PostTrip = () => {
 const PostTripContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-rows: repeat(9, 1fr);
   grid-column-gap: 13px;
   grid-row-gap: 10px;
   width: 100%;

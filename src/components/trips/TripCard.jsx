@@ -45,6 +45,7 @@ const Title = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0em 1em;
+  user-select: none;
 `;
 const Info = styled.div`
   display: flex;
@@ -74,4 +75,7 @@ const Icons = styled.div`
 `
 const Icon = styled(FontAwesomeIcon)`
   font-size: 2em;
+  &:hover{
+    filter: brightness(120%);
+  }
 `

@@ -39,7 +39,7 @@ const Chat = () => {
   }, []);
 
   return (
-    <div>
+    <ChatCont>
       <MessageCont>
         {messages.map((message, index) => (
           <Message key={index}>
@@ -77,21 +77,32 @@ const Chat = () => {
         }
       }}>
         <div>
-          <input type='text' value={body} onChange={(e) => {
-            setBody(e.target.value);
-          }} />
+          <Input
+            type='text'
+            value={body}
+            onChange={(e) => {
+              setBody(e.target.value);
+            }
+          } />
           <input type='submit' />
         </div>
       </form>
-    </div>
+    </ChatCont>
   )
 };
+
+const ChatCont = styled.div`
+  max-height: 500px;
+  width: 100%;
+`
 
 const MessageCont = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
   gap: 1em;
+  height: 90%;
+  width: 100%;
 `
 
 const Message = styled.div`
@@ -114,12 +125,21 @@ const MessageHead = styled.div`
 const Pfp = styled.img`
   height: 3em;
   border-radius: 1.5em;
-  padding-right: 0.5em;
+  margin-right: 0.5em;
 `
 
 const timeStyle = {
   fontSize: ".75em",
   fontStyle: "italic"
 }
+
+const Form = styled.form`
+  display: flex;
+`
+
+const Input = styled.input`
+  display: inline-block;
+  width: 80%;
+`
 
 export default Chat;

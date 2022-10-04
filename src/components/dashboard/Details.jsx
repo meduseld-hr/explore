@@ -5,25 +5,33 @@ import Chat from './Chat'
 export default function Details() {
 
   return (
-    <ColContainer>
-      <DetailsCont>where the deetz go</DetailsCont>
-      <Container>
-        <div>replace with map</div>
-        <Chat />
-      </Container>
-    </ColContainer>
+    <ColCont>
+      <Cont>
+        where the deetz go
+      </Cont>
+      <Cont>
+        <SmallCont>
+          replace with map
+        </SmallCont>
+        <SmallCont>
+          <Chat />
+        </SmallCont>
+      </Cont>
+    </ColCont>
   )
 }
 
-const Container = styled.div`
+const Cont = styled.div`
   display: flex;
+  width: 100%;
+  flex: 1;
 `
 
-const ColContainer = styled.div`
+const ColCont = styled(Cont)`
   flex-direction: column;
-  justify-content: space-between;
 `
 
-const DetailsCont = styled(Container)`
-
+const SmallCont = styled.div`
+  display: flex;
+  flex: 1 0 50%;
 `

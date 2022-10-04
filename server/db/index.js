@@ -21,7 +21,7 @@ pool.getTrips = (userId) => {
   return pool
     .query(
       `
-    SELECT t.id, t.trip_name, t.origin_google_place_id, t.completed, t.public
+    SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public
     FROM trips t
     INNER JOIN trips_users tu ON tu.trip_id = t.id
     WHERE tu.user_id = $1
@@ -32,13 +32,114 @@ pool.getTrips = (userId) => {
     .catch((err) => console.log('Error retrieving trips', err));
 }
 
-pool.addTrip = ({}, userId) => {
+pool.addTrip = ({ tripName, googlePlaceId, thumbnailUrl, completed, public }, userId) => {
   return pool
     .query(
-    `
-
-    `
+      `
+      INSERT INTO trips (trip_name, origin_google_place_id, thumbnail_url, completed, public)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id
+      `
+      , [tripName, googlePlaceId, thumbnailUrl, completed, public]
   )
+  .then((response) => {
+    var tripId = response.rows.id;
+
+    return pool
+      .query(
+        `
+        INSERT INTO trips_users (trip_id, user_id, trip_owner, liked, added)
+        VALUES ($1, $2, $3, $4, $5)
+        `
+        , [tripId, userId, true, true, true]
+      )
+      .then((response) => response.rows)
+      .catch((err) => console.log(`Error adding trip `, err))
+  })
+  .catch((err) => console.log(`Error adding trip `, err))
+}
+
+pool.getPopularTrips = () => {
+  return pool
+    .query(
+      `
+      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public, COUNT(tu.liked) AS count
+      FROM trips t
+      INNER JOIN trips_users tu ON tu.trip_id = t.id
+      WHERE tu.liked = true AND t.public = true
+      GROUP BY t.id
+      ORDER BY count DESC
+      `
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error retrieving popular trips`, err))
+}
+
+pool.getRecentTrips = () => {
+  return pool
+    .query(
+      `
+      SELECT id, trip_name, origin_google_place_id, thumbnail_url, completed, public
+      FROM trips
+      WHERE public = true
+      ORDER BY id DESC
+      `
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error retrieving recent trips`, err))
+}
+
+pool.getRecommendedTrips = () => {
+  return pool
+    .query(
+      `
+      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public, COUNT(tu.added) AS count
+      FROM trips t
+      INNER JOIN trips_users tu ON tu.trip_id = t.id
+      WHERE tu.added = true AND t.public = true
+      GROUP BY t.id
+      ORDER BY count DESC
+      `
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error retrieving recommended trips`, err))
+}
+
+pool.deleteTrip = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      DELETE FROM trips t
+      USING trips_users tu
+      WHERE t.trip_id = tu.trip_id AND t.id = $1 AND tu.user_id = $2 AND tu.owner = true
+      RETURNING *
+      `
+      , [tripId, userId]
+    )
+    .then((response) => {
+      if (response.rows.length > 0) {
+        return pool
+          .query(
+            `
+            WITH
+            tu AS (DELETE FROM trips_users
+              WHERE trip_id = $1),
+            m AS (DELETE FROM messages
+              WHERE trip_id = $1),
+            c AS (DELETE FROM comments
+              WHERE trip_id = $1)
+            DELETE FROM stops
+              WHERE trip_id = $1
+            `
+            , [tripId]
+          )
+          .then((response) => response.rows)
+          .catch((err) => console.log(`Error deleting trip: `, tripId, err))
+      } else {
+        return `Unauthorized user or not trip owner: ${userId} for Trip id: ${tripId}`;
+      }
+    })
+    .catch((err) => console.log(`Error deleting trip: `, tripId, err))
 }
 
 // STOPS
@@ -173,5 +274,67 @@ pool.addMessage = ({body, tripId, userId, timeStamp}) => {
     .then((response) => response.rows)
     .catch((err) => console.log(`Error adding message to trip: `, err));
 }
+
+
+pool.getUserInfo = (userId) => {
+  return pool
+    .query(
+      `
+    SELECT *
+    FROM users
+    WHERE id = $1
+  `,
+  [userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error retrieving trips', err));
+},
+
+pool.insertUser = (userId, nickname, picture, givenName) => {
+  return pool
+    .query(
+      `
+    INSERT INTO users (id, nickname, picture, given_name)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT DO NOTHING
+    RETURNING nickname, picture
+  `,
+  [userId, nickname, picture, givenName]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error creating userInfo', err));
+},
+
+pool.updateUserName = (userId, updatedValue) => {
+  return pool
+    .query(
+      `
+      UPDATE users
+      SET nickname = $1
+      WHERE id = $2
+      RETURNING nickname, picture
+      `,
+      [updatedValue, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error updating userInfo', err));
+},
+
+pool.updateUserPic = (userId, updatedValue) => {
+  return pool
+    .query(
+      `
+      UPDATE users
+      SET picture = $1
+      WHERE id = $2
+      RETURNING nickname, picture
+      `,
+      [updatedValue, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error updating userInfo', err));
+},
+
+
 
 module.exports = pool;

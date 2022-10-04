@@ -18,8 +18,7 @@ const TileHolder = (props) => {
 const Holder = styled.div`
   width: 100%;
   height: 30%;
-  border: solid;
-  border-color: blue;
+  border-radius: 10px;
 `;
 
 const Container = styled.div`
@@ -27,6 +26,7 @@ const Container = styled.div`
   height: 90%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const Title = styled.div`

@@ -14,6 +14,7 @@ import Trips from "./routes/Trips";
 import Dashboard from "./routes/Dashboard";
 import Chat from "./components/dashboard/Chat";
 import PostTrip from "./components/dashboard/Post-Trip/PostTrip";
+import Details from "./components/dashboard/Details";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,8 @@ const router = createBrowserRouter(
       <Route path="dashboard/:tripId/" element={<Dashboard />}>
         <Route path="chat" element={<Chat />} />
         <Route path="posttrip" element={<PostTrip />} />
+        <Route path="details" element={<Details />} />
+        <Route path="map" element={<div>Hello</div>} />
       </Route>
     </Route>
   )

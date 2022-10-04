@@ -31,6 +31,7 @@ export default function App() {
     lat: 30.27466235839214,
     lng: -97.74035019783334,
   })
+  const [autocomplete, setAutoComplete] = useState('');
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
   const [locationSearch, setLocationSearch] = useState('');
@@ -45,8 +46,6 @@ export default function App() {
   if(!isLoaded) {
     return "Loading Maps";
   }
-
-
 
   const mapOptions = {
     disableDefaultUI: false,
@@ -66,6 +65,24 @@ export default function App() {
   }
   const throttleIdle = _.debounce(handleIdle, 1000)
 
+  const onLoad = (autocomplete) => {
+    console.log('autocomplete: ', autocomplete);
+    setAutoComplete(autocomplete);
+  }
+
+  const onPlaceChanged = () => {
+    if(autocomplete !== null) {
+      const tempNewPlaceInfo = autocomplete.getPlace();
+      setCenter({
+        lat:  tempNewPlaceInfo.geometry.location.lat(),
+        lng:  tempNewPlaceInfo.geometry.location.lng()
+      });
+      searchRef.current.value = '';
+    } else {
+      console.log('Autocomplete not loaded yet')
+    }
+  }
+
   return <div>
     <GoogleMap
       mapContainerClassName="map-container"
@@ -84,9 +101,10 @@ export default function App() {
         ><Info marker={marker}/></InfoWindow>
       ))}
 
-
-
-      <Autocomplete>
+      <Autocomplete
+        onLoad={onLoad}
+        onPlaceChanged={onPlaceChanged}
+      >
         <div>
           <SearchInput
             type="text"
@@ -95,29 +113,6 @@ export default function App() {
           />
         </div>
       </Autocomplete>
-
-      <SearchButton
-        type="submit"
-        value="Search"
-        onClick={(e) => {
-          console.log(searchRef.current.value);
-          setLocationSearch(searchRef.current.value);
-          searchRef.current.value = '';
-
-          //Add Marker to Map
-          //Pan to Marker on Map
-      }}
-      />
-
-      <AddStopButton
-        type="submit"
-        value="Add Stop"
-        onClick={(e) => {
-
-          //POST stop to trip
-          //Pan to trip route on Map
-        }}
-      />
 
     </GoogleMap>
   </div>;
@@ -131,37 +126,19 @@ const Info = ({marker: {name}}) => {
   )
 }
 
-const SearchButton = styled.input`
-  height: 32px;
-  fontSize: 14px;
-  position: absolute;
-  left: 50%;
-  marginLeft: -10px;
-  marginRight: -10px;
-`;
-
-const AddStopButton = styled.input`
-  height: 32px;
-  fontSize: 14px;
-  position: absolute;
-  left: 60%;
-  marginLeft: -10px;
-  marginRight: -10px;
-`;
-
 const SearchInput = styled.input`
   boxSizing: border-box;
   border: 1px solid transparent;
   width: 180px;
   height: 32px;
-  padding: 0 12px;
+  padding: 0 17px;
   borderRadius: 3px;
   boxShadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   fontSize: 14px;
   outline: none;
   textOverflow: ellipses;
   position: absolute;
-  left: 30%;
+  left: 35%;
   marginLeft: -120px;
   marginRight: -120px;
 `;

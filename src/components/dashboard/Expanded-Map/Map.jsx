@@ -14,8 +14,9 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 import styled from 'styled-components';
 import _ from 'lodash';
+import MapInfo from './MapInfo';
 
-const MAPS_SECRET = "AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA";
+const MAPS_SECRET = "AIzaSyBSN7vnZvFPDtAVLBzu8LB0N_MEn5fzHXc";
 
 const libraries = ["places"];
 
@@ -84,7 +85,7 @@ export default function App() {
         <InfoWindow
           key={index}
           position={marker.geometry.location}
-        ><Info marker={marker}/></InfoWindow>
+        ><MapInfo marker={marker}/></InfoWindow>
       ))}
 
 
@@ -126,13 +127,6 @@ export default function App() {
   </div>;
 }
 
-const Info = ({marker: {name}}) => {
-  return (
-    <Popup>
-      {name}
-    </Popup>
-  )
-}
 
 const SearchButton = styled.input`
   height: 32px;
@@ -173,6 +167,3 @@ const mapContainerStyle = {
   width: '100vw',
   height: '100vh',
 };
-const Popup = styled.div`
-
-`

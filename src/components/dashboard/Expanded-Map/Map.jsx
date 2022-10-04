@@ -60,20 +60,11 @@ export default function App() {
     loader.load().then(() => {
       const service = new google.maps.places.PlacesService(mapRef.current.state.map);
       service.nearbySearch({bounds: bounds}, (places) => {
-        let markers = [];
-        for(let place of places) {
-          markers.push({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
-        }
-        console.log(places);
-        console.log('Update markers');
-        setMarkers(markers);
+        setMarkers(places);
       });
     })
   }
   const throttleIdle = _.debounce(handleIdle, 1000)
-
-
-
 
   return <div>
     <GoogleMap
@@ -87,12 +78,28 @@ export default function App() {
     >
 
       {markers.map((marker, index) => (
-        <Marker
+      <div>
+
+        {/* <Marker
           key={index}
           position={{lat: marker.lat, lng: marker.lng}}
-        />
-      ))}
+          label={marker.name}
+          icon={marker.icon}
+        /> */}
+        <InfoWindow
+        position={marker.geometry.location}
+        key={index}
+        >
+          <div>
+            {marker.name}
+          </div>
+        </InfoWindow>
+      </div>
 
+
+
+      ))}
+{/*
       {selected ? (
       <InfoWindow
         position={{lat: selected.lat, lng: selected.lng}}
@@ -101,9 +108,9 @@ export default function App() {
         }}
       >
         <div>
-          <input type="submit"></input>
+
         </div>
-      </InfoWindow>) : null}
+      </InfoWindow>) : null} */}
 
 
       <Autocomplete>

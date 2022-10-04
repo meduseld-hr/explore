@@ -8,7 +8,6 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
-import Profile from "./routes/Profile";
 import Landing from "./routes/Landing";
 import Trips from "./routes/Trips";
 import Dashboard from "./routes/Dashboard";
@@ -20,7 +19,6 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
       <Route path="landing" element={<Landing />} />
-      <Route path="profile" element={<Profile />} />
       <Route path="trips" element={<Trips />} />
       <Route path="dashboard/:tripId/" element={<Dashboard />}>
         <Route path="chat" element={<Chat />} />

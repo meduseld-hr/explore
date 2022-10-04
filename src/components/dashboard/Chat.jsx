@@ -17,6 +17,7 @@ const Chat = () => {
   const [body, setBody] = useState('');
   const [messages, setMessages] = useState([]);
   const socket = useRef(null);
+  const scrollBottom = useRef(0);
 
   useEffect(() => {
     socket.current = io('http://localhost:3000', {
@@ -26,10 +27,18 @@ const Chat = () => {
       setMessages((messages) => (
         [...messages, message]
       ));
+      const messageList = document.getElementById('messages');
+      if (scrollBottom.current === messageList.scrollTop) {
+        messageList.scrollTo(0, messageList.scrollHeight);
+        scrollBottom.current = messageList.scrollTop;
+      }
     });
     api.get(`/dashboard/${tripId}`)
       .then((response) => {
         setMessages(response.data[1]);
+        const messageList = document.getElementById('messages');
+        messageList.scrollTo(0, messageList.scrollHeight);
+        scrollBottom.current = messageList.scrollTop;
       })
       .catch((err) => {
         console.log(err);
@@ -39,9 +48,17 @@ const Chat = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const messageList = document.getElementById('messages');
+    if (scrollBottom.current === messageList.scrollTop) {
+      messageList.scrollTo(0, messageList.scrollHeight);
+      scrollBottom.current = messageList.scrollTop;
+    }
+  }, [messages])
+
   return (
     <ChatCont>
-      <MessageCont>
+      <MessageCont id='messages'>
         {messages.map((message, index) => (
           <Message key={index}>
             <Pfp src={message.picture} />
@@ -71,6 +88,9 @@ const Chat = () => {
                 picture: user.picture
               });
               setBody('');
+              const messageList = document.getElementById('messages');
+              messageList.scrollTo(0, messageList.scrollHeight);
+              scrollBottom.current = messageList.scrollTop;
             })
             .catch((err) => {
               console.log(err);
@@ -84,12 +104,13 @@ const Chat = () => {
             onChange={(e) => {
               setBody(e.target.value);
             }
-          } />
+            } />
           <input type='submit' />
         </div>
       </form>
     </ChatCont>
   )
+
 };
 
 const ChatCont = styled.div`

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   GoogleMap,
   useLoadScript,
@@ -6,11 +6,13 @@ import {
   InfoWindow,
   Autocomplete,
 } from "@react-google-maps/api";
+import { Loader } from '@googlemaps/js-api-loader';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
 import styled from 'styled-components';
+import _ from 'lodash';
 
 const MAPS_SECRET = "AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA";
 
@@ -24,13 +26,17 @@ export default function App() {
     libraries,
   });
 
-
+  const [center, setCenter] = useState({
+    lat: 30.27466235839214,
+    lng: -97.74035019783334,
+  })
   const [markers, setMarkers] = useState([]);
   const [selected, setSelected] = useState(null);
   const [locationSearch, setLocationSearch] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
   const searchRef = useRef(null);
+  const mapRef = useRef();
 
   if(loadError) {
     return "Error loading maps";
@@ -39,16 +45,31 @@ export default function App() {
     return "Loading Maps";
   }
 
-  const center = {
-    lat: 30.27466235839214,
-    lng: -97.74035019783334,
-  }
+
 
   const mapOptions = {
     disableDefaultUI: false,
     zoomControl: true,
-    clickableIcons: true,
   }
+
+  function handleIdle () {
+    console.log('Handle idle called')
+    var bounds = mapRef.current.state.map.getBounds()
+    const loader = new Loader({apiKey:MAPS_SECRET})
+    loader.load().then(() => {
+      const service = new google.maps.places.PlacesService(mapRef.current.state.map);
+      service.nearbySearch({bounds: bounds}, (places) => {
+        let markers = [];
+        for(let place of places) {
+          markers.push({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
+        }
+        console.log(places);
+        console.log('Update markers');
+        setMarkers(markers);
+      });
+    })
+  }
+  const throttleIdle = _.debounce(handleIdle, 1000)
 
 
 
@@ -57,26 +78,16 @@ export default function App() {
     <GoogleMap
       mapContainerClassName="map-container"
       mapContainerStyle={mapContainerStyle}
+      onCenterChanged={throttleIdle}
       zoom={8}
       center={center}
+      ref={mapRef}
       options={mapOptions}
-      onClick={(e) => {
-        console.log(e.placeId);
-        setMarkers(prev => [...prev,{
-          lat: e.latLng.lat(),
-          lng: e.latLng.lng(),
-          place_id: e.placeId,
-          time: new Date(),
-        }]);
-      }}
     >
       {markers.map((marker, index) => (
         <Marker
-          key={marker.time.toISOString()}
+          key={index}
           position={{lat: marker.lat, lng: marker.lng}}
-          onClick={() => {
-            setSelected(marker);
-          }}
         />
       ))}
 

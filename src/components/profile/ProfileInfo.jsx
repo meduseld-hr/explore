@@ -37,7 +37,6 @@ export default function ProfileInfo({setOpenProfile}) {
   useEffect(()=>{
     api.get(`/profileInfo/info`)
       .then((response)=>{
-        console.log('profile data', response.data[0])
         let pic = response.data[0].picture
         let nickname = response.data[0].nickname
         setProfilePic(pic);
@@ -59,7 +58,7 @@ export default function ProfileInfo({setOpenProfile}) {
         "nickname": changeValue
       })
         .then((response)=> {
-          console.log(response.data)
+          setUsername(response.data)
         })
         .catch((err)=> {
           console.log(err);
@@ -70,7 +69,7 @@ export default function ProfileInfo({setOpenProfile}) {
         "picture": changeValue
       })
       .then((response)=> {
-        console.log(response.data)
+        setProfilePic(response.data)
       })
       .catch((err)=> {
         console.log(err);

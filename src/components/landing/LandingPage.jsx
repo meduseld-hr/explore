@@ -40,7 +40,7 @@ const Button = styled.button`
   padding: 5px;
   margin: 10px;
   color: #020331fd;
-  background-color: #2264e9c3;
+  background-color: #4a81efc3;
 
 `;
 

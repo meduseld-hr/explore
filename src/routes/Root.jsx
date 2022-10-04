@@ -8,12 +8,22 @@ import ProfileInfo from '../components/profile/ProfileInfo.jsx';
 export default function Root() {
   const [user, setUser] = useState(null);
   const [openProfile, setOpenProfile] = useState(false);
+  const [userPic, setUserPic] = useState(null);
 
   useEffect(() => {
     api
       .get('/profile')
       .then((response) => {
         setUser(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    api
+      .get(`/profileInfo/info`)
+      .then((response) => {
+        setUserPic(response.data[0].picture);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -35,7 +45,7 @@ export default function Root() {
               <a href={`${window.location.origin}/api/login?redirect_uri=${window.location.origin}`}>Login</a>
             )}
             {user ? (
-              <img src={user.picture} onClick={() => { setOpenProfile(true) }} />
+              <img style={{height: "30px", width: "30px"}} src={userPic} onClick={() => { setOpenProfile(true) }} />
             ) : (
               <div></div>
             )}

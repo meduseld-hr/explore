@@ -14,9 +14,7 @@ import usePlacesAutocomplete, {
 import styled from 'styled-components';
 import _ from 'lodash';
 
-const MAPS_SECRET = "AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA";
-
-// const libraries = ["places"];
+const MAPS_SECRET = "AIzaSyBSN7vnZvFPDtAVLBzu8LB0N_MEn5fzHXc";
 
 export default function App() {
   //setting libraries variable so that console doesn't give warning anymore, per stackOverflow
@@ -58,14 +56,8 @@ export default function App() {
     const loader = new Loader({apiKey:MAPS_SECRET})
     loader.load().then(() => {
       const service = new google.maps.places.PlacesService(mapRef.current.state.map);
-      service.nearbySearch({bounds: bounds}, (places) => {
-        let markers = [];
-        for(let place of places) {
-          markers.push({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()})
-        }
-        console.log(places);
-        console.log('Update markers');
-        setMarkers(markers);
+      service.nearbySearch({bounds: bounds, type: 'tourist_attraction'}, (places) => {
+        setMarkers(places);
       });
     })
   }
@@ -85,23 +77,12 @@ export default function App() {
       options={mapOptions}
     >
       {markers.map((marker, index) => (
-        <Marker
+        <InfoWindow
           key={index}
-          position={{lat: marker.lat, lng: marker.lng}}
-        />
+          position={marker.geometry.location}
+        ><Info marker={marker}/></InfoWindow>
       ))}
 
-      {selected ? (
-      <InfoWindow
-        position={{lat: selected.lat, lng: selected.lng}}
-        onCloseClick={() => {
-          setSelected(null);
-        }}
-      >
-        <div>
-          Yay
-        </div>
-      </InfoWindow>) : null}
 
       <Autocomplete>
         <div>
@@ -131,6 +112,14 @@ export default function App() {
 
     </GoogleMap>
   </div>;
+}
+
+const Info = ({marker: {name}}) => {
+  return (
+    <Popup>
+      {name}
+    </Popup>
+  )
 }
 
 const SearchButton = styled.input`
@@ -163,3 +152,6 @@ const mapContainerStyle = {
   width: '100vw',
   height: '100vh',
 };
+const Popup = styled.div`
+
+`

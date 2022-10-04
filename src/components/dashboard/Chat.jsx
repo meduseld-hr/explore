@@ -114,8 +114,12 @@ const Chat = () => {
 };
 
 const ChatCont = styled.div`
-  max-height: 500px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100%;
+  padding: 1em;
 `
 
 const MessageCont = styled.div`
@@ -123,7 +127,6 @@ const MessageCont = styled.div`
   flex-direction: column;
   overflow: auto;
   gap: 1em;
-  height: 90%;
   width: 100%;
 `
 

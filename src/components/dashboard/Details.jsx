@@ -32,6 +32,8 @@ const ColCont = styled(Cont)`
 `
 
 const SmallCont = styled.div`
+  height: 50%;
   display: flex;
   flex: 1 0 50%;
+  border: 1px solid;
 `

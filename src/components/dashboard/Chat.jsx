@@ -119,7 +119,7 @@ const ChatCont = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 1em;
+  padding: .25em;
 `
 
 const MessageCont = styled.div`

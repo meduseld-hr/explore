@@ -69,7 +69,7 @@ export default function ProfileInfo({setOpenProfile}) {
           src={profilePic}
           alt="profile pic"
         />
-        <p><b>Username: </b>{username}</p>
+        <p><b>{username} </b></p>
       </RowContainer>
       <Button onClick={() => { setEditInProgress(true) }}>Update Profile</Button></div>}
     </TopModal>

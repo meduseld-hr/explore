@@ -277,7 +277,6 @@ pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterL
       }
     })
     .catch(err => console.log('Error getting trips for adding a stop', err))
-
 }
 
 pool.deleteStop = (stopId, userId) => {
@@ -309,7 +308,7 @@ pool.changeStopTime = (stopId, newTime, userId) => {
     .catch((err) => console.log(`Error updating timestamp for stop: `, stopId, err))
 }
 
-pool.decreaseStopOrder = (stopId, tripId , userId) => {
+pool.decreaseStopOrder = (stopId, tripId, userId) => {
   return pool
     .query(
       `
@@ -423,7 +422,7 @@ pool.insertUser = (userId, nickname, picture, givenName) => {
       `
     INSERT INTO users (id, nickname, picture, given_name)
     VALUES ($1, $2, $3, $4)
-    ON CONFLICT DO NOTHING
+    ON CONFLICT (id) DO NOTHING
     RETURNING nickname, picture
   `,
   [userId, nickname, picture, givenName]
@@ -534,5 +533,6 @@ pool.addComment = ({body, tripId, userId, timeStamp}) => {
     .then((response) => response.rows)
     .catch((err) => console.log(`Error adding comment to trip: `, err));
 }
+
 
 module.exports = pool;

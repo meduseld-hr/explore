@@ -58,6 +58,7 @@ const Chat = () => {
 
   return (
     <ChatCont>
+      <button>Add Explorers</button>
       <MessageCont id='messages'>
         {messages.map((message, index) => (
           <Message key={index}>
@@ -76,10 +77,10 @@ const Chat = () => {
           </Message>
         ))}
       </MessageCont>
-      <form onSubmit={(e) => {
+      <Form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          api.post(`/dashboard/${tripId}`, {body, timeStamp: Date.now()})
+          api.post(`/dashboard/${tripId}/chat`, {body, timeStamp: Date.now()})
             .then(() => {
               socket.current.emit('chat message', {
                 body,
@@ -103,19 +104,23 @@ const Chat = () => {
             value={body}
             onChange={(e) => {
               setBody(e.target.value);
-            }
+              }
             } />
           <input type='submit' />
         </div>
-      </form>
+      </Form>
     </ChatCont>
   )
 
 };
 
 const ChatCont = styled.div`
-  max-height: 500px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100%;
+  padding: .25em;
 `
 
 const MessageCont = styled.div`
@@ -123,8 +128,10 @@ const MessageCont = styled.div`
   flex-direction: column;
   overflow: auto;
   gap: 1em;
-  height: 90%;
   width: 100%;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const Message = styled.div`
@@ -156,12 +163,12 @@ const timeStyle = {
 }
 
 const Form = styled.form`
-  display: flex;
+  width: 100%;
 `
 
 const Input = styled.input`
   display: inline-block;
-  width: 80%;
+  width: 80%
 `
 
 export default Chat;

@@ -55,7 +55,7 @@ export default function Root() {
               {openProfile ? <ProfileInfo setOpenProfile={setOpenProfile}/> : <div></div>}
             </Links>
           </Header>
-          <Outlet />
+          <Outlet context={{theme, setTheme}}/>
         </App>
       </UserContext.Provider>
     </ThemeProvider>

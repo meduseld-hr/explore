@@ -115,7 +115,6 @@ const Chat = () => {
 };
 
 const ChatCont = styled.div`
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   width: 100%;

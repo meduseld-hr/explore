@@ -15,12 +15,6 @@ export default function Details() {
 
     <MainGridCont>
       <InfoContainer>
-        <InfoHeader>
-          <h2>Place Title</h2>
-          <span>Rating 4.2</span>
-          <p>Some description about this place?</p>
-          <Btn><PlusIcon icon={faPlus}></PlusIcon></Btn>
-        </InfoHeader>
         <StopDetails stop={stop} />
       </InfoContainer>
       <MapCont>
@@ -44,27 +38,15 @@ const MainGridCont = styled.div`
 `
 const InfoContainer = styled.div`
   grid-area: 1 / 1 / 2 / 2;
-  padding: 1.5em;
   border: 1px solid black;
   border-radius: 1.5em;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  padding: 1.5em;
   background-color: ${(props) => props.theme.background};
 `
 
 const InfoHeader = styled.div`
   grid-area: 1 / 1 / 2 / 3;
   height: 20%;
-`
-
-const PicContainer = styled.div`
-  grid-area: 2 / 1 / 3 / 2;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
 `
 
 const ScheduleContainer = styled.div`

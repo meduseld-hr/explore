@@ -6,6 +6,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import {useParams} from "react-router-dom";
+import AddUsersModal from './AddUsersModal.jsx';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -14,6 +15,7 @@ const Chat = () => {
   const user = useContext(UserContext);
   const {tripId} = useParams();
 
+  const [addingUsers, setAddingUsers] = useState(false)
   const [body, setBody] = useState('');
   const [messages, setMessages] = useState([]);
   const socket = useRef(null);
@@ -58,7 +60,10 @@ const Chat = () => {
 
   return (
     <ChatCont>
-      <button>Add Explorers</button>
+      {addingUsers && <AddUsersModal setAddingUsers={setAddingUsers} />}
+      <button onClick={() => {
+        setAddingUsers(true);
+      }}>Add Explorers</button>
       <MessageCont id='messages'>
         {messages.map((message, index) => (
           <Message key={index}>
@@ -115,19 +120,24 @@ const Chat = () => {
 };
 
 const ChatCont = styled.div`
-  box-sizing: border-box;
+  grid-area: 2 / 1 / 3 / 3;
+  padding: 1.5em;
+  border-radius: 1.5em;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: .25em;
+  justify-content: space-between;
+  background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
 `
-
+const MessageWrapper = styled.div`
+  flex: 1;
+  overflow: auto;
+`
 const MessageCont = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
   gap: 1em;
+  max-height: 10px;
   width: 100%;
   &::-webkit-scrollbar {
     display: none;
@@ -153,7 +163,9 @@ const MessageHead = styled.div`
 
 const Pfp = styled.img`
   height: 3em;
-  border-radius: 1.5em;
+  width: 3em;
+  object-fit: cover;
+  border-radius: 1em;
   margin-right: 0.5em;
 `
 

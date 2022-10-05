@@ -1,20 +1,22 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ stop }) {
+export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, swapStops, deleteStop }) {
   const navigate = useNavigate();
-
   return (
-    <Card>
+    <Card onClick={changeIndex} style={{border: selected ? '2px solid red' : '2px solid black'}}>
       <Thumbnail src={stop.thumbnail_url} />
-      <div>{stop.stop_name}</div>
-      <div>{stop.greater_location}</div>
+      <Detail>
+        <Name>{stop.stop_name}</Name>
+        <Loc>{stop.greater_location}</Loc>
+      </Detail>
       <Actions>
-        <Action>⬆️</Action>
-        <Action>⬇️</Action>
-        <Action>❌</Action>
+        {index > 0 &&<Action icon={faArrowUp} onClick={(e) => swapStops(e, index, index - 1)}/>}
+        <Delete icon={faXmark} onClick={(e) => deleteStop(e, index)}/>
+        {index < length - 1 && <Action icon={faArrowDown} onClick={(e) => swapStops(e, index, index + 1)}/>}
       </Actions>
     </Card>
   );
@@ -44,13 +46,25 @@ const Card = styled.div`
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: absolute;
-  position: absolute;
-  left: 50%;
+  margin-left: auto;
+  margin-right: .2em;
 `;
-const Action = styled.div`
+const Action = styled(FontAwesomeIcon)`
+  font-size: 1.8em;
+  color: #030333;
   cursor: pointer;
+  z-index: 1;
 `
+const Delete = styled(Action)`
+  color: red;
+`
+const Detail = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: absolute;
+  left: 40%;
+`;
 const OpenTrip = styled(FontAwesomeIcon)`
   color: #383838;
   font-size: 2em;
@@ -59,3 +73,9 @@ const OpenTrip = styled(FontAwesomeIcon)`
   cursor: pointer;
   z-index: 1;
 `;
+const Name = styled.div`
+  font-weight: 500;
+`
+const Loc = styled.div`
+  font-style: italic;
+`

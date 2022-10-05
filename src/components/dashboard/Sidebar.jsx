@@ -22,13 +22,15 @@ const SideBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  background-color: #c8c8c8;
+  border-radius: 1.5em;
+  padding: 1em;
+  background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
 `;
 const Container = styled.div`
   display: flex;
   flex: 1;
   width: 100%;
-  border: 2px solid black;
 `;
 
 const EndContainer = styled.div`

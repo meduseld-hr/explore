@@ -44,7 +44,7 @@ export default function App({ small, navigateDirection = '../details' }) {
   const destinationRef = useRef();
   const searchRef = useRef(null);
   const mapRef = useRef();
-  const [stops, addStop] = useOutletContext();
+  const {stops, addStop} = useOutletContext();
 
   if (loadError) {
     return 'Error loading maps';
@@ -139,7 +139,7 @@ const Icon = styled(FontAwesomeIcon)`
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  border-radius: 1em;
+  border-radius: 1.5em;
   overflow: hidden;
   position: relative;
 `;

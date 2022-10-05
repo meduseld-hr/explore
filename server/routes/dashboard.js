@@ -118,8 +118,8 @@ router.post('/:tripId/chat', (req, res) => {
 
 // SEARCH FOR USER TO ADD TO TRIP
 
-router.get('/search', (req, res) => {
-  const { searchTerm } = req.body
+router.get('/search/:searchTerm', (req, res) => {
+  const { searchTerm } = req.params
 
   db.searchUser(searchTerm)
   .then(response => {

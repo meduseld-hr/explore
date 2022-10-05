@@ -6,6 +6,7 @@ const { auth, requiresAuth } = require('express-openid-connect');
 require('dotenv').config();
 const http = require('http');
 const socketio = require('socket.io');
+const db = require('./db');
 
 //VARIABLE INITIALIZATION
 const app = express();
@@ -28,6 +29,15 @@ const io = socketio(server, {
     methods: ['GET', 'POST', 'PUT']
   }
 });
+function connection (req, res, next) {
+  console.log('I am the connection')
+  let userId = req.oidc.user.sub;
+  let nickname = req.oidc.user.nickname;
+  let picture = req.oidc.user.picture;
+  let givenName = req.oidc.user.given_name;
+  db.insertUser(userId, nickname, picture, givenName)
+  next();
+}
 
 //MIDDLEWARE
 app.use(express.static(path.join(__dirname, '../dist')));
@@ -38,6 +48,7 @@ app.use(morgan('dev'));
 
 //ROUTES WITH AUTH
 app.use(auth(config));
+app.use(connection);
 mountRoutes(app);
 
 app.get('/api/profile', (req, res) => {
@@ -59,3 +70,4 @@ io.on('connection', (socket) => {
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+

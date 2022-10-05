@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
   const userId = req.oidc.user.sub;
   console.log(userId);
   db.getTrips(userId).then(response => {
-    console.log('Trips response: ', response);
     res.status(200).send(response);
   })
   .catch(err => {
@@ -74,6 +73,86 @@ router.delete('/:tripId', (req, res) => {
   db.deleteTrip(tripId, userId)
   .then(response => {
     res.status(200).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+router.put('/:tripId/completed', (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.markTripCompleted(tripId, userId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+router.put('/:tripId/incomplete', (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.markTripIncomplete(tripId, userId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+router.put('/:tripId/name', (req, res) => {
+  const { newTripName } = req.body
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.changeTripName(tripId, newTripName, userId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+router.put('/:tripId/origin', (req, res) => {
+  const tripData = req.body
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.changeTripOrigin(tripId, tripData, userId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+router.put('/:tripId/public', (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.markTripPublic(tripId, userId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+router.put('/:tripId/private', (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.markTripPrivate(tripId, userId)
+  .then(response => {
+    res.status(201).end();
   })
   .catch(err => {
     res.status(404).end();

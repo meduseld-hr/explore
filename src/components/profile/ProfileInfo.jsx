@@ -4,13 +4,14 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/user";
 import styled from 'styled-components';
 import api from '../../functions/api';
-
+import dummyDataTripsUsers from './dummyData.js'
 
 export default function ProfileInfo({setOpenProfile}) {
   const user = useContext(UserContext);
   let [editInProgress, setEditInProgress] = useState(false);
   let [profilePic, setProfilePic] = useState("https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png");
   let [username, setUsername] = useState(user.nickname);
+  const [trips, setTrips] = useState(dummyDataTripsUsers.results);
 
   useEffect(()=>{
     api.get(`/profileInfo/info`)
@@ -22,6 +23,10 @@ export default function ProfileInfo({setOpenProfile}) {
       })
       .catch((err) => {
         console.log(err);
+      })
+    api.get(`/trips/`)
+      .then((response)=> {
+        setTrips(response.data)
       })
   }, [])
 
@@ -72,6 +77,10 @@ export default function ProfileInfo({setOpenProfile}) {
         <p><b>Username: </b>{username}</p>
       </RowContainer>
       <Button onClick={() => { setEditInProgress(true) }}>Update Profile</Button></div>}
+
+      {trips.map((trip) => {
+        return (<TripTiles key={trip.id} trip={trip} />)
+      })}
     </TopModal>
 
     </div>

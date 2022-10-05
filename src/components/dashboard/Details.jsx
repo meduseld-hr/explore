@@ -14,8 +14,12 @@ export default function Details() {
     <MainGridCont>
       <InfoContainer>
         <InfoHeader>
-          <h2>Place Title <Btn><PlusIcon icon={faPlus}></PlusIcon></Btn></h2>
+          <h2>Place Title</h2>
+          <span>Rating 4.2</span>
           <p>Some description about this place?</p>
+          <Btn
+
+          ><PlusIcon icon={faPlus}></PlusIcon></Btn>
         </InfoHeader>
         <PicContainer>
           Picture Grid
@@ -25,7 +29,7 @@ export default function Details() {
         </ScheduleContainer>
       </InfoContainer>
       <MapCont>
-        replace with map
+        <Map />
       </MapCont>
       <ChatCont>
         <Chat />
@@ -74,7 +78,6 @@ const ScheduleContainer = styled.div`
 
 const MapCont = styled.div`
   grid-area: 2 / 1 / 3 / 2;
-  padding: 1.5em;
   border: 1px solid black;
   border-radius: 2em;
 `
@@ -84,21 +87,6 @@ const ChatCont = styled.div`
   padding: 1.5em;
   border: 1px solid black;
   border-radius: 2em;
-`
-
-const Cont = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-  border: 1px solid black;
-`
-
-const ColCont = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  border: 1px solid black;
 `
 
 const Btn = styled.div`

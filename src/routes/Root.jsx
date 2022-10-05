@@ -62,8 +62,10 @@ const App = styled.div`
   margin: auto;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   align-items: center;
   font-family: 'Poppins', sans-serif;
+  overflow: auto;
 `;
 const Header = styled.header`
   width: 100%;

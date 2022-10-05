@@ -1,5 +1,6 @@
 body {
   background-color: rgb(235, 214, 187);
+  margin: 0;
 }
 .map-container {
   width: 100%;

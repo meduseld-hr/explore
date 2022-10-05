@@ -17,7 +17,7 @@ export default function Dashboard() {
   const [stop, setStop ] = useState(null);
 
   function addStop(stop) {
-    stop.stop_order = stops.length > 0 ? stops.at(-1) + 1 : 0;
+    stop.stop_order = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
     setStops([...stops, stop]);
   }
 
@@ -67,8 +67,8 @@ export default function Dashboard() {
 }
 
 const DashContainer = styled.div`
+  flex: 1;
   width: 100%;
-  height: 100vh;
   display: grid;
   grid-template-columns: 1fr 3fr;
   border: 2px solid black;

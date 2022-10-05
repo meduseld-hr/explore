@@ -41,7 +41,7 @@ export default function Trips () {
 
 const Container = styled.div`
   width: 100%;
-  border: 1px solid;
+  /* border: 1px solid; */
   display: grid;
   grid-template-columns: 1fr 3fr;
 `

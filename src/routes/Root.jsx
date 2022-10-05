@@ -74,9 +74,10 @@ const App = styled.div`
 `;
 const Header = styled.header`
   width: 100%;
-  border: 1px solid;
+  /* border: 1px solid; */
   display: flex;
   align-items: center;
+  margin: 1em;
 `;
 const Links = styled.div`
   display: flex;

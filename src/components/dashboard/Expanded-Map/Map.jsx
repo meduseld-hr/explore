@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import api from '../../../functions/api.js';
 import {
   GoogleMap,
   useLoadScript,
@@ -43,17 +44,7 @@ export default function App({ small, navigateDirection = '../details' }) {
   const [selected, setSelected] = useState(null);
   const [locationSearch, setLocationSearch] = useState('');
 
-  const searchRef = useRef(null);
-  const mapRef = useRef();
-
   const [tripRoute, setTripRoute] = useState(null)
-  const [tripStops, setTripStops] = useState([
-    {lat: 30.281812053292956, lng: -97.73815329458314},
-    {lat: 30.230781421835704, lng: -97.75279748278045},
-    {lat: 30.26518019321872, lng: -97.7720555943571},
-    {lat: 30.301887158191406, lng: -97.8260877885794}
-  ])
-
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const originRef = useRef();
@@ -62,12 +53,73 @@ export default function App({ small, navigateDirection = '../details' }) {
   const mapRef = useRef();
   const {stops, addStop} = useOutletContext();
 
-  if (loadError) {
-    return 'Error loading maps';
-  }
-  if (!isLoaded) {
-    return 'Loading Maps';
-  }
+  useEffect(() => {
+    console.log("useEffect called")
+    if(stops.length >= 2) {
+
+      const promiseAllStops = [];
+      for (let i = 0; i < stops.length; i++) {
+        console.log(stops[i].google_place_id)
+        let options = {
+          method: "GET",
+          url: "/googlePlaces/placeinfo",
+          params: {
+            placeID: stops[i].google_place_id
+          }
+        }
+        promiseAllStops.push(api(options));
+      }
+      let tempAllStops = [];
+      Promise.all(promiseAllStops)
+      .then(response => {
+        for (let i = 0; i < response.length; i++){
+          tempAllStops.push({
+            location: {
+              lat: response[i].data.result.geometry.location.lat,
+              lng: response[i].data.result.geometry.location.lng
+            },
+            stopover: true,
+          }
+          );
+        }
+        return tempAllStops;
+      })
+      .then((tempAllStops) => {
+        // mutate tripStops clone to get waypoints
+        const tempWaypoints = tempAllStops.slice();
+        tempWaypoints.shift()
+        tempWaypoints.pop();
+        // load directions from Google API
+        const loader = new Loader({apiKey:MAPS_SECRET});
+        loader.load().then(() => {
+          const directionsService = new google.maps.DirectionsService();
+          directionsService.route({
+            origin:  tempAllStops[0].location,//first stop
+            destination:  tempAllStops[tempAllStops.length - 1].location,//last stop
+            travelMode: google.maps.TravelMode.DRIVING,
+            waypoints: tempWaypoints,//all stops without first and last
+          }, (directions) => {
+            setTripRoute(directions);
+            // setDistance(directions.routes[0].legs[0].distance.text);
+            // setDuration(directions.routes[0].legs[0].duration.text);
+          }
+          )})
+          .catch(err => {
+            console.log(err)
+          });
+        })
+        .catch(err => {
+          console.log(err)
+        });
+      }
+      }, [stops, tripRoute, /*distance, duration*/]);
+
+      if (loadError) {
+        return 'Error loading maps';
+      }
+      if (!isLoaded) {
+        return 'Loading Maps';
+      }
 
   const mapOptions = {
     disableDefaultUI: true,
@@ -75,13 +127,11 @@ export default function App({ small, navigateDirection = '../details' }) {
   };
 
   function handleIdle() {
-    console.log('Handle idle called');
     var bounds = mapRef.current.state.map.getBounds();
     const loader = new Loader({ apiKey: MAPS_SECRET });
     loader.load().then(() => {
       const service = new google.maps.places.PlacesService(mapRef.current.state.map);
       service.nearbySearch({bounds: bounds, type: 'tourist_attraction'}, (places) => {
-        console.log("currently displayed places: ", places)
         setMarkers(places);
       });
     })
@@ -106,45 +156,6 @@ export default function App({ small, navigateDirection = '../details' }) {
     }
   }
 
-  const handleDirections = () => {
-
-    //create and properly format new array from tripStops
-    const tempAllStops = [];
-    for (let i = 0; i < tripStops.length; i++) {
-      tempAllStops.push({
-        location: {
-          lat: tripStops[i].lat,
-          lng: tripStops[i].lng
-        },
-        stopover: true,
-      })
-    }
-    //mutate tripStops clone to get waypoints
-    const tempWaypoints = tempAllStops.slice();
-    tempWaypoints.shift()
-    tempWaypoints.pop();
-    console.log("waypoints: ", tempWaypoints);
-
-
-    const loader = new Loader({apiKey:MAPS_SECRET});
-    loader.load().then(() => {
-    const directionsService = new google.maps.DirectionsService();
-    directionsService.route({
-      origin:  tempAllStops[0].location,//first stop
-      destination:  tempAllStops[tempAllStops.length - 1].location,//last stop
-      travelMode: google.maps.TravelMode.DRIVING,
-      waypoints: tempWaypoints,//all stops without first and last
-    }, (directions) => {
-      setTripRoute(directions);
-      setDistance(directions.routes[0].legs[0].distance.text);
-      setDuration(directions.routes[0].legs[0].duration.text);
-      console.log("directions response: ", directions);
-      }
-    )})
-    .catch(err => {
-      console.log(err)
-    });
-  }
 
 
   return (
@@ -159,7 +170,6 @@ export default function App({ small, navigateDirection = '../details' }) {
         mapContainerStyle={mapContainerStyle}
         onDragEnd={throttleIdle}
         onZoomChanged={throttleIdle}
-        onClick={handleDirections}
         zoom={8}
         center={center}
         ref={mapRef}
@@ -167,7 +177,7 @@ export default function App({ small, navigateDirection = '../details' }) {
       >
       {markers.map((marker, index) => (
         <InfoWindow key={index} position={marker.geometry.location}>
-          <MapInfo addStop={addStop} marker={marker} />
+          <MapInfo addStop={addStop}  marker={marker} />
         </InfoWindow>
       ))}
 

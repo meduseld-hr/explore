@@ -20,7 +20,7 @@ export default function LandingPage() {
     navigate(`../trips`)
   }
   return <div>
-    <LOGOBackground src={logo} />
+    {/* <LOGOBackground src={logo} /> */}
     <LOGOTop src={explorer} />
     <TopModal>
       <i>Travel to live.</i>

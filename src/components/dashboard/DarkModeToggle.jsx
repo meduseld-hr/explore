@@ -5,7 +5,7 @@ import { useOutletContext } from "react-router-dom";
 
 const DarkmodeToggle = () => {
   const [checked, setChecked] = useState(false);
-  const { theme, setTheme } = useOutletContext();//probably wrong
+  const { theme, setTheme } = useOutletContext();
 
   const handleChange = (e) => {
     setChecked(e.target.checked);

@@ -24,11 +24,9 @@ export default function StopDetails({ stop }) {
 }
 
 const Container = styled.div`
+  grid-area: 2 / 1 / 3 / 2;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  flex: 1;
-  border: 1px solid black;
   padding: 0.5em;
 `;
 const Details = styled.div`
@@ -42,13 +40,16 @@ const Name = styled.h2`
 const Loc = styled.div`
   font-style: italic;
 `;
+
 const Photos = styled.div`
-  display: flex;
-  gap: .5em;
-  overflow: auto;
-`;
+  grid-area: 2 / 1 / 3 / 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  border-radius: 1.5em;
+`
 const Photo = styled.img`
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
 `

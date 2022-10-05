@@ -54,12 +54,12 @@ export default function App({ small, navigateDirection = '../details' }) {
   const {stops, addStop} = useOutletContext();
 
   useEffect(() => {
-    console.log("useEffect called")
+    // console.log("useEffect called")
     if(stops.length >= 2) {
 
       const promiseAllStops = [];
       for (let i = 0; i < stops.length; i++) {
-        console.log(stops[i].google_place_id)
+        // console.log(stops[i].google_place_id)
         let options = {
           method: "GET",
           url: "/googlePlaces/placeinfo",

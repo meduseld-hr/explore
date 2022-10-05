@@ -8,7 +8,9 @@ export default function Dashboard () {
   const user = useContext(UserContext);
   return (
     <DashContainer>
-      <SideBar/>
+      <SideBar>
+        <div>Hello world</div>
+        </SideBar>
       <StagingArea/>
     </DashContainer>
   )

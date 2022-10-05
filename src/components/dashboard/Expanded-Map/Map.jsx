@@ -111,7 +111,10 @@ export default function App({ small, navigateDirection = '../details' }) {
         .catch(err => {
           console.log(err)
         });
+      } else {
+        setTripRoute(null);
       }
+
       }, [stops, tripRoute, /*distance, duration*/]);
 
       if (loadError) {
@@ -170,6 +173,7 @@ export default function App({ small, navigateDirection = '../details' }) {
         mapContainerStyle={mapContainerStyle}
         onDragEnd={throttleIdle}
         onZoomChanged={throttleIdle}
+        onCenterChanged={throttleIdle}
         zoom={8}
         center={center}
         ref={mapRef}

@@ -62,7 +62,7 @@ const Detail = styled.div`
   flex-direction: column;
   flex: 1;
   position: absolute;
-  left: 50%;
+  left: 40%;
 `;
 const OpenTrip = styled(FontAwesomeIcon)`
   color: #383838;

@@ -125,16 +125,19 @@ const ChatCont = styled.div`
   border-radius: 1.5em;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background-color: ${(props) => props.theme.background};
   border: 1px solid ${(props) => props.theme.border};
 `
-
+const MessageWrapper = styled.div`
+  flex: 1;
+  overflow: auto;
+`
 const MessageCont = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
   gap: 1em;
-  max-height: 30vh;
+  max-height: 10px;
   width: 100%;
   &::-webkit-scrollbar {
     display: none;

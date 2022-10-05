@@ -7,17 +7,14 @@ const PlacesContainer = () => {
   useEffect(() => {
     let options = {
       method: "GET",
-      url: "/googlePlaces/placeinfo",
-      params: {
-        placeID: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
-      },
+      url: "/trips",
     };
     api(options)
       .then((response) => {
-        console.log(response.data.result);
+        // console.log(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, []);
 

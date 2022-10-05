@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import api from "../../../functions/api.js";
 
-const ReviewTile = () => {
+const ReviewTile = (props) => {
+  // console.log(props.img);
+
   return (
     <Tile>
       <Title>Location Name</Title>
-      <Img></Img>
+      <Img src={props.img}></Img>
     </Tile>
   );
 };
@@ -24,9 +27,8 @@ const Title = styled.div`
   text-align: center;
   background-color: white;
 `;
-const Img = styled.div`
-  background-size: cover;
-  background-image: url("https://www.fodors.com/wp-content/uploads/2018/10/HERO_UltimateRome_Hero_shutterstock789412159.jpg");
+
+const Img = styled.img`
   width: 100%;
   height: 100%;
 `;

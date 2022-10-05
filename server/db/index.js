@@ -423,7 +423,7 @@ pool.insertUser = (userId, nickname, picture, givenName) => {
       `
     INSERT INTO users (id, nickname, picture, given_name)
     VALUES ($1, $2, $3, $4)
-    ON CONFLICT DO NOTHING
+    ON CONFLICT (id) DO NOTHING
     RETURNING nickname, picture
   `,
   [userId, nickname, picture, givenName]

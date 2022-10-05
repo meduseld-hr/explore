@@ -1,17 +1,20 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import TileHolder from "./TileHolder.jsx";
-import axios from "axios";
+import api from "../../../functions/api.js";
 
 const PlacesContainer = () => {
   useEffect(() => {
     let options = {
       method: "GET",
-      url: "/api/trips",
+      url: "/googlePlaces/placeinfo",
+      params: {
+        placeID: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
+      },
     };
-    axios(options)
+    api(options)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.result);
       })
       .catch((err) => {
         console.log(err);

@@ -20,9 +20,7 @@ export default function Details() {
       <MapCont>
         <Map small navigateDirection="../map" />
       </MapCont>
-      <ChatCont>
-        <Chat />
-      </ChatCont>
+      <Chat />
     </MainGridCont>
   )
 }
@@ -42,6 +40,7 @@ const InfoContainer = styled.div`
   border-radius: 1.5em;
   padding: 1.5em;
   background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
 `
 
 const InfoHeader = styled.div`
@@ -54,17 +53,9 @@ const ScheduleContainer = styled.div`
 `
 
 const MapCont = styled.div`
-  grid-area: 2 / 1 / 3 / 2;
+  grid-area: 1 / 2 / 2 / 3;
   border: 1px solid black;
   border-radius: 1.5em;
-`
-
-const ChatCont = styled.div`
-  grid-area: 1 / 2 / 3 / 3;
-  padding: 1.5em;
-  border: 1px solid black;
-  border-radius: 1.5em;
-  background-color: ${(props) => props.theme.background};
 `
 
 const Btn = styled.div`

@@ -1,16 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import TileHolder from "./TileHolder.jsx";
+import axios from "axios";
 
 const PlacesContainer = () => {
-  return <PlacesTiles>Places Container</PlacesTiles>;
+  useEffect(() => {
+    let options = {
+      method: "GET",
+      url: "/api/trips",
+    };
+    axios(options)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  return (
+    <ReviewContainer>
+      <Title>Review your Trip:</Title>
+      <TileHolder title={"Stayed"} />
+      <TileHolder title={"Eaten"} />
+      <TileHolder title={"Explored"} />
+    </ReviewContainer>
+  );
 };
 
-const PlacesTiles = styled.div`
-  grid-area: 3 / 1 / 7 / 2;
+const ReviewContainer = styled.div`
+  grid-area: 3 / 1 / 10 / 2;
   width: 100%;
   height: 100%;
   display: flex;
-  border: solid;
+  flex-direction: column;
+  justify-content: space-evenly;
+  //TODO fix css
+  margin-left: 7px;
 `;
 
+const Title = styled.h4`
+  width: 100%;
+  height: 5%;
+  text-align: center;
+  margin: 0;
+`;
 export default PlacesContainer;

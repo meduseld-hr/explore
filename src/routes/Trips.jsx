@@ -19,15 +19,15 @@ export default function Trips () {
             <Selection>Shared plans<input type='checkbox'/></Selection>
           </PlanSelector>
           <div>Your Plans</div>
-          <TripSidebarCard/>
-          <TripSidebarCard/>
-          <TripSidebarCard/>
-          <TripSidebarCard/>
+          <TripSidebarCard id={1}/>
+          <TripSidebarCard id={2}/>
+          <TripSidebarCard id={3}/>
+          <TripSidebarCard id={4}/>
           <div>Shared Plans</div>
-          <TripSidebarCard/>
-          <TripSidebarCard/>
-          <TripSidebarCard/>
-          <TripSidebarCard/>
+          <TripSidebarCard id={5}/>
+          <TripSidebarCard id={6}/>
+          <TripSidebarCard id={7}/>
+          <TripSidebarCard id={8}/>
         </SidebarWrapper>
       </SideBar>
       <Dashboard>
@@ -43,7 +43,7 @@ const Container = styled.div`
   width: 100%;
   border: 1px solid;
   display: grid;
-  grid-template-columns: 20% 80%;
+  grid-template-columns: 1fr 3fr;
 `
 const SidebarWrapper = styled.div`
   width: 100%;

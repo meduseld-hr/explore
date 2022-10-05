@@ -1,30 +1,33 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   GoogleMap,
   useLoadScript,
   Marker,
   InfoWindow,
   Autocomplete,
-  DirectionsService,
   DirectionsRenderer,
-  Polyline,
-} from "@react-google-maps/api";
+} from '@react-google-maps/api';
 import { Loader } from '@googlemaps/js-api-loader';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-} from "use-places-autocomplete";
+} from 'use-places-autocomplete';
 import styled from 'styled-components';
 import _ from 'lodash';
+import MapInfo from './MapInfo';
+import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Navigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
-const MAPS_SECRET = "AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA";
+const MAPS_SECRET = 'AIzaSyBSN7vnZvFPDtAVLBzu8LB0N_MEn5fzHXc';
 
-const libraries = ["places"];
+const libraries = ['places'];
 
-export default function App() {
+export default function App({ small, navigateDirection = '../details' }) {
   //setting libraries variable so that console doesn't give warning anymore, per stackOverflow
   const [libraries] = useState(['places']);
-  const {isLoaded, loadError} = useLoadScript({
+  const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: MAPS_SECRET,
     libraries,
   });
@@ -32,7 +35,8 @@ export default function App() {
   const [center, setCenter] = useState({
     lat: 30.27466235839214,
     lng: -97.74035019783334,
-  })
+  });
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const [autocomplete, setAutoComplete] = useState('');
   const [markers, setMarkers] = useState([]);
@@ -54,30 +58,26 @@ export default function App() {
   const [duration, setDuration] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
+  const searchRef = useRef(null);
+  const mapRef = useRef();
+  const [stops, addStop] = useOutletContext();
 
-  function clearDirections() {
-    setTripRoute(null);
-    setDistance('');
-    setDuration('');
-    //reset origin and destination
+  if (loadError) {
+    return 'Error loading maps';
   }
-
-  if(loadError) {
-    return "Error loading maps";
-  }
-  if(!isLoaded) {
-    return "Loading Maps";
+  if (!isLoaded) {
+    return 'Loading Maps';
   }
 
   const mapOptions = {
-    disableDefaultUI: false,
+    disableDefaultUI: true,
     zoomControl: true,
-  }
+  };
 
-  function handleIdle () {
-    console.log('Handle idle called')
-    var bounds = mapRef.current.state.map.getBounds()
-    const loader = new Loader({apiKey:MAPS_SECRET})
+  function handleIdle() {
+    console.log('Handle idle called');
+    var bounds = mapRef.current.state.map.getBounds();
+    const loader = new Loader({ apiKey: MAPS_SECRET });
     loader.load().then(() => {
       const service = new google.maps.places.PlacesService(mapRef.current.state.map);
       service.nearbySearch({bounds: bounds, type: 'tourist_attraction'}, (places) => {
@@ -184,39 +184,76 @@ export default function App() {
         </div>
       </Autocomplete>
 
-    </GoogleMap>
-  </div>;
+        <SearchButton
+          type="submit"
+          value="Search"
+          onClick={(e) => {
+            console.log(searchRef.current.value);
+            setLocationSearch(searchRef.current.value);
+            searchRef.current.value = '';
+
+            //Add Marker to Map
+            //Pan to Marker on Map
+          }}
+        />
+      </GoogleMap>
+    </Container>
+  );
 }
 
-const Info = ({marker: {name}}) => {
-  return (
-    <Popup>
-      {name}
-    </Popup>
-  )
-}
+const Icon = styled(FontAwesomeIcon)`
+  z-index: 1;
+  font-size: 2em;
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
+  color: white;
+  filter: drop-shadow(1px 1px 2px black);
+  cursor: pointer;
+`;
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+  border-radius: 1em;
+  overflow: hidden;
+  position: relative;
+`;
+const SearchButton = styled.input`
+  height: 32px;
+  fontsize: 14px;
+  position: absolute;
+  left: 50%;
+  marginleft: -10px;
+  marginright: -10px;
+`;
+
+const AddStopButton = styled.input`
+  height: 32px;
+  fontsize: 14px;
+  position: absolute;
+  left: 60%;
+  marginleft: -10px;
+  marginright: -10px;
+`;
 
 const SearchInput = styled.input`
-  boxSizing: border-box;
+  boxsizing: border-box;
   border: 1px solid transparent;
   width: 180px;
   height: 32px;
-  padding: 0 17px;
-  borderRadius: 3px;
-  boxShadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  fontSize: 14px;
+  padding: 0 12px;
+  borderradius: 3px;
+  boxshadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  fontsize: 14px;
   outline: none;
-  textOverflow: ellipses;
+  textoverflow: ellipses;
   position: absolute;
-  left: 35%;
-  marginLeft: -120px;
-  marginRight: -120px;
+  left: 30%;
+  marginleft: -120px;
+  marginright: -120px;
 `;
 
 const mapContainerStyle = {
-  width: '100vw',
-  height: '100vh',
+  width: '100%',
+  height: '100%',
 };
-const Popup = styled.div`
-
-`

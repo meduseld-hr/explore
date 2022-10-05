@@ -5,16 +5,19 @@ import api from '../../functions/api';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
+import {useParams} from "react-router-dom";
 
 TimeAgo.addDefaultLocale(en);
 
 const Chat = () => {
 
   const user = useContext(UserContext);
+  const {tripId} = useParams();
 
   const [body, setBody] = useState('');
   const [messages, setMessages] = useState([]);
   const socket = useRef(null);
+  const scrollBottom = useRef(0);
 
   useEffect(() => {
     socket.current = io('http://localhost:3000', {
@@ -24,11 +27,18 @@ const Chat = () => {
       setMessages((messages) => (
         [...messages, message]
       ));
+      const messageList = document.getElementById('messages');
+      if (scrollBottom.current === messageList.scrollTop) {
+        messageList.scrollTo(0, messageList.scrollHeight);
+        scrollBottom.current = messageList.scrollTop;
+      }
     });
-    api.get('/dashboard/2')
+    api.get(`/dashboard/${tripId}`)
       .then((response) => {
-        console.log(response.data);
         setMessages(response.data[1]);
+        const messageList = document.getElementById('messages');
+        messageList.scrollTo(0, messageList.scrollHeight);
+        scrollBottom.current = messageList.scrollTop;
       })
       .catch((err) => {
         console.log(err);
@@ -38,9 +48,18 @@ const Chat = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const messageList = document.getElementById('messages');
+    if (scrollBottom.current === messageList.scrollTop) {
+      messageList.scrollTo(0, messageList.scrollHeight);
+      scrollBottom.current = messageList.scrollTop;
+    }
+  }, [messages])
+
   return (
-    <div>
-      <MessageCont>
+    <ChatCont>
+      <button>Add Explorers</button>
+      <MessageCont id='messages'>
         {messages.map((message, index) => (
           <Message key={index}>
             <Pfp src={message.picture} />
@@ -58,10 +77,10 @@ const Chat = () => {
           </Message>
         ))}
       </MessageCont>
-      <form onSubmit={(e) => {
+      <Form onSubmit={(e) => {
         e.preventDefault();
         if (body.length) {
-          api.post(`/dashboard/2`, {body, timeStamp: Date.now()})
+          api.post(`/dashboard/${tripId}/chat`, {body, timeStamp: Date.now()})
             .then(() => {
               socket.current.emit('chat message', {
                 body,
@@ -70,6 +89,9 @@ const Chat = () => {
                 picture: user.picture
               });
               setBody('');
+              const messageList = document.getElementById('messages');
+              messageList.scrollTo(0, messageList.scrollHeight);
+              scrollBottom.current = messageList.scrollTop;
             })
             .catch((err) => {
               console.log(err);
@@ -77,21 +99,39 @@ const Chat = () => {
         }
       }}>
         <div>
-          <input type='text' value={body} onChange={(e) => {
-            setBody(e.target.value);
-          }} />
+          <Input
+            type='text'
+            value={body}
+            onChange={(e) => {
+              setBody(e.target.value);
+              }
+            } />
           <input type='submit' />
         </div>
-      </form>
-    </div>
+      </Form>
+    </ChatCont>
   )
+
 };
+
+const ChatCont = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: .25em;
+`
 
 const MessageCont = styled.div`
   display: flex;
   flex-direction: column;
   overflow: auto;
   gap: 1em;
+  width: 100%;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const Message = styled.div`
@@ -114,12 +154,21 @@ const MessageHead = styled.div`
 const Pfp = styled.img`
   height: 3em;
   border-radius: 1.5em;
-  padding-right: 0.5em;
+  margin-right: 0.5em;
 `
 
 const timeStyle = {
   fontSize: ".75em",
   fontStyle: "italic"
 }
+
+const Form = styled.form`
+  width: 100%;
+`
+
+const Input = styled.input`
+  display: inline-block;
+  width: 80%
+`
 
 export default Chat;

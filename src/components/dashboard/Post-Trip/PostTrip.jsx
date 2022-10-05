@@ -19,7 +19,7 @@ const PostTrip = () => {
 const PostTripContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-rows: repeat(9, 1fr);
   grid-column-gap: 13px;
   grid-row-gap: 10px;
   width: 100%;

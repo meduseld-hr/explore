@@ -4,11 +4,11 @@ import PostTrip from "./Post-Trip/PostTrip.jsx";
 import { Outlet } from "react-router-dom";
 
 
-export default function StagingArea() {
+export default function StagingArea({stops, addStop}) {
 
   return (
     <StagingAreaContainer>
-      <Outlet/>
+      <Outlet context={[stops, addStop]}/>
     </StagingAreaContainer>
   );
 }
@@ -17,6 +17,5 @@ const StagingAreaContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  margin: 0.5em;
   background-color: #9e9e9e;
 `;

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected }) {
+export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, swapStops, deleteStop }) {
   const navigate = useNavigate();
   return (
     <Card onClick={changeIndex} style={{border: selected ? '2px solid red' : '2px solid black'}}>
@@ -14,9 +14,9 @@ export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected
         <Loc>{stop.greater_location}</Loc>
       </Detail>
       <Actions>
-        <Action icon={faArrowUp}/>
-        <Delete icon={faXmark}/>
-        <Action icon={faArrowDown}/>
+        {index > 0 &&<Action icon={faArrowUp} onClick={(e) => swapStops(e, index, index - 1)}/>}
+        <Delete icon={faXmark} onClick={(e) => deleteStop(e, index)}/>
+        {index < length - 1 && <Action icon={faArrowDown} onClick={(e) => swapStops(e, index, index + 1)}/>}
       </Actions>
     </Card>
   );
@@ -53,6 +53,7 @@ const Action = styled(FontAwesomeIcon)`
   font-size: 1.8em;
   color: #030333;
   cursor: pointer;
+  z-index: 1;
 `
 const Delete = styled(Action)`
   color: red;
@@ -62,7 +63,7 @@ const Detail = styled.div`
   flex-direction: column;
   flex: 1;
   position: absolute;
-  left: 50%;
+  left: 40%;
 `;
 const OpenTrip = styled(FontAwesomeIcon)`
   color: #383838;

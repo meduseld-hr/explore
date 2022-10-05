@@ -20,6 +20,21 @@ export default function Dashboard() {
     stop.stop_order = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
     setStops([...stops, stop]);
   }
+  function swapStops(e, index1, index2) {
+    e.stopPropagation();
+    const newStops = stops.slice();
+    const stop = newStops[index1];
+    newStops[index1] = newStops[index2];
+    newStops[index2] = stop;
+    setStopIndex(index2);
+    setStops(newStops);
+  }
+  function deleteStop(e, index) {
+    e.stopPropagation();
+    const newStops = stops.slice()
+    newStops.splice(index, 1)
+    setStops(newStops);
+  }
 
   useEffect(() => {
     api
@@ -47,10 +62,14 @@ export default function Dashboard() {
           />
           {stops.map((stop, index) => (
             <StopSidebarCard
+              length={stops.length}
               stop={stop}
               key={index}
+              index={index}
               selected={index === stopIndex}
               changeIndex={() => setStopIndex(index)}
+              swapStops={swapStops}
+              deleteStop={deleteStop}
             />
           ))}
           <ActionBar>
@@ -71,8 +90,9 @@ const DashContainer = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr;
-  border: 2px solid black;
-`;
+  padding: 1em;
+  gap: 1em;
+`
 const SidebarWrapper = styled.div`
   width: 100%;
   grid-column: 1;

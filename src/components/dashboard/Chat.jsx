@@ -160,7 +160,9 @@ const MessageHead = styled.div`
 
 const Pfp = styled.img`
   height: 3em;
-  border-radius: 1.5em;
+  width: 3em;
+  object-fit: cover;
+  border-radius: 1em;
   margin-right: 0.5em;
 `
 

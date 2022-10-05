@@ -3,8 +3,12 @@ import styled from 'styled-components'
 import Chat from './Chat'
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Map from './Expanded-Map/Map';
+import { useNavigate } from 'react-router-dom';
 
 export default function Details() {
+
+  const navigate = useNavigate();
 
   return (
     <MainGridCont>

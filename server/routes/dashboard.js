@@ -18,7 +18,7 @@ router.get('/:tripId', (req, res) => {
   })
   .catch((err) => {
     res.status(404).end();
-  });
+  })
 })
 
 // POST A NEW STOP TO A TRIP
@@ -53,11 +53,12 @@ router.delete('/:stopId', (req, res) => {
 
 // UPDATE A STOP'S TIMESTAMP
 
-router.put('/time', (req, res) => {
-  const stopData = req.body
+router.put('/:stopId/time', (req, res) => {
+  const { newTime } = req.body
+  const { stopId } = req.params
   const userId = req.oidc.user.sub
 
-  db.changeStopTime(stopData, userId)
+  db.changeStopTime(stopId, newTime, userId)
   .then(() => {
     res.status(201).end()
   })
@@ -68,11 +69,12 @@ router.put('/time', (req, res) => {
 
 // UPDATE A STOP'S ORDER
 
-router.put('/order', (req, res) => {
+router.put('/:stopId/order', (req, res) => {
   const stopData = req.body
+  const { stopId } = req.params
   const userId = req.oidc.user.sub
 
-  db.changeStopOrder(stopData, userId)
+  db.changeStopOrder(stopId, stopData, userId)
   .then(() => {
     res.status(201).end()
   })
@@ -98,6 +100,36 @@ router.post('/:tripId/chat', (req, res) => {
       console.log(err);
       res.status(501).end();
     })
+});
+
+// SEARCH FOR USER TO ADD TO TRIP
+
+router.get('/search', (req, res) => {
+  const { searchTerm } = req.body
+
+  db.searchUser(searchTerm)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+// ADD USER TO TRIP
+
+router.post('/:tripId/addUser', (req, res) => {
+  const { addedUserID } = req.body
+  const { tripId } = req.params
+  const authUserId = req.oidc.user.sub
+
+  db.addUserToTrip(tripId, addedUserID, authUserId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
 });
 
 // POST COMMENTS FOR A SPECIFIED TRIP

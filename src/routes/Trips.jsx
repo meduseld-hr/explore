@@ -43,7 +43,7 @@ const Container = styled.div`
   width: 100%;
   border: 1px solid;
   display: grid;
-  grid-template-columns: 20% 80%;
+  grid-template-columns: 1fr 3fr;
 `
 const SidebarWrapper = styled.div`
   width: 100%;

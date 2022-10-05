@@ -4,11 +4,11 @@ import PostTrip from "./Post-Trip/PostTrip.jsx";
 import { Outlet } from "react-router-dom";
 
 
-export default function StagingArea() {
+export default function StagingArea({stops, addStop}) {
 
   return (
     <StagingAreaContainer>
-      <Outlet />
+      <Outlet context={[stops, addStop]}/>
     </StagingAreaContainer>
   );
 }

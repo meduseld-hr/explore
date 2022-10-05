@@ -30,6 +30,7 @@ const io = socketio(server, {
   }
 });
 function connection (req, res, next) {
+  console.log('I am the connection')
   let userId = req.oidc.user.sub;
   let nickname = req.oidc.user.nickname;
   let picture = req.oidc.user.picture;

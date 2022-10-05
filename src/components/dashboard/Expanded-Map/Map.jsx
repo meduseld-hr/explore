@@ -139,7 +139,7 @@ const Icon = styled(FontAwesomeIcon)`
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  border-radius: 2em;
+  border-radius: 1.5em;
   overflow: hidden;
   position: relative;
 `;

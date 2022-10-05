@@ -50,13 +50,13 @@ const InfoContainer = styled.div`
   grid-area: 1 / 1 / 2 / 2;
   padding: 1.5em;
   border: 1px solid black;
-  border-radius: 2em;
+  border-radius: 1.5em;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-  background-color: ${(props) => props.theme.background}
+  background-color: ${(props) => props.theme.background};
 `
 
 const InfoHeader = styled.div`
@@ -78,14 +78,15 @@ const ScheduleContainer = styled.div`
 const MapCont = styled.div`
   grid-area: 2 / 1 / 3 / 2;
   border: 1px solid black;
-  border-radius: 2em;
+  border-radius: 1.5em;
 `
 
 const ChatCont = styled.div`
   grid-area: 1 / 2 / 3 / 3;
   padding: 1.5em;
   border: 1px solid black;
-  border-radius: 2em;
+  border-radius: 1.5em;
+  background-color: ${(props) => props.theme.background};
 `
 
 const Btn = styled.div`

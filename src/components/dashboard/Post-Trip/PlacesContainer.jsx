@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import TileHolder from "./TileHolder.jsx";
-import axios from "axios";
+import api from "../../../functions/api.js";
 
 const PlacesContainer = () => {
   useEffect(() => {
     let options = {
       method: "GET",
-      url: "/api/trips",
+      url: "/trips",
     };
-    axios(options)
+    api(options)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, []);
 

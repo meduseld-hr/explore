@@ -11,7 +11,6 @@ router.get('/info', (req, res) => {
   const userId = req.oidc.user.sub;
   db.getUserInfo(userId)
   .then((data) => {
-    console.log(data);
     res.status(200).send(data)
   })
   .catch((err) => {
@@ -27,7 +26,6 @@ router.post('/', (req, res) => {
   const givenName = req.oidc.user.given_name;
   db.insertUser(userId, nickname, picture, givenName)
   .then((data) => {
-    console.log(data);
     res.status(200).send(data)
   })
   .catch((err) => {
@@ -43,7 +41,6 @@ router.patch('/updateNickname', (req, res) => {
   const userId = req.oidc.user.sub;
   db.updateUserName(userId, updatedValue)
   .then((data) => {
-    console.log(data);
     res.status(200).send(data)
   })
   .catch((err) => {
@@ -57,7 +54,6 @@ router.patch('/updateProfilePic', (req, res) => {
   const userId = req.oidc.user.sub;
   db.updateUserPic(userId, updatedValue)
   .then((data) => {
-    console.log(data);
     res.status(200).send(data)
   })
   .catch((err) => {

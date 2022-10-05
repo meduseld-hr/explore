@@ -66,36 +66,21 @@ export default function ProfileInfo({ setOpenProfile }) {
 
   return (
     <div>
-      <GreyBackground
-        onClick={() => {
-          setOpenProfile(false);
-        }}
-      />
-      <TopModal>
-        {editInProgress ? (
-          <EditProfileModal
-            onSubmit={onSubmit}
-            setEditInProgress={setEditInProgress}
-          />
-        ) : (
-          <div style={{ paddingTop: "30px" }}>
-            <RowContainer>
-              <Image src={profilePic} alt="profile pic" />
-              <p>
-                <b>Username: </b>
-                {username}
-              </p>
-            </RowContainer>
-            <Button
-              onClick={() => {
-                setEditInProgress(true);
-              }}
-            >
-              Update Profile
-            </Button>
-          </div>
-        )}
+    <GreyBackground onClick={()=> {setOpenProfile(false)}}/>
+    <TopModal>
 
+      {editInProgress ?
+        <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} />
+        : <div style={{paddingTop: "30px"}}><RowContainer>
+        <Image
+
+          src={profilePic}
+          alt="profile pic"
+        />
+        <p><b>{username} </b></p>
+      </RowContainer>
+      <Button onClick={() => { setEditInProgress(true) }}>Update Profile</Button></div>}
+    </TopModal>
         {trips.map((trip) => {
           return <TripTiles key={trip.id} trip={trip} />;
         })}

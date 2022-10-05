@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DarkmodeToggle from "./DarkModeToggle.jsx";
 
 export default function SideBar({ children }) {
+
   return (
     <SideBarContainer>
       <Img src="/Logo_Light_v2.png" alt="Explore Logo"></Img>

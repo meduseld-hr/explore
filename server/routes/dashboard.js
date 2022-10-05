@@ -6,13 +6,13 @@ const router = new Router();
 
 module.exports = router;
 
-// GET ALL STOPS AND MESSAGES FOR A SPECIFIED TRIP
+// GET ALL STOPS, MESSAGES, AND COMMENTS FOR A SPECIFIED TRIP
 
 router.get('/:tripId', (req, res) => {
   const { tripId } = req.params
   const userId = req.oidc.user.sub
 
-  Promise.all([db.getStops(tripId, userId), db.getMessages(tripId)])
+  Promise.all([db.getStops(tripId, userId), db.getMessages(tripId), db.getComments(tripId)])
   .then((data) => {
     res.status(200).send(data);
   })
@@ -83,7 +83,7 @@ router.put('/order', (req, res) => {
 
 // POST CHAT MESSAGES FOR A SPECIFIED TRIP
 
-router.post('/:tripId', (req, res) => {
+router.post('/:tripId/chat', (req, res) => {
   const messageData = {
     body: req.body.body,
     tripId: req.params.tripId,
@@ -98,5 +98,23 @@ router.post('/:tripId', (req, res) => {
       console.log(err);
       res.status(501).end();
     })
+});
 
+// POST COMMENTS FOR A SPECIFIED TRIP
+
+router.post('/:tripId/comment', (req, res) => {
+  const commentData = {
+    body: req.body.body,
+    tripId: req.params.tripId,
+    userId: req.oidc.user.sub,
+    timeStamp: Math.floor(req.body.timeStamp / 1000)
+  }
+  db.addComment(commentData)
+    .then(() => {
+      res.status(200).end();
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(501).end();
+    })
 });

@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 
-export default function MapInfo ({marker: {name, photos = [], types, place_id, vicinity}}) {
+export default function MapInfo ({marker: {name, photos = [], types, place_id, vicinity}, addStop}) {
   const photoUrl = photos.length > 0 ? photos[0].getUrl() : '';
   function handleAdd() {
     const stop = {
-      name, type: types[0], place_id, photoUrl, vicinity
+      stop_name: name, type: types[0], google_place_id: place_id, thumbnail_url: photoUrl, greater_location: vicinity
     }
-    console.log('Adding stop: ',stop);
+    addStop(stop);
   }
   return (
     <Popup>

@@ -8,7 +8,7 @@ export default function StopSidebarCard({ stop }) {
 
   return (
     <Card>
-      <Thumbnail src="https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg" />
+      <Thumbnail src={stop.thumbnail_url} />
       <div>{stop.stop_name}</div>
       <div>{stop.greater_location}</div>
       <Actions>

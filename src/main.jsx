@@ -24,7 +24,7 @@ const router = createBrowserRouter(
       <Route path="dashboard/:tripId/" element={<Dashboard />}>
         <Route path="chat" element={<Chat />} />
         <Route path="posttrip" element={<PostTrip />} />
-        <Route path="details" element={<Details />} />
+        <Route path="details" element={<Details />}></Route>
         <Route path='map' element={<Map/>}/>
       </Route>
     </Route>

@@ -15,6 +15,11 @@ export default function Dashboard () {
   const [search, setSearch] = useState('');
   const [stops, setStops] = useState([]);
 
+  function addStop (stop) {
+    stop.stop_order = stops.at(-1) + 1;
+    setStops([...stops, stop])
+  }
+
   useEffect(() => {
     api.get(`/dashboard/${tripId}`)
     .then((response) => {
@@ -37,7 +42,7 @@ export default function Dashboard () {
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea />
+      <StagingArea stops={stops} addStop={addStop}/>
     </DashContainer>
   )
 }

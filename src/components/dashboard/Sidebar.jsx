@@ -22,7 +22,6 @@ const SideBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  background-color: #c8c8c8;
 `;
 const Container = styled.div`
   display: flex;

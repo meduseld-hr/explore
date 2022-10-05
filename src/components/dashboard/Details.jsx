@@ -17,9 +17,7 @@ export default function Details() {
           <h2>Place Title</h2>
           <span>Rating 4.2</span>
           <p>Some description about this place?</p>
-          <Btn
-
-          ><PlusIcon icon={faPlus}></PlusIcon></Btn>
+          <Btn><PlusIcon icon={faPlus}></PlusIcon></Btn>
         </InfoHeader>
         <PicContainer>
           Picture Grid
@@ -58,6 +56,7 @@ const InfoContainer = styled.div`
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+  background-color: ${(props) => props.theme.background}
 `
 
 const InfoHeader = styled.div`

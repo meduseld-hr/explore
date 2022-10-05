@@ -1,12 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import DarkmodeToggle from "./DarkModeToggle.jsx";
+import { useOutletContext } from "react-router-dom";
 
 export default function SideBar({ children }) {
+  const { theme } = useOutletContext();
 
   return (
     <SideBarContainer>
-      <Img src="/Logo_Light_v2.png" alt="Explore Logo"></Img>
+      {theme === 'light'
+        ? <Img src="/Logo_Light_v2.png" alt="Explore Logo"/>
+        : <Img src="/Logo_Dark_v2.png" alt="Explore Logo"/>
+      }
       <Container>{children}</Container>
       <EndContainer>
         <DarkmodeToggle />

@@ -42,7 +42,6 @@ export default function App() {
   const searchRef = useRef(null);
   const mapRef = useRef();
 
-
   const [map, setMap] = useState(null);
   const [tripRoute, setTripRoute] = useState(null)
   const [tripStops, setTripStops] = useState([
@@ -55,7 +54,6 @@ export default function App() {
   const [duration, setDuration] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
-
 
   function clearDirections() {
     setTripRoute(null);
@@ -83,7 +81,7 @@ export default function App() {
     loader.load().then(() => {
       const service = new google.maps.places.PlacesService(mapRef.current.state.map);
       service.nearbySearch({bounds: bounds, type: 'tourist_attraction'}, (places) => {
-        console.log(places)
+        console.log("currently displayed places: ", places)
         setMarkers(places);
       });
     })
@@ -110,6 +108,7 @@ export default function App() {
 
   const handleDirections = () => {
 
+    //create and properly format new array from tripStops
     const tempAllStops = [];
     for (let i = 0; i < tripStops.length; i++) {
       tempAllStops.push({
@@ -120,32 +119,32 @@ export default function App() {
         stopover: true,
       })
     }
-
+    //mutate tripStops clone to get waypoints
     const tempWaypoints = tempAllStops.slice();
     tempWaypoints.shift()
     tempWaypoints.pop();
-    console.log(tempWaypoints);
+    console.log("waypoints: ", tempWaypoints);
+
 
     const loader = new Loader({apiKey:MAPS_SECRET});
     loader.load().then(() => {
     const directionsService = new google.maps.DirectionsService();
     directionsService.route({
-      origin:  tempAllStops[0].location,
-      destination:  tempAllStops[tempAllStops.length - 1].location,
+      origin:  tempAllStops[0].location,//first stop
+      destination:  tempAllStops[tempAllStops.length - 1].location,//last stop
       travelMode: google.maps.TravelMode.DRIVING,
-      waypoints: tempWaypoints,
+      waypoints: tempWaypoints,//all stops without first and last
     }, (directions) => {
       setTripRoute(directions);
       setDistance(directions.routes[0].legs[0].distance.text);
       setDuration(directions.routes[0].legs[0].duration.text);
-      console.log("directions set: ", directions);
+      console.log("directions response: ", directions);
       }
     )})
     .catch(err => {
       console.log(err)
     });
   }
-
 
 
   return <div>

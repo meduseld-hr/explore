@@ -131,7 +131,7 @@ router.post('/:tripId/addUser', (req, res) => {
     res.status(404).end();
   })
 });
-=======
+
 // POST COMMENTS FOR A SPECIFIED TRIP
 
 router.post('/:tripId/comment', (req, res) => {

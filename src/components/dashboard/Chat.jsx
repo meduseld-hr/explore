@@ -128,6 +128,7 @@ const MessageCont = styled.div`
   flex-direction: column;
   overflow: auto;
   gap: 1em;
+  max-height: 90vh;
   width: 100%;
   &::-webkit-scrollbar {
     display: none;

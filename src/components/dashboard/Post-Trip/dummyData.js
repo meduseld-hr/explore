@@ -7,7 +7,7 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "Austin Texas",
-    google_place_id: "ChIJN1t_tDeuEmsRUsoyG83frY4",
+    google_place_id: "ChIJSTKCCzZwQIYRPN4IGI8c6xY",
   },
   {
     id: 1,
@@ -27,7 +27,7 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "La La Land",
-    google_place_id: "ChIJN1t_tDeuEmsRUsoyG83frY4",
+    google_place_id: "ChIJgTwKgJcpQg0RaSKMYcHeNsQ",
   },
   {
     id: 1,

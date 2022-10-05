@@ -25,13 +25,13 @@ const CommentContainer = () => {
   return (
     <CommentGrid>
       {comments.map((comment, index) => (
-        <div key={index}>
-          <img src={comment.picture} />
+        <Comment key={index}>
+          <img style={{ width: "50%", height: "50%" }} src={comment.picture} />
           <strong>{comment.nickname}</strong>
           <div>{comment.body}</div>
-        </div>
+        </Comment>
       ))}
-      <button
+      <Button
         onClick={() => {
           api
             .post(`/dashboard/${tripId}/comment`, {
@@ -42,10 +42,17 @@ const CommentContainer = () => {
               console.log(err);
             });
         }}
-      ></button>
+      >
+        Post
+      </Button>
     </CommentGrid>
   );
 };
+
+const Comment = styled.div`
+  width: 100%;
+  height: 30%;
+`;
 
 const CommentGrid = styled.div`
   grid-area: 3 / 2 / 10 / 3;
@@ -53,6 +60,11 @@ const CommentGrid = styled.div`
   height: 100%;
   max-height: 100%;
   border: solid;
+`;
+
+const Button = styled.button`
+  width: 20%;
+  height: 5%;
 `;
 
 export default CommentContainer;

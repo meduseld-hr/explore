@@ -18,7 +18,7 @@ export default function Dashboard () {
 
 const DashContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr;
   border: 2px solid black;

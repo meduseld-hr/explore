@@ -12,7 +12,6 @@ const AddUsersModal = ({ setAddingUsers }) => {
     if (e.target.value.length >= 1) {
       api.get(`/dashboard/search/${e.target.value}`)
           .then((response) => {
-            console.log('onChange response: ', response);
             setSearchedUsers(response.data)
           })
     } else {

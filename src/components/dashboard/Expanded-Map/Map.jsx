@@ -53,6 +53,7 @@ export default function App({ small, navigateDirection = '../details' }) {
     {lat: 30.26518019321872, lng: -97.7720555943571},
     {lat: 30.301887158191406, lng: -97.8260877885794}
   ])
+
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const originRef = useRef();
@@ -183,7 +184,8 @@ export default function App({ small, navigateDirection = '../details' }) {
         </div>
       </Autocomplete>
 
-        <SearchButton
+      {/*Not needed because of Autocomplete functionality*/}
+        {/* <SearchButton
           type="submit"
           value="Search"
           onClick={(e) => {
@@ -191,7 +193,8 @@ export default function App({ small, navigateDirection = '../details' }) {
             setLocationSearch(searchRef.current.value);
             searchRef.current.value = '';
           }}
-        />
+        /> */}
+
       </GoogleMap>
     </Container>
   );

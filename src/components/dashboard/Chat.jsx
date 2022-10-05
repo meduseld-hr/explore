@@ -5,7 +5,8 @@ import api from '../../functions/api';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
-import {useParams} from "react-router-dom";
+import {useParams} from 'react-router-dom';
+import AddUsersModal from './AddUsersModal.jsx';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -16,6 +17,7 @@ const Chat = () => {
 
   const [body, setBody] = useState('');
   const [messages, setMessages] = useState([]);
+  const [addingUsers, setAddingUsers] = useState(false);
   const socket = useRef(null);
   const scrollBottom = useRef(0);
 
@@ -58,7 +60,10 @@ const Chat = () => {
 
   return (
     <ChatCont>
-      <button>Add Explorers</button>
+      {addingUsers && <AddUsersModal setAddingUsers={setAddingUsers} />}
+      <button onClick={() => {
+        setAddingUsers(true);
+      }}>Add Explorers</button>
       <MessageCont id='messages'>
         {messages.map((message, index) => (
           <Message key={index}>

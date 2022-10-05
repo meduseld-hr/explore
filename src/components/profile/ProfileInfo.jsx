@@ -5,33 +5,11 @@ import { UserContext } from "../../contexts/user";
 import styled from 'styled-components';
 import api from '../../functions/api';
 
-const dummyDataTripsUsers = {
-  results: [
-    {
-      "id": 1,
-      "trip_name": "Going to Madrid",
-      "ThumbnailURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLOPKXq9Izs3dns9rgXXeRy5Jlmhiho-hAdg&usqp=CAU"
-    },
-    {
-      "id": 2,
-      "trip_name": "On My Way to California",
-      "ThumbnailURL": "https://picsum.photos/200"
-    },
-    {
-      "id": 3,
-      "trip_name": "Brazil Here I Come!",
-      "ThumbnailURL": "https://picsum.photos/200"
-    }
-  ]
-}
-
-
 
 export default function ProfileInfo({setOpenProfile}) {
-  const trips = dummyDataTripsUsers.results;
   const user = useContext(UserContext);
   let [editInProgress, setEditInProgress] = useState(false);
-  let [profilePic, setProfilePic] = useState(user.picture);
+  let [profilePic, setProfilePic] = useState("https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png");
   let [username, setUsername] = useState(user.nickname);
 
   useEffect(()=>{
@@ -43,37 +21,38 @@ export default function ProfileInfo({setOpenProfile}) {
         setUsername(nickname);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       })
   }, [])
 
   const onSubmit = (e, field) => {
     e.preventDefault();
-    // console.log('target is -->', e);
-    // console.log(e.target.form[0].value, 'is the changeValue')
-    // console.log(field, 'is the field')
     let changeValue = e.target.form[0].value;
-    if (field === "nickname") {
-      api.patch(`/profileInfo/updateNickname`, {
-        "nickname": changeValue
-      })
+    if (changeValue.length > 0){
+      if (field === "nickname") {
+        api.patch(`/profileInfo/updateNickname`, {
+          "nickname": changeValue
+        })
+          .then((response)=> {
+            setUsername(response.data.nickname);
+            setEditInProgress(false);
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
+
+      } else if (field === "picture") {
+        api.patch(`/profileInfo/updateProfilePic`, {
+          "picture": changeValue
+        })
         .then((response)=> {
-          setUsername(response.data)
+          setProfilePic(response.data.picture);
+          setEditInProgress(false);
         })
         .catch((err)=> {
           console.log(err);
         })
-
-    } else if (field === "picture") {
-      api.patch(`/profileInfo/updateProfilePic`, {
-        "picture": changeValue
-      })
-      .then((response)=> {
-        setProfilePic(response.data)
-      })
-      .catch((err)=> {
-        console.log(err);
-      })
+      }
     }
   }
 
@@ -81,21 +60,18 @@ export default function ProfileInfo({setOpenProfile}) {
     <div>
     <GreyBackground onClick={()=> {setOpenProfile(false)}}/>
     <TopModal>
-      <RowContainer>
-        <img
-          style={{ height: "10vw", width: "10vw" }}
+
+      {editInProgress ?
+        <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} />
+        : <div style={{paddingTop: "30px"}}><RowContainer>
+        <Image
+
           src={profilePic}
           alt="profile pic"
         />
-        <p>Username: {username}</p>
+        <p><b>Username: </b>{username}</p>
       </RowContainer>
-      <button onClick={() => { setEditInProgress(true) }}>Update Profile</button>
-      {editInProgress ?
-        <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} />
-        : <div></div>}
-      {trips.map((trip) => {
-        return (<TripTiles key={trip.id} trip={trip} />)
-      })}
+      <Button onClick={() => { setEditInProgress(true) }}>Update Profile</Button></div>}
     </TopModal>
 
     </div>
@@ -103,9 +79,26 @@ export default function ProfileInfo({setOpenProfile}) {
 }
 
 const RowContainer = styled.div`
-  display: "flex";
-  flex-direction: "row";
+  display: flex;
+  flex-direction: row;
 `
+
+const Image = styled.img`
+  height: 10vw;
+  width: 10vw;
+  border-radius: 10px;
+  margin: 10px;
+  object-fit: cover;
+  object-position: 50% top;
+`;
+
+const Button = styled.button`
+  padding: 5px;
+  margin: 10px;
+  color: #020331fd;
+  border-radius: 20px;
+  background-color: #4a81efc3;
+`;
 
 const GreyBackground = styled.div`
   background: rgba(0, 0, 0, .5);
@@ -122,9 +115,13 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 z-index: 101;
-width: 80vw;
-height: 70vh;
+width: 35vw;
+height: 45vh;
 overflow: auto;
 background-color: white;
-padding: 10px;
+padding: 35px;
+border-radius: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
 `;

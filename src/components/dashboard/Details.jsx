@@ -12,7 +12,6 @@ export default function Details() {
   const navigate = useNavigate();
 
   return (
-<<<<<<< HEAD
 
     <MainGridCont>
       <InfoContainer>
@@ -79,41 +78,6 @@ const Btn = styled.div`
   background-color: white;
 `
 
-=======
-    <Container>
-      <Row>
-        <StopDetails stop={stop} />
-      </Row>
-      <Row>
-        <MapWrapper>
-          <Map small navigateDirection="../map" />
-        </MapWrapper>
-        <ChatWrapper>
-          <Chat />
-        </ChatWrapper>
-      </Row>
-    </Container>
-  );
-}
-
-const Container = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
-const Row = styled.div`
-  display: flex;
-  flex: 1;
-`;
-const MapWrapper = styled.div`
-  flex: 1;
-  height: 100%;
-`;
-const ChatWrapper = styled.div`
-  flex: 1;
-  max-height: 500px;
-`;
->>>>>>> fff52311919bbc4326d4a10b553bdb1fd1189809
 const PlusIcon = styled(FontAwesomeIcon)`
   font-size: 1em;
 `;

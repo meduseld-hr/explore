@@ -40,11 +40,10 @@ const MainGridCont = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 2em;
-  grid-row-gap: 2em;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
   width: 100%;
   height: 100%;
-  padding: 1em;
 `
 const InfoContainer = styled.div`
   grid-area: 1 / 1 / 2 / 2;

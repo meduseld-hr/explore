@@ -31,8 +31,8 @@ export default function LandingPage() {
       <br />
       <i>Travel with excellence.</i>
       <br /><br />
-      <label htmlFor="destinationSearch">Where would you like to go next:</label> <br />
-      <input style={{width: '50%', margin: '0 auto'}} type="search" name="destinationSearch" onChange={onChange} />
+      {/*<label htmlFor="destinationSearch">Where would you like to go next:</label> <br />
+      <input style={{width: '50%', margin: '0 auto'}} type="search" name="destinationSearch" onChange={onChange} /> */}
       <br />
       <Button onClick={onClick}>Start Your Adventure</Button>
     </TopModal>

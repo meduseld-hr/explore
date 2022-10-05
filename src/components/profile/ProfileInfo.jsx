@@ -84,7 +84,6 @@ export default function ProfileInfo({ setOpenProfile }) {
         {trips.map((trip) => {
           return <TripTiles key={trip.id} trip={trip} />;
         })}
-      </TopModal>
     </div>
   );
 }

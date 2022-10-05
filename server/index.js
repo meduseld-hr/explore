@@ -45,6 +45,7 @@ app.get('/api/profile', (req, res) => {
   res.send(JSON.stringify(req.oidc.user))
 });
 
+
 io.on('connection', (socket) => {
   console.log('connected to dashboard');
   socket.on('chat message', (message) => {
@@ -54,7 +55,7 @@ io.on('connection', (socket) => {
     console.log('disconnected from dashboard');
     io.emit('leave', socket.id);
   });
-});
+})
 
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

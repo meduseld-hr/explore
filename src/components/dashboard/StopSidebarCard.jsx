@@ -2,9 +2,26 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import api from '../../functions/api';
+import {useParams} from 'react-router-dom';
 
 export default function StopSidebarCard({ stop }) {
+
+  const {tripId} = useParams();
+
   const navigate = useNavigate();
+  console.log(stop);
+  const moveStopUp = () => {
+    api.put()
+  };
+
+  const moveStopDown = () => {
+    api.put()
+  };
+
+  const deleteStop = () => {
+
+  };
 
   return (
     <Card>
@@ -12,9 +29,9 @@ export default function StopSidebarCard({ stop }) {
       <div>{stop.stop_name}</div>
       <div>{stop.greater_location}</div>
       <Actions>
-        <Action>⬆️</Action>
-        <Action>⬇️</Action>
-        <Action>❌</Action>
+        <Action onClick={moveStopUp}>⬆️</Action>
+        <Action onClick={moveStopDown}>⬇️</Action>
+        <Action onClick={deleteStop}>❌</Action>
       </Actions>
     </Card>
   );

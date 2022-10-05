@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { UserContext } from "../contexts/user";
 import SideBar from "../components/dashboard/Sidebar.jsx";
@@ -14,6 +14,8 @@ export default function Dashboard () {
   const user = useContext(UserContext);
   const [search, setSearch] = useState('');
   const [stops, setStops] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const socket = useRef(null);
 
   function addStop (stop) {
     stop.stop_order = stops.at(-1) + 1;
@@ -21,13 +23,32 @@ export default function Dashboard () {
   }
 
   useEffect(() => {
+    socket.current = io(`http://localhost:3000`, {
+      withCredentials: false
+    });
+    socket.current.on('chat message', (message) => {
+      if (message.tripId === tripId) {
+        setMessages((messages) => (
+          [...messages, message]
+        ));
+        const messageList = document.getElementById('messages');
+        if (scrollBottom.current === messageList.scrollTop) {
+          messageList.scrollTo(0, messageList.scrollHeight);
+          scrollBottom.current = messageList.scrollTop;
+        }
+      }
+    });
     api.get(`/dashboard/${tripId}`)
-    .then((response) => {
-      setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+      .then((response) => {
+        setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
+        setMessages(response.data[1]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return () => {
+      socket.current.disconnect();
+    }
   }, [])
 
   return (
@@ -42,7 +63,7 @@ export default function Dashboard () {
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea stops={stops} addStop={addStop}/>
+      <StagingArea stops={stops} addStop={addStop} messages={messages} socket={socket} />
     </DashContainer>
   )
 }

@@ -7,6 +7,7 @@ import en from 'javascript-time-ago/locale/en';
 import ReactTimeAgo from 'react-time-ago';
 import {useParams} from 'react-router-dom';
 import AddUsersModal from './AddUsersModal.jsx';
+import { useOutletContext } from 'react-router-dom';
 
 TimeAgo.addDefaultLocale(en);
 
@@ -16,47 +17,15 @@ const Chat = () => {
   const {tripId} = useParams();
 
   const [body, setBody] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [stops, addStop, messages, socket] = useOutletContext();
   const [addingUsers, setAddingUsers] = useState(false);
-  const socket = useRef(null);
-  const scrollBottom = useRef(0);
-
-  useEffect(() => {
-    socket.current = io('http://localhost:3000', {
-      withCredentials: false
-    });
-    socket.current.on('chat message', (message) => {
-      setMessages((messages) => (
-        [...messages, message]
-      ));
-      const messageList = document.getElementById('messages');
-      if (scrollBottom.current === messageList.scrollTop) {
-        messageList.scrollTo(0, messageList.scrollHeight);
-        scrollBottom.current = messageList.scrollTop;
-      }
-    });
-    api.get(`/dashboard/${tripId}`)
-      .then((response) => {
-        setMessages(response.data[1]);
-        const messageList = document.getElementById('messages');
-        messageList.scrollTo(0, messageList.scrollHeight);
-        scrollBottom.current = messageList.scrollTop;
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    return () => {
-      socket.current.disconnect();
-    }
-  }, []);
+  const scrollBottom = useRef();
 
   useEffect(() => {
     const messageList = document.getElementById('messages');
-    if (scrollBottom.current === messageList.scrollTop) {
-      messageList.scrollTo(0, messageList.scrollHeight);
-      scrollBottom.current = messageList.scrollTop;
-    }
-  }, [messages])
+    messageList.scrollTo(0, messageList.scrollHeight);
+    scrollBottom.current = messageList.scrollTop;
+  }, [messages]);
 
   return (
     <ChatCont>
@@ -88,6 +57,7 @@ const Chat = () => {
           api.post(`/dashboard/${tripId}/chat`, {body, timeStamp: Date.now()})
             .then(() => {
               socket.current.emit('chat message', {
+                tripId,
                 body,
                 time_stamp: Date.now() / 1000,
                 nickname: user.nickname,

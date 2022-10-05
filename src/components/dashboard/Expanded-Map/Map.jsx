@@ -18,6 +18,7 @@ import MapInfo from './MapInfo';
 import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
 const MAPS_SECRET = 'AIzaSyBSN7vnZvFPDtAVLBzu8LB0N_MEn5fzHXc';
 
@@ -43,6 +44,7 @@ export default function App({ small, navigateDirection = '../details' }) {
   const destinationRef = useRef();
   const searchRef = useRef(null);
   const mapRef = useRef();
+  const [stops, addStop] = useOutletContext();
 
   if (loadError) {
     return 'Error loading maps';
@@ -93,7 +95,7 @@ export default function App({ small, navigateDirection = '../details' }) {
       >
         {markers.map((marker, index) => (
           <InfoWindow key={index} position={marker.geometry.location}>
-            <MapInfo marker={marker} />
+            <MapInfo addStop={addStop} marker={marker} />
           </InfoWindow>
         ))}
 

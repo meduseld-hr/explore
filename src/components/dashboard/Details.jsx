@@ -4,30 +4,19 @@ import Chat from './Chat'
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Map from './Expanded-Map/Map';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import StopDetails from './details/StopDetails';
 
 export default function Details() {
 
+  const {stop} = useOutletContext();
   const navigate = useNavigate();
 
   return (
     <ColCont>
       <Cont>
         <Cont>
-          <ColCont>
-            <Cont>
-              <h2>Place Title</h2>
-              <Btn><PlusIcon icon={faPlus}></PlusIcon></Btn>
-            </Cont>
-            <Cont>
-              <PicContainer>
-                Picture Grid
-              </PicContainer>
-              <Cont>
-                Info
-              </Cont>
-            </Cont>
-          </ColCont>
+          <StopDetails stop={stop}/>
           <Cont>
             Calender Here
           </Cont>
@@ -62,8 +51,6 @@ const SmallCont = styled.div`
   height: 50%;
   display: flex;
   flex: 1 0 50%;
-  padding: 1em;
-  border: 1px solid black;
   border-radius: 2em;
 `
 const PicContainer = styled.div`

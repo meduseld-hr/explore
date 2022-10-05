@@ -17,6 +17,8 @@ pool.connect((err) => {
   }
 });
 
+// TRIPS
+
 pool.getTrips = (userId) => {
   return pool
     .query(
@@ -142,6 +144,96 @@ pool.deleteTrip = (tripId, userId) => {
     .catch((err) => console.log(`Error deleting trip: `, tripId, err))
 }
 
+pool.markTripCompleted = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips t
+      SET complete = true
+      FROM trips_users tu
+      WHERE t.id = tu.trip_id AND t.id = $1 AND tu.user_Id = $2
+      `
+      , [tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error marking trip completed `, err))
+}
+
+pool.markTripIncomplete = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips t
+      SET complete = false
+      FROM trips_users tu
+      WHERE t.id = tu.trip_id AND t.id = $1 AND tu.user_Id = $2
+      `
+      , [tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error marking trip incomplete `, err))
+}
+
+pool.changeTripName = (tripId, newTripName, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips t
+      SET trip_name = $1
+      FROM trips_users tu
+      WHERE t.id = tu.trip_id AND t.id = $2 AND tu.user_Id = $3
+      `
+      , [newTripName, tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error changing trip name `, err))
+}
+
+pool.changeTripOrigin = (tripId, { newOriginId, newThumbnailUrl }, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips t
+      SET origin_google_place_id = $1, thumbnail_url = $2
+      FROM trips_users tu
+      WHERE t.id = tu.trip_id AND t.id = $3 AND tu.user_Id = $4
+      `
+      , [newOriginId, newThumbnailUrl, tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error changing trip origin `, err))
+}
+
+pool.markTripPublic = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips t
+      SET public = true
+      FROM trips_users tu
+      WHERE t.id = tu.trip_id AND t.id = $1 AND tu.user_Id = $2
+      `
+      , [tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error marking trip public `, err))
+}
+
+pool.markTripPrivate = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips t
+      SET public = false
+      FROM trips_users tu
+      WHERE t.id = tu.trip_id AND t.id = $1 AND tu.user_Id = $2
+      `
+      , [tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error marking trip private `, err))
+}
+
 // STOPS
 
 pool.getStops = (tripId, userId) => {
@@ -202,7 +294,7 @@ pool.deleteStop = (stopId, userId) => {
     .catch((err) => console.log(`Error deleting stop: `, stopId, err))
 }
 
-pool.changeStopTime = ({ stopId, newTime }, userId) => {
+pool.changeStopTime = (stopId, newTime, userId) => {
   return pool
     .query(
       `
@@ -217,7 +309,7 @@ pool.changeStopTime = ({ stopId, newTime }, userId) => {
     .catch((err) => console.log(`Error updating timestamp for stop: `, stopId, err))
 }
 
-pool.changeStopOrder = ({ stopId, tripId, newOrder }, userId) => {
+pool.changeStopOrder = (stopId, { tripId, newOrder }, userId) => {
   return pool
     .query(
       `
@@ -244,6 +336,8 @@ pool.changeStopOrder = ({ stopId, tripId, newOrder }, userId) => {
     })
     .catch((err) => console.log(`Error updating order for stop: `, stopId, err))
 }
+
+// MESSAGES
 
 pool.getMessages = (tripId) => {
   return pool
@@ -275,6 +369,7 @@ pool.addMessage = ({body, tripId, userId, timeStamp}) => {
     .catch((err) => console.log(`Error adding message to trip: `, err));
 }
 
+// USERS
 
 pool.getUserInfo = (userId) => {
   return pool
@@ -334,6 +429,49 @@ pool.updateUserPic = (userId, updatedValue) => {
     .then((response) => response.rows)
     .catch((err) => console.log('Error updating userInfo', err));
 },
+
+pool.searchUser = (searchTerm) => {
+  return pool
+    .query(
+      `
+      SELECT id, nickname, picture
+      FROM users
+      WHERE nickname ILIKE $1
+      `
+      , [searchTerm + '%']
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error searching for users `, err))
+}
+
+// TRIPS/USERS
+
+pool.addUserToTrip = (tripId, addedUserID, authUserId) => {
+  return pool.getTrips(authUserId)
+    .then((response) => {
+      var authCheck = false;
+      response.forEach((trip) => {
+        if (trip.id === tripId) {
+          authCheck = true;
+        }
+      })
+      if (authCheck) {
+        return pool
+          .query(
+            `
+            INSERT INTO trips_users (trip_id, user_id, owner, liked, added)
+            VALUES ($1, $2, $3, $4, $5)
+            `
+            , [tripId, addedUserID, false, false, false]
+          )
+          .then((response) => response.rows)
+          .catch((err) => console.log(`Error inserting user into user_trips `, err))
+      } else {
+        return `Unauthorized User: ${authUserId} for Trip id: ${tripId}`;
+      }
+    })
+    .catch((err) => console.log(`Error retrieving trips`, err))
+}
 
 
 

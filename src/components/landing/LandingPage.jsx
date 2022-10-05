@@ -2,19 +2,22 @@ import logo from '/408006.webp';
 import explorer from '/Logo_Light_v2.png';
 import { useState } from 'react'
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
   let [destination, setDestination] = useState('')
+  const navigate = useNavigate();
 
-  const onChange = (e) => {
-    e.preventDefault();
-    setDestination(e.target.value);
-  }
+  // const onChange = (e) => {
+  //   e.preventDefault();
+  //   setDestination(e.target.value);
+  // }
 
   const onClick = () => {
     console.log(`I am going to ${destination}`);
     //make axios request for recommended trips by "destination"
     //redirect to page for trips
+    navigate(`../trips`)
   }
   return <div>
     <LOGOBackground src={logo} />

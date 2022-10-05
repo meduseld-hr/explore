@@ -120,12 +120,13 @@ const Chat = () => {
 };
 
 const ChatCont = styled.div`
-  box-sizing: border-box;
+  grid-area: 2 / 1 / 3 / 3;
+  padding: 1.5em;
+  border-radius: 1.5em;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: .25em;
+  background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
 `
 
 const MessageCont = styled.div`
@@ -133,6 +134,7 @@ const MessageCont = styled.div`
   flex-direction: column;
   overflow: auto;
   gap: 1em;
+  max-height: 30vh;
   width: 100%;
   &::-webkit-scrollbar {
     display: none;

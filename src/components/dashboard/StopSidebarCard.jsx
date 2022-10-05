@@ -1,20 +1,22 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ stop }) {
+export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected }) {
   const navigate = useNavigate();
-
   return (
-    <Card>
+    <Card onClick={changeIndex} style={{border: selected ? '2px solid red' : '2px solid black'}}>
       <Thumbnail src={stop.thumbnail_url} />
-      <div>{stop.stop_name}</div>
-      <div>{stop.greater_location}</div>
+      <Detail>
+        <Name>{stop.stop_name}</Name>
+        <Loc>{stop.greater_location}</Loc>
+      </Detail>
       <Actions>
-        <Action>⬆️</Action>
-        <Action>⬇️</Action>
-        <Action>❌</Action>
+        <Action icon={faArrowUp}/>
+        <Delete icon={faXmark}/>
+        <Action icon={faArrowDown}/>
       </Actions>
     </Card>
   );
@@ -44,13 +46,24 @@ const Card = styled.div`
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: absolute;
+  margin-left: auto;
+  margin-right: .2em;
+`;
+const Action = styled(FontAwesomeIcon)`
+  font-size: 1.8em;
+  color: #030333;
+  cursor: pointer;
+`
+const Delete = styled(Action)`
+  color: red;
+`
+const Detail = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   position: absolute;
   left: 50%;
 `;
-const Action = styled.div`
-  cursor: pointer;
-`
 const OpenTrip = styled(FontAwesomeIcon)`
   color: #383838;
   font-size: 2em;
@@ -59,3 +72,9 @@ const OpenTrip = styled(FontAwesomeIcon)`
   cursor: pointer;
   z-index: 1;
 `;
+const Name = styled.div`
+  font-weight: 500;
+`
+const Loc = styled.div`
+  font-style: italic;
+`

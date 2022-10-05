@@ -46,7 +46,6 @@ export default function App({ small, navigateDirection = '../details' }) {
   const searchRef = useRef(null);
   const mapRef = useRef();
 
-  const [map, setMap] = useState(null);
   const [tripRoute, setTripRoute] = useState(null)
   const [tripStops, setTripStops] = useState([
     {lat: 30.281812053292956, lng: -97.73815329458314},
@@ -58,8 +57,6 @@ export default function App({ small, navigateDirection = '../details' }) {
   const [duration, setDuration] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
-  const searchRef = useRef(null);
-  const mapRef = useRef();
   const [stops, addStop] = useOutletContext();
 
   if (loadError) {
@@ -147,26 +144,28 @@ export default function App({ small, navigateDirection = '../details' }) {
   }
 
 
-  return <div>
-    <GoogleMap
-      mapContainerClassName="map-container"
-      mapContainerStyle={mapContainerStyle}
-      onCenterChanged={throttleIdle}
-      onClick={handleDirections}
-      zoom={8}
-      center={center}
-      ref={mapRef}
-      options={mapOptions}
-      onLoad={(map) => {
-        setMap(map);
-      }}
-    >
-
+  return (
+    <Container>
+    {shouldRedirect && <Navigate to={navigateDirection} />}
+      <Icon
+        icon={!small ? faCompress : faExpand}
+        onClick={() => setShouldRedirect(true)}
+      />
+      <GoogleMap
+        mapContainerClassName="map-container"
+        mapContainerStyle={mapContainerStyle}
+        onDragEnd={throttleIdle}
+        onZoomChanged={throttleIdle}
+        onClick={handleDirections}
+        zoom={8}
+        center={center}
+        ref={mapRef}
+        options={mapOptions}
+      >
       {markers.map((marker, index) => (
-        <InfoWindow
-          key={index}
-          position={marker.geometry.location}
-        ><Info marker={marker}/></InfoWindow>
+        <InfoWindow key={index} position={marker.geometry.location}>
+          <MapInfo addStop={addStop} marker={marker} />
+        </InfoWindow>
       ))}
 
       {tripRoute && <DirectionsRenderer directions={tripRoute} />}
@@ -191,9 +190,6 @@ export default function App({ small, navigateDirection = '../details' }) {
             console.log(searchRef.current.value);
             setLocationSearch(searchRef.current.value);
             searchRef.current.value = '';
-
-            //Add Marker to Map
-            //Pan to Marker on Map
           }}
         />
       </GoogleMap>

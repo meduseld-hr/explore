@@ -34,6 +34,20 @@ pool.getTrips = (userId) => {
     .catch((err) => console.log('Error retrieving trips', err));
 }
 
+pool.searchTrips = (placeID) => {
+  return pool
+    .query(
+      `
+    SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url
+    FROM trips AS t
+    WHERE t.public = true AND t.origin_google_place_id = $1
+  `,
+      [placeID]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error retrieving trips', err));
+}
+
 pool.addTrip = ({ tripName, googlePlaceId, thumbnailUrl, completed, public }, userId) => {
   return pool
     .query(

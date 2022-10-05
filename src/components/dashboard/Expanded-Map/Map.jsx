@@ -45,24 +45,18 @@ export default function App() {
 
   const [map, setMap] = useState(null);
   const [tripRoute, setTripRoute] = useState(null)
-  // const [directionsResponse, setDirectionsResponse] = useState(null);
+  const [tripStops, setTripStops] = useState([
+    {lat: 30.281812053292956, lng: -97.73815329458314},
+    {lat: 30.230781421835704, lng: -97.75279748278045},
+    {lat: 30.26518019321872, lng: -97.7720555943571},
+    {lat: 30.301887158191406, lng: -97.8260877885794}
+  ])
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
 
-  // async function calculateRoute () {
-  //   const directionsService = new google.maps.DirectionsService()
-  //   const results = await directionsService.route({
-  //     origin: "Austin, TX",
-  //     destination: "Bee Cave, TX",
-  //     travelMode: google.maps.TravelMode.DRIVING
-  //   })
-  //   setDirectionsResponse(results);
-  //   setDistance(results.routes[0].legs[0].distance.value);
-  //   setDuration(results.routes[0].legs[0].duration.value);
 
-  // }
   function clearDirections() {
     setTripRoute(null);
     setDistance('');
@@ -89,6 +83,7 @@ export default function App() {
     loader.load().then(() => {
       const service = new google.maps.places.PlacesService(mapRef.current.state.map);
       service.nearbySearch({bounds: bounds, type: 'tourist_attraction'}, (places) => {
+        console.log(places)
         setMarkers(places);
       });
     })
@@ -113,22 +108,37 @@ export default function App() {
     }
   }
 
-  const testDirections = {
-    lat: 30.37466235839214,
-    lng: -97.84035019783334,
-  }
+  const handleDirections = () => {
 
-  const handleDirections = (origin, destination) => {
+    const tempAllStops = [];
+    for (let i = 0; i < tripStops.length; i++) {
+      tempAllStops.push({
+        location: {
+          lat: tripStops[i].lat,
+          lng: tripStops[i].lng
+        },
+        stopover: true,
+      })
+    }
+
+    const tempWaypoints = tempAllStops.slice();
+    tempWaypoints.shift()
+    tempWaypoints.pop();
+    console.log(tempWaypoints);
+
     const loader = new Loader({apiKey:MAPS_SECRET});
     loader.load().then(() => {
     const directionsService = new google.maps.DirectionsService();
     directionsService.route({
-      origin:  "Austin, Texas",
-      destination:  "Bee Cave, Texas",
+      origin:  tempAllStops[0].location,
+      destination:  tempAllStops[tempAllStops.length - 1].location,
       travelMode: google.maps.TravelMode.DRIVING,
+      waypoints: tempWaypoints,
     }, (directions) => {
       setTripRoute(directions);
-      console.log("directions set")
+      setDistance(directions.routes[0].legs[0].distance.text);
+      setDuration(directions.routes[0].legs[0].duration.text);
+      console.log("directions set: ", directions);
       }
     )})
     .catch(err => {
@@ -137,12 +147,6 @@ export default function App() {
   }
 
 
-  const tripPath = [
-    {lat: 30.281812053292956, lng: -97.73815329458314},
-    {lat: 30.230781421835704, lng: -97.75279748278045},
-    {lat: 30.26518019321872, lng: -97.7720555943571},
-    {lat: 30.301887158191406, lng: -97.8260877885794}
-  ]
 
   return <div>
     <GoogleMap

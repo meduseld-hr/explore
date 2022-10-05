@@ -72,12 +72,8 @@ const DashContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
   border: 2px solid black;
-<<<<<<< HEAD
   gap: 1em;
 `
-=======
-`;
->>>>>>> 51a50c71e222e3b1203247a023ad93777a934e95
 const SidebarWrapper = styled.div`
   width: 100%;
   grid-column: 1;

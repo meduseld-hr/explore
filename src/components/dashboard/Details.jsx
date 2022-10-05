@@ -12,41 +12,7 @@ export default function Details() {
   const navigate = useNavigate();
 
   return (
-<<<<<<< HEAD
-    <Container>
-      <Row>
-        <StopDetails stop={stop} />
-      </Row>
-      <Row>
-        <MapWrapper>
-          <Map small navigateDirection="../map" />
-        </MapWrapper>
-        <ChatWrapper>
-          <Chat />
-        </ChatWrapper>
-      </Row>
-    </Container>
-  );
-}
 
-const Container = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
-const Row = styled.div`
-  display: flex;
-  flex: 1;
-`;
-const MapWrapper = styled.div`
-  flex: 1;
-  height: 100%;
-`;
-const ChatWrapper = styled.div`
-  flex: 1;
-  max-height: 500px;
-`;
-=======
     <MainGridCont>
       <InfoContainer>
         <InfoHeader>
@@ -55,15 +21,10 @@ const ChatWrapper = styled.div`
           <p>Some description about this place?</p>
           <Btn><PlusIcon icon={faPlus}></PlusIcon></Btn>
         </InfoHeader>
-        <PicContainer>
-          Picture Grid
-        </PicContainer>
-        <ScheduleContainer>
-          Schedule
-        </ScheduleContainer>
+        <StopDetails stop={stop} />
       </InfoContainer>
       <MapCont>
-        <Map />
+        <Map small navigateDirection="../map" />
       </MapCont>
       <ChatCont>
         <Chat />
@@ -135,7 +96,6 @@ const Btn = styled.div`
   background-color: white;
 `
 
->>>>>>> 67c4775dd1cd1072fdf7205b0f0b473334fa8b68
 const PlusIcon = styled(FontAwesomeIcon)`
   font-size: 1em;
 `;

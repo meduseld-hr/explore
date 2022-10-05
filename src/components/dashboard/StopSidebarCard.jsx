@@ -1,37 +1,43 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import api from '../../functions/api';
 import {useParams} from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ stop }) {
+export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected }) {
 
   const {tripId} = useParams();
-
   const navigate = useNavigate();
   console.log(stop);
   const moveStopUp = () => {
-    api.put()
+    console.log('move stop up');
+    // api.put()
   };
 
   const moveStopDown = () => {
-    api.put()
+    console.log('move stop down');
+    // api.put()
   };
 
   const deleteStop = () => {
+    console.log('delete stop');
 
   };
 
+
   return (
-    <Card>
+    <Card onClick={changeIndex} style={{border: selected ? '2px solid red' : '2px solid black'}}>
       <Thumbnail src={stop.thumbnail_url} />
-      <div>{stop.stop_name}</div>
-      <div>{stop.greater_location}</div>
+      <Detail>
+        <Name>{stop.stop_name}</Name>
+        <Loc>{stop.greater_location}</Loc>
+      </Detail>
       <Actions>
-        <Action onClick={moveStopUp}>⬆️</Action>
-        <Action onClick={moveStopDown}>⬇️</Action>
-        <Action onClick={deleteStop}>❌</Action>
+        <Action icon={faArrowUp} onClick={moveStopUp}/>
+        <Delete icon={faXmark} onClick={moveStopDown}/>
+        <Action icon={faArrowDown} onClick={deleteStop}/>
       </Actions>
     </Card>
   );
@@ -61,13 +67,24 @@ const Card = styled.div`
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: absolute;
+  margin-left: auto;
+  margin-right: .2em;
+`;
+const Action = styled(FontAwesomeIcon)`
+  font-size: 1.8em;
+  color: #030333;
+  cursor: pointer;
+`
+const Delete = styled(Action)`
+  color: red;
+`
+const Detail = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   position: absolute;
   left: 50%;
 `;
-const Action = styled.div`
-  cursor: pointer;
-`
 const OpenTrip = styled(FontAwesomeIcon)`
   color: #383838;
   font-size: 2em;
@@ -76,3 +93,9 @@ const OpenTrip = styled(FontAwesomeIcon)`
   cursor: pointer;
   z-index: 1;
 `;
+const Name = styled.div`
+  font-weight: 500;
+`
+const Loc = styled.div`
+  font-style: italic;
+`

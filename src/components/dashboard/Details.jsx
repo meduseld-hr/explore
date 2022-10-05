@@ -1,84 +1,61 @@
-import React from 'react'
-import styled from 'styled-components'
-import Chat from './Chat'
+import React from 'react';
+import styled from 'styled-components';
+import Chat from './Chat';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Map from './Expanded-Map/Map';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import StopDetails from './details/StopDetails';
 
 export default function Details() {
-
+  const { stop } = useOutletContext();
   const navigate = useNavigate();
 
   return (
-    <ColCont>
-      <Cont>
-        <Cont>
-          <ColCont>
-            <Cont>
-              <h2>Place Title</h2>
-              <Btn><PlusIcon icon={faPlus}></PlusIcon></Btn>
-            </Cont>
-            <Cont>
-              <PicContainer>
-                Picture Grid
-              </PicContainer>
-              <Cont>
-                Info
-              </Cont>
-            </Cont>
-          </ColCont>
-          <Cont>
-            Calender Here
-          </Cont>
-        </Cont>
-      </Cont>
-      <Cont>
-        <SmallCont>
-          <Map small navigateDirection='../map'/>
-        </SmallCont>
-        <SmallCont>
-          <Chat />
-        </SmallCont>
-      </Cont>
-    </ColCont>
+
+    <MainGridCont>
+      <InfoContainer>
+        <StopDetails stop={stop} />
+      </InfoContainer>
+      <MapCont>
+        <Map small navigateDirection="../map" />
+      </MapCont>
+      <Chat />
+    </MainGridCont>
   )
 }
 
-const Cont = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-  flex: 1;
-  border: 1px solid black;
-`
-
-const ColCont = styled(Cont)`
-  flex-direction: column;
-`
-
-const SmallCont = styled.div`
-  width: 50%;
-  height: 50%;
-  display: flex;
-  flex: 1 0 50%;
-  padding: 1em;
-  border: 1px solid black;
-  border-radius: 2em;
-`
-const PicContainer = styled.div`
-  flex: 1;
-  height: 50%;
-  width: 50%;
+const MainGridCont = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  width: 100%;
+  height: 100%;
+`
+const InfoContainer = styled.div`
+  grid-area: 1 / 1 / 2 / 2;
+  border: 1px solid black;
+  border-radius: 1.5em;
+  padding: 1.5em;
+  background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
 `
 
-const InfoContainer = styled.div`
-  flex: 1;
-  height: 50%;
-  width: 50%;
+const InfoHeader = styled.div`
+  grid-area: 1 / 1 / 2 / 3;
+  height: 20%;
+`
+
+const ScheduleContainer = styled.div`
+  grid-area: 2 / 2 / 3 / 3;
+`
+
+const MapCont = styled.div`
+  grid-area: 1 / 2 / 2 / 3;
+  border: 1px solid black;
+  border-radius: 1.5em;
 `
 
 const Btn = styled.div`
@@ -94,4 +71,4 @@ const Btn = styled.div`
 
 const PlusIcon = styled(FontAwesomeIcon)`
   font-size: 1em;
-`
+`;

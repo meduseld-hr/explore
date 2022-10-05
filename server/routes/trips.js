@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
   const userId = req.oidc.user.sub;
   console.log(userId);
   db.getTrips(userId).then(response => {
-    console.log('Trips response: ', response);
     res.status(200).send(response);
   })
   .catch(err => {

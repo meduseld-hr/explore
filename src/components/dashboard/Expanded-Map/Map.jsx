@@ -58,7 +58,9 @@ export default function App({ small, navigateDirection = '../details' }) {
   const [duration, setDuration] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
-  const [stops, addStop] = useOutletContext();
+  const searchRef = useRef(null);
+  const mapRef = useRef();
+  const {stops, addStop} = useOutletContext();
 
   if (loadError) {
     return 'Error loading maps';

@@ -2,95 +2,112 @@ import TripTiles from "./TripTiles.jsx";
 import EditProfileModal from "./EditProfileModal.jsx";
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/user";
-import styled from 'styled-components';
-import api from '../../functions/api';
-import dummyDataTripsUsers from './dummyData.js'
+import styled from "styled-components";
+import api from "../../functions/api";
+import { dummyDataTripsUsers } from "./dummyData.js";
 
-export default function ProfileInfo({setOpenProfile}) {
+export default function ProfileInfo({ setOpenProfile }) {
   const user = useContext(UserContext);
   let [editInProgress, setEditInProgress] = useState(false);
-  let [profilePic, setProfilePic] = useState("https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png");
+  let [profilePic, setProfilePic] = useState(
+    "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png"
+  );
   let [username, setUsername] = useState(user.nickname);
   const [trips, setTrips] = useState(dummyDataTripsUsers.results);
 
-  useEffect(()=>{
-    api.get(`/profileInfo/info`)
-      .then((response)=>{
-        let pic = response.data[0].picture
-        let nickname = response.data[0].nickname
+  useEffect(() => {
+    api
+      .get(`/profileInfo/info`)
+      .then((response) => {
+        let pic = response.data[0].picture;
+        let nickname = response.data[0].nickname;
         setProfilePic(pic);
         setUsername(nickname);
       })
       .catch((err) => {
         console.log(err);
-      })
-    api.get(`/trips/`)
-      .then((response)=> {
-        setTrips(response.data)
-      })
-  }, [])
+      });
+    api.get(`/trips/`).then((response) => {
+      setTrips(response.data);
+    });
+  }, []);
 
   const onSubmit = (e, field) => {
     e.preventDefault();
     let changeValue = e.target.form[0].value;
-    if (changeValue.length > 0){
+    if (changeValue.length > 0) {
       if (field === "nickname") {
-        api.patch(`/profileInfo/updateNickname`, {
-          "nickname": changeValue
-        })
-          .then((response)=> {
+        api
+          .patch(`/profileInfo/updateNickname`, {
+            nickname: changeValue,
+          })
+          .then((response) => {
             setUsername(response.data.nickname);
             setEditInProgress(false);
           })
-          .catch((err)=> {
+          .catch((err) => {
             console.log(err);
-          })
-
+          });
       } else if (field === "picture") {
-        api.patch(`/profileInfo/updateProfilePic`, {
-          "picture": changeValue
-        })
-        .then((response)=> {
-          setProfilePic(response.data.picture);
-          setEditInProgress(false);
-        })
-        .catch((err)=> {
-          console.log(err);
-        })
+        api
+          .patch(`/profileInfo/updateProfilePic`, {
+            picture: changeValue,
+          })
+          .then((response) => {
+            setProfilePic(response.data.picture);
+            setEditInProgress(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     }
-  }
+  };
 
   return (
     <div>
-    <GreyBackground onClick={()=> {setOpenProfile(false)}}/>
-    <TopModal>
+      <GreyBackground
+        onClick={() => {
+          setOpenProfile(false);
+        }}
+      />
+      <TopModal>
+        {editInProgress ? (
+          <EditProfileModal
+            onSubmit={onSubmit}
+            setEditInProgress={setEditInProgress}
+          />
+        ) : (
+          <div style={{ paddingTop: "30px" }}>
+            <RowContainer>
+              <Image src={profilePic} alt="profile pic" />
+              <p>
+                <b>Username: </b>
+                {username}
+              </p>
+            </RowContainer>
+            <Button
+              onClick={() => {
+                setEditInProgress(true);
+              }}
+            >
+              Update Profile
+            </Button>
+          </div>
+        )}
 
-      {editInProgress ?
-        <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} />
-        : <div style={{paddingTop: "30px"}}><RowContainer>
-        <Image
-
-          src={profilePic}
-          alt="profile pic"
-        />
-        <p><b>Username: </b>{username}</p>
-      </RowContainer>
-      <Button onClick={() => { setEditInProgress(true) }}>Update Profile</Button></div>}
-
-      {trips.map((trip) => {
-        return (<TripTiles key={trip.id} trip={trip} />)
-      })}
-    </TopModal>
-
+        {trips.map((trip) => {
+          return <TripTiles key={trip.id} trip={trip} />;
+        })}
+      </TopModal>
     </div>
-  )
+  );
 }
 
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
-`
+`;
 
 const Image = styled.img`
   height: 10vw;
@@ -110,27 +127,29 @@ const Button = styled.button`
 `;
 
 const GreyBackground = styled.div`
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 100;
   cursor: pointer;
 `;
 
 const TopModal = styled.div`
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-z-index: 101;
-width: 35vw;
-height: 45vh;
-overflow: auto;
-background-color: white;
-padding: 35px;
-border-radius: 10px;
-display: flex;
-flex-direction: column;
-align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  width: 35vw;
+  height: 45vh;
+  overflow: auto;
+  background-color: white;
+  padding: 35px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;

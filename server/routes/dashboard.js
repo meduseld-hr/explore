@@ -69,12 +69,26 @@ router.put('/:stopId/time', (req, res) => {
 
 // UPDATE A STOP'S ORDER
 
-router.put('/:stopId/order', (req, res) => {
-  const stopData = req.body
+router.put('/:stopId/decrease', (req, res) => {
+  const { tripId } = req.body
   const { stopId } = req.params
   const userId = req.oidc.user.sub
 
-  db.changeStopOrder(stopId, stopData, userId)
+  db.decreaseStopOrder(stopId, tripId, userId)
+  .then(() => {
+    res.status(201).end()
+  })
+  .catch((err) => {
+    res.status(404).end()
+  })
+})
+
+router.put('/:stopId/increase', (req, res) => {
+  const { tripId } = req.body
+  const { stopId } = req.params
+  const userId = req.oidc.user.sub
+
+  db.increaseStopOrder(stopId, tripId, userId)
   .then(() => {
     res.status(201).end()
   })

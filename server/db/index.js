@@ -309,30 +309,62 @@ pool.changeStopTime = (stopId, newTime, userId) => {
     .catch((err) => console.log(`Error updating timestamp for stop: `, stopId, err))
 }
 
-pool.changeStopOrder = (stopId, { tripId, newOrder }, userId) => {
+pool.decreaseStopOrder = (stopId, tripId , userId) => {
+  return pool
+    .query(
+      `
+      UPDATE stops s
+      SET stop_order = stop_order - 1
+      FROM trips_users tu
+      WHERE s.trip_id = tu.trip_id AND s.id = $1 AND s.trip_id = $2 AND tu.user_Id = $3
+      RETURNING stop_order
+      `
+      , [stopId, tripId, userId]
+    )
+    .then((response) => {
+      var stopOrder = response.rows.stop_order
+      return pool
+        .query(
+          `
+          UPDATE stops s
+          SET stop_order = stop_order + 1
+          FROM trips_users tu
+          WHERE s.trip_id = tu.trip_id AND s.id != $1 AND s.stop_order = $2 AND s.trip_id = $3 AND tu.user_Id = $4
+          `
+          , [stopId, stopOrder, tripId, userId]
+        )
+        .then((response) => response.rows)
+        .catch((err) => console.log(`Error updating order for stops`, err))
+    })
+    .catch((err) => console.log(`Error updating order for stop: `, stopId, err))
+}
+
+pool.increaseStopOrder = (stopId, tripId, userId) => {
   return pool
     .query(
       `
       UPDATE stops s
       SET stop_order = stop_order + 1
       FROM trips_users tu
-      WHERE s.trip_id = tu.trip_id AND s.trip_id = $2 AND tu.user_Id = $3 AND s.stop_order >= $1
+      WHERE s.trip_id = tu.trip_id AND s.id = $1 AND s.trip_id = $2 AND tu.user_Id = $3
+      RETURNING stop_order
       `
-      , [newOrder, tripId, userId]
+      , [stopId, tripId, userId]
     )
     .then((response) => {
+      var stopOrder = response.rows.stop_order
       return pool
         .query(
-        `
-        UPDATE stops s
-        SET stop_order = $1
-        FROM trips_users tu
-        WHERE s.trip_id = tu.trip_id AND s.id = $2 AND tu.user_Id = $3
-        `
-        , [newOrder, stopId, userId]
-      )
-      .then((response) => response.rows)
-      .catch((err) => console.log(`Error updating order for stop: `, stopId, err))
+          `
+          UPDATE stops s
+          SET stop_order = stop_order - 1
+          FROM trips_users tu
+          WHERE s.trip_id = tu.trip_id AND s.id != $1 AND s.stop_order = $2 AND s.trip_id = $3 AND tu.user_Id = $4
+          `
+          , [stopId, stopOrder, tripId, userId]
+        )
+        .then((response) => response.rows)
+        .catch((err) => console.log(`Error updating order for stops`, err))
     })
     .catch((err) => console.log(`Error updating order for stop: `, stopId, err))
 }

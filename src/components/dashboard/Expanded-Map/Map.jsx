@@ -15,13 +15,17 @@ import usePlacesAutocomplete, {
 import styled from 'styled-components';
 import _ from 'lodash';
 import MapInfo from './MapInfo';
+import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
 
 const MAPS_SECRET = "AIzaSyBSN7vnZvFPDtAVLBzu8LB0N_MEn5fzHXc";
 
 const libraries = ["places"];
 
-export default function App() {
+export default function App({small, navigateDirection = '../details'}) {
   //setting libraries variable so that console doesn't give warning anymore, per stackOverflow
+  const navigate = useNavigate();
   const [libraries] = useState(['places']);
   const {isLoaded, loadError} = useLoadScript({
     googleMapsApiKey: MAPS_SECRET,
@@ -50,7 +54,7 @@ export default function App() {
 
 
   const mapOptions = {
-    disableDefaultUI: false,
+    disableDefaultUI: true,
     zoomControl: true,
   }
 
@@ -70,12 +74,14 @@ export default function App() {
 
 
 
-  return <div>
+  return <Container>
+    <Icon icon={!small ? faCompress : faExpand} onClick={() => navigate(navigateDirection)}/>
     <GoogleMap
       mapContainerClassName="map-container"
       mapContainerStyle={mapContainerStyle}
-      onCenterChanged={throttleIdle}
-      zoom={8}
+      onDragEnd={throttleIdle}
+      onZoomChanged={throttleIdle}
+      zoom={12}
       center={center}
       ref={mapRef}
       options={mapOptions}
@@ -112,22 +118,27 @@ export default function App() {
           //Pan to Marker on Map
       }}
       />
-
-      <AddStopButton
-        type="submit"
-        value="Add Stop"
-        onClick={(e) => {
-
-          //POST stop to trip
-          //Pan to trip route on Map
-        }}
-      />
-
     </GoogleMap>
-  </div>;
+  </Container>;
 }
 
-
+const Icon = styled(FontAwesomeIcon)`
+  z-index: 1;
+  font-size: 2em;
+  position: absolute;
+  right: .5em;
+  top: .5em;
+  color: white;
+  filter: drop-shadow(1px 1px 2px black);
+  cursor: pointer;
+`
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+  border-radius: 1em;
+  overflow: hidden;
+  position: relative;
+`
 const SearchButton = styled.input`
   height: 32px;
   fontSize: 14px;
@@ -164,6 +175,6 @@ const SearchInput = styled.input`
 `;
 
 const mapContainerStyle = {
-  width: '100vw',
-  height: '100vh',
+  width: '100%',
+  height: '100%',
 };

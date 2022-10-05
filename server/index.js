@@ -30,7 +30,6 @@ const io = socketio(server, {
   }
 });
 function connection (req, res, next) {
-  console.log('I am the connection')
   let userId = req.oidc.user.sub;
   let nickname = req.oidc.user.nickname;
   let picture = req.oidc.user.picture;
@@ -52,7 +51,7 @@ app.use(connection);
 mountRoutes(app);
 
 app.get('/api/profile', (req, res) => {
-  console.log(req.oidc.user);
+  // console.log(req.oidc.user);
   res.send(JSON.stringify(req.oidc.user))
 });
 

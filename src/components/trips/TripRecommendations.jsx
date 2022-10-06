@@ -2,18 +2,17 @@ import styled from "styled-components"
 import TripCard from "./TripCard"
 
 
-export default function TripRecommendations({type}) {
+export default function TripRecommendations({ type, trips }) {
 
   return(
     <Container>
       <Title>
-        {type} trips
+        {type} Trips
       </Title>
       <Cards>
-        <TripCard title='rome, italy' image='https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg'/>
-        <TripCard title={'paris, france'} image='https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg'/>
-        <TripCard title='new orleans, louisiana'/>
-        <TripCard title="tokyo, japan"/>
+        {trips.map((trip)=> {
+          return <TripCard key={trip.id} title={trip.trip_name} image={trip.thumbnail_url}/>
+        })}
       </Cards>
     </Container>
   )

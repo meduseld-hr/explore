@@ -3,7 +3,7 @@ const Router = require('express-promise-router');
 const db = require('../db');
 
 const router = new Router();
-
+const axios = require('axios');
 module.exports = router;
 
 
@@ -31,18 +31,72 @@ router.get('/searchPlaceID', (req, res) => {
     })
 })
 
+router.get('/searchTripsByName', (req, res) => {
+  const placeName = req.query.placeName + '%';
+  db.searchTripsByName(placeName)
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(err => {
+      console.log('Error getting trips', err)
+      res.status(404).end();
+    })
+})
+
 
 router.post('/', (req, res) => {
+
   const tripData = req.body;
   const userId = req.oidc.user.sub;
+  const searchString = req.body.tripName;
+  const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchString}&inputtype=textquery&key=${process.env.GPLACES}`;
 
-  db.addTrip(tripData, userId)
-  .then(response => {
-    res.status(200).end();
-  })
-  .catch(err => {
-    res.status(404).end();
-  })
+  let options = {
+    method: "GET",
+    url: url,
+  };
+  axios(options)
+    .then((response) => {
+      const googlePlaceId = response.data.candidates[0].place_id
+      const url =
+        "https://maps.googleapis.com/maps/api/place/details/json?place_id=" +
+        googlePlaceId +
+        "&key=" +
+        process.env.GPLACES;
+      let options = {
+        method: "GET",
+        url: url,
+      };
+      axios(options)
+        .then((response) => {
+          let photo = response.data.result.photos[0].photo_reference;
+          // const photo_reference = response.data.result.photos[0].photo_reference;
+          let img_url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo}&key=${process.env.GPLACES}`;
+
+          tripData.completed = false;
+          tripData.public = true;
+
+          db.addTrip(tripData, googlePlaceId, img_url, userId)
+          .then(response => {
+
+            let tripId = response[0]
+            res.status(200).send(tripId);
+          })
+          .catch(err => {
+            res.status(404).end();
+          })
+        })
+        .catch((err) => {
+          res.status(500).send(err);
+        });
+
+
+
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+
 })
 
 router.get('/popular', (req, res) => {

@@ -19,8 +19,23 @@ export default function Dashboard() {
   const [stop, setStop] = useState(null);
 
   function addStop(stop) {
-    stop.stop_order = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
-    setStops([...stops, stop]);
+    stop.stopOrder = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
+    api.post(`/dashboard/${tripId}/stop`, {stop})
+      .then((response) => {
+
+        api.get(`/dashboard/${tripId}`)
+          .then((response) => {
+            setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // setStops([...stops, stop]);
   }
 
   useEffect(() => {
@@ -71,6 +86,7 @@ export default function Dashboard() {
               stop={stop}
               key={index}
               selected={index === stopIndex}
+              setStops={setStops}
               changeIndex={() => setStopIndex(index)}
             />
           ))}

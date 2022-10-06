@@ -251,7 +251,7 @@ pool.getStops = (tripId, userId) => {
     .catch((err) => console.log(`Error receiving stops for trip: `, tripId, err))
 }
 
-pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId }, userId) => {
+pool.addStop = ({ stopOrder, stopName, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId }, userId, tripId) => {
 
   return pool.getTrips(userId)
     .then((response) => {
@@ -309,7 +309,7 @@ pool.changeStopTime = (stopId, newTime, userId) => {
     .catch((err) => console.log(`Error updating timestamp for stop: `, stopId, err))
 }
 
-pool.decreaseStopOrder = (stopId, tripId , userId) => {
+pool.decreaseStopOrder = (stopId, tripId, userId) => {
   return pool
     .query(
       `
@@ -322,6 +322,7 @@ pool.decreaseStopOrder = (stopId, tripId , userId) => {
       , [stopId, tripId, userId]
     )
     .then((response) => {
+      console.log('response', response);
       var stopOrder = response.rows.stop_order
       return pool
         .query(

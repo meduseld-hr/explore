@@ -6,26 +6,49 @@ import {useParams} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected }) {
+export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected, setStops }) {
 
   const {tripId} = useParams();
   const navigate = useNavigate();
-  console.log(stop);
-  const moveStopUp = () => {
-    console.log('move stop up');
-    // api.put()
+
+  const decreaseOrder = () => {
+    api.put(`/dashboard/${stop.id}/decrease`, {tripId})
+      .then(() => {
+        api.get(`/dashboard/${tripId}`)
+          .then((response) => {
+            setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
   };
 
-  const moveStopDown = () => {
-    console.log('move stop down');
-    // api.put()
+  const increaseOrder = () => {
+    api.put(`/dashboard/${stop.id}/increase`, {tripId})
+      .then(() => {
+        api.get(`/dashboard/${tripId}`)
+          .then((response) => {
+            setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
   };
 
   const deleteStop = () => {
-    console.log('delete stop');
-
+    api.delete(`/dashboard/${stop.id}`)
+      .then(() => {
+        api.get(`/dashboard/${tripId}`)
+          .then((response) => {
+            setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
   };
-
 
   return (
     <Card onClick={changeIndex} style={{border: selected ? '2px solid red' : '2px solid black'}}>
@@ -35,9 +58,9 @@ export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected
         <Loc>{stop.greater_location}</Loc>
       </Detail>
       <Actions>
-        <Action icon={faArrowUp} onClick={moveStopUp}/>
-        <Delete icon={faXmark} onClick={moveStopDown}/>
-        <Action icon={faArrowDown} onClick={deleteStop}/>
+        <Action icon={faArrowUp} onClick={decreaseOrder}/>
+        <Delete icon={faXmark} onClick={deleteStop}/>
+        <Action icon={faArrowDown} onClick={increaseOrder}/>
       </Actions>
     </Card>
   );
@@ -74,6 +97,7 @@ const Action = styled(FontAwesomeIcon)`
   font-size: 1.8em;
   color: #030333;
   cursor: pointer;
+  z-index: 10;
 `
 const Delete = styled(Action)`
   color: red;

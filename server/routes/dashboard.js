@@ -23,11 +23,12 @@ router.get('/:tripId', (req, res) => {
 
 // POST A NEW STOP TO A TRIP
 
-router.post('/', (req, res) => {
-  const stopData = req.body
-  const userId = req.oidc.user.sub
+router.post('/:tripId/stop', (req, res) => {
+  const stopData = req.body.stop;
+  const {tripId} = req.params;
+  const userId = req.oidc.user.sub;
 
-  db.addStop(stopData, userId)
+  db.addStop(stopData, userId, parseInt(tripId))
   .then(() => {
     res.status(201).end()
   })
@@ -42,7 +43,7 @@ router.delete('/:stopId', (req, res) => {
   const { stopId } = req.params
   const userId = req.oidc.user.sub
 
-  db.deleteStop(stopId, userId)
+  db.deleteStop(parseInt(stopId), userId)
   .then((deletedData) => {
     res.status(200).send(deletedData)
   })
@@ -58,7 +59,7 @@ router.put('/:stopId/time', (req, res) => {
   const { stopId } = req.params
   const userId = req.oidc.user.sub
 
-  db.changeStopTime(stopId, newTime, userId)
+  db.changeStopTime(parseInt(stopId), newTime, userId)
   .then(() => {
     res.status(201).end()
   })
@@ -73,8 +74,9 @@ router.put('/:stopId/decrease', (req, res) => {
   const { tripId } = req.body
   const { stopId } = req.params
   const userId = req.oidc.user.sub
+  console.log(stopId, tripId, userId)
 
-  db.decreaseStopOrder(stopId, tripId, userId)
+  db.decreaseStopOrder(parseInt(stopId), parseInt(tripId), userId)
   .then(() => {
     res.status(201).end()
   })
@@ -88,7 +90,7 @@ router.put('/:stopId/increase', (req, res) => {
   const { stopId } = req.params
   const userId = req.oidc.user.sub
 
-  db.increaseStopOrder(stopId, tripId, userId)
+  db.increaseStopOrder(stopId, parseInt(tripId), userId)
   .then(() => {
     res.status(201).end()
   })

@@ -17,7 +17,7 @@ const Chat = () => {
   const {tripId} = useParams();
 
   const [body, setBody] = useState('');
-  const {stops, addStop, stop, messages, socket} = useOutletContext();
+  const {messages, socket} = useOutletContext();
   const [addingUsers, setAddingUsers] = useState(false);
   const scrollBottom = useRef();
 

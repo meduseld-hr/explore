@@ -20,7 +20,7 @@ import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
-import MAPS_SECRET from './config'
+import MAPS_SECRET from './config';
 
 const libraries = ['places'];
 
@@ -43,85 +43,57 @@ export default function App({ small, navigateDirection = '../details' }) {
   const [selected, setSelected] = useState(null);
   const [locationSearch, setLocationSearch] = useState('');
 
-  const [tripRoute, setTripRoute] = useState(null)
+  const [tripRoute, setTripRoute] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
   const searchRef = useRef(null);
   const mapRef = useRef();
-  const {stops, addStop} = useOutletContext();
+  const { stops, addStop } = useOutletContext();
 
   useEffect(() => {
     // console.log("useEffect called")
-    if(stops.length >= 2) {
-
-      const promiseAllStops = [];
-      for (let i = 0; i < stops.length; i++) {
-        // console.log(stops[i].google_place_id)
-        let options = {
-          method: "GET",
-          url: "/googlePlaces/placeinfo",
-          params: {
-            placeID: stops[i].google_place_id
-          }
-        }
-        promiseAllStops.push(api(options));
+    if (stops.length >= 2) {
+      const tempAllStops = [];
+      for (const stop of stops) {
+        tempAllStops.push({
+          location: { lat: stop.latitude, lng: stop.longitude },
+        });
       }
-      let tempAllStops = [];
-      Promise.all(promiseAllStops)
-      .then(response => {
-        for (let i = 0; i < response.length; i++){
-          tempAllStops.push({
-            location: {
-              lat: response[i].data.result.geometry.location.lat,
-              lng: response[i].data.result.geometry.location.lng
-            },
-            stopover: true,
-          }
-          );
-        }
-        return tempAllStops;
-      })
-      .then((tempAllStops) => {
-        // mutate tripStops clone to get waypoints
-        const tempWaypoints = tempAllStops.slice();
-        tempWaypoints.shift()
-        tempWaypoints.pop();
-        // load directions from Google API
-        const loader = new Loader({apiKey:MAPS_SECRET});
-        loader.load().then(() => {
-          const directionsService = new google.maps.DirectionsService();
-          directionsService.route({
-            origin:  tempAllStops[0].location,//first stop
-            destination:  tempAllStops[tempAllStops.length - 1].location,//last stop
+      // mutate tripStops clone to get waypoints
+      const tempWaypoints = tempAllStops.slice();
+      tempWaypoints.shift();
+      tempWaypoints.pop();
+      // load directions from Google API
+      const loader = new Loader({ apiKey: MAPS_SECRET });
+      loader.load().then(() => {
+        const directionsService = new google.maps.DirectionsService();
+        directionsService.route(
+          {
+            origin: tempAllStops[0].location, //first stop
+            destination: tempAllStops[tempAllStops.length - 1].location, //last stop
             travelMode: google.maps.TravelMode.DRIVING,
-            waypoints: tempWaypoints,//all stops without first and last
-          }, (directions) => {
+            waypoints: tempWaypoints, //all stops without first and last
+          },
+          (directions) => {
             setTripRoute(directions);
             // setDistance(directions.routes[0].legs[0].distance.text);
             // setDuration(directions.routes[0].legs[0].duration.text);
           }
-          )})
-          .catch(err => {
-            console.log(err)
-          });
-        })
-        .catch(err => {
-          console.log(err)
-        });
-      } else {
-        setTripRoute(null);
-      }
+        );
+      });
+    } else {
+      setTripRoute(null);
+    }
+  }, [stops /*distance, duration*/]);
 
-      }, [stops,/*distance, duration*/]);
-
-      if (loadError) {
-        return 'Error loading maps';
-      }
-      if (!isLoaded) {
-        return 'Loading Maps';
-      }
+  if (loadError) {
+    return 'Error loading maps';
+  }
+  if (!isLoaded) {
+    return 'Loading Maps';
+  }
 
   const mapOptions = {
     disableDefaultUI: true,
@@ -132,37 +104,40 @@ export default function App({ small, navigateDirection = '../details' }) {
     var bounds = mapRef.current.state.map.getBounds();
     const loader = new Loader({ apiKey: MAPS_SECRET });
     loader.load().then(() => {
-      const service = new google.maps.places.PlacesService(mapRef.current.state.map);
-      service.nearbySearch({bounds: bounds, type: 'tourist_attraction'}, (places) => {
-        setMarkers(places);
-      });
-    })
+      const service = new google.maps.places.PlacesService(
+        mapRef.current.state.map
+      );
+      service.nearbySearch(
+        { bounds: bounds, type: 'tourist_attraction' },
+        (places) => {
+          setMarkers(places);
+        }
+      );
+    });
   }
 
   const throttleIdle = _.debounce(handleIdle, 1000);
 
   const onSearchLoad = (autocomplete) => {
     setAutoComplete(autocomplete);
-  }
+  };
 
   const onPlaceChanged = () => {
-    if(autocomplete !== null) {
+    if (autocomplete !== null) {
       const tempNewPlaceInfo = autocomplete.getPlace();
       setCenter({
-        lat:  tempNewPlaceInfo.geometry.location.lat(),
-        lng:  tempNewPlaceInfo.geometry.location.lng()
+        lat: tempNewPlaceInfo.geometry.location.lat(),
+        lng: tempNewPlaceInfo.geometry.location.lng(),
       });
       searchRef.current.value = '';
     } else {
-      console.log('Autocomplete not loaded yet')
+      console.log('Autocomplete not loaded yet');
     }
-  }
-
-
+  };
 
   return (
     <Container>
-    {shouldRedirect && <Navigate to={navigateDirection} />}
+      {shouldRedirect && <Navigate to={navigateDirection} />}
       <Icon
         icon={!small ? faCompress : faExpand}
         onClick={() => setShouldRedirect(true)}
@@ -177,28 +152,25 @@ export default function App({ small, navigateDirection = '../details' }) {
         ref={mapRef}
         options={mapOptions}
       >
-      {markers.map((marker, index) => (
-        <InfoWindow key={index} position={marker.geometry.location}>
-          <MapInfo addStop={addStop}  marker={marker} />
-        </InfoWindow>
-      ))}
+        {markers.map((marker, index) => (
+          <InfoWindow key={index} position={marker.geometry.location}>
+            <MapInfo addStop={addStop} marker={marker} />
+          </InfoWindow>
+        ))}
 
-      {tripRoute && <DirectionsRenderer directions={tripRoute} />}
+        {tripRoute && <DirectionsRenderer directions={tripRoute} />}
 
-      <Autocomplete
-        onLoad={onSearchLoad}
-        onPlaceChanged={onPlaceChanged}
-      >
-        <div>
-          <SearchInput
-            type="text"
-            placeholder="Go to a destination:"
-            ref={searchRef}
-          />
-        </div>
-      </Autocomplete>
+        <Autocomplete onLoad={onSearchLoad} onPlaceChanged={onPlaceChanged}>
+          <div>
+            <SearchInput
+              type="text"
+              placeholder="Go to a destination:"
+              ref={searchRef}
+            />
+          </div>
+        </Autocomplete>
 
-      {/*Not needed because of Autocomplete functionality*/}
+        {/*Not needed because of Autocomplete functionality*/}
         {/* <SearchButton
           type="submit"
           value="Search"
@@ -208,7 +180,6 @@ export default function App({ small, navigateDirection = '../details' }) {
             searchRef.current.value = '';
           }}
         /> */}
-
       </GoogleMap>
     </Container>
   );

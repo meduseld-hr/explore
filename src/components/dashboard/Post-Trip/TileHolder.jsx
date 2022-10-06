@@ -31,6 +31,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  overflow: hidden;
 `;
 
 const Title = styled.div`

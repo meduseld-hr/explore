@@ -60,6 +60,10 @@ const CommentGrid = styled.div`
   height: 100%;
   max-height: 100%;
   border: solid;
+  background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
+  border-radius: 1.5em;
+  padding: 1em;
 `;
 
 const Button = styled.button`

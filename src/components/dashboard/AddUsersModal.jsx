@@ -14,6 +14,7 @@ const AddUsersModal = ({ setAddingUsers }) => {
     if (e.target.value.length >= 1) {
       api.get(`/dashboard/search/${e.target.value}`)
           .then((response) => {
+            console.log(response.data);
             setSearchedUsers(response.data)
           })
     } else {
@@ -23,7 +24,16 @@ const AddUsersModal = ({ setAddingUsers }) => {
 
   const addUser = (e) => {
     e.preventDefault();
-    api.push(`/dashboard/${tripId}/addUser`)
+
+    var addedUserId = e.target.title;
+
+    api.push(`/dashboard/${tripId}/addUser`, { addedUserId })
+    .then((response) => {
+      setAddingUsers(false);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   return (
@@ -36,10 +46,10 @@ const AddUsersModal = ({ setAddingUsers }) => {
         <input style={{width: '50%', margin: '0 auto', border: 'solid'}} type="search" name="usersSearch" onChange={onChange} />
         <br />
         {searchedUsers.map((user) => (
-          <userProfile >
+          <userProfile key={user.id}>
             <styledImg src={user.picture}></styledImg>
             <div>{user.nickname}</div>
-            <addUserButton onClick={addUser}>Add User to trip</addUserButton>
+            <addUserButton onClick={addUser} title={user.id}>Add User to trip</addUserButton>
           </userProfile>
         ))}
       </TopModal>

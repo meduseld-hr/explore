@@ -254,7 +254,7 @@ pool.getStops = (tripId, userId) => {
   return pool
     .query(
       `
-      SELECT *
+      SELECT s.id, s.stop_order, s.stop_name, s.trip_id, s.thumbnail_url, s.time_stamp, s.greater_location, s.google_place_id, s.latitude, s.longitude
       FROM stops s
       INNER JOIN trips_users tu ON tu.trip_id = s.trip_id
       WHERE tu.user_id = $1 AND s.trip_id = $2
@@ -479,9 +479,11 @@ pool.searchUser = (searchTerm) => {
   return pool
     .query(
       `
-      SELECT id, nickname, picture
-      FROM users
+      SELECT u.id, array_agg(tu.trip_id),  u.nickname, u.picture
+      FROM users u
+      INNER JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1
+      GROUP BY u.id
       `
       , [searchTerm + '%']
     )

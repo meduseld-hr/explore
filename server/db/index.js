@@ -265,7 +265,7 @@ pool.getStops = (tripId, userId) => {
     .catch((err) => console.log(`Error receiving stops for trip: `, tripId, err))
 }
 
-pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId, latitude, longitude }, userId) => {
+pool.addStop = ({ stopOrder, stopName,  thumbnailUrl, timeStamp, greaterLocation, googlePlaceId, latitude, longitude }, userId, tripId) => {
 
   return pool.getTrips(userId)
     .then((response) => {

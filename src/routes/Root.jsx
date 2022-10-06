@@ -35,7 +35,7 @@ export default function Root() {
       <UserContext.Provider value={user}>
         <App>
           <Header>
-            <H2>Explore {user && <span>for {user.name}</span>}</H2>
+            {/* <H2>Explore {user && <span>for {user.name}</span>}</H2> */}
             <Links>
               <Link to={'dashboard'}>Dashboard</Link>
               {/* <Link to={'profile'}>Profile</Link> */}

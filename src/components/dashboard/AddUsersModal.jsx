@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import api from '../../functions/api';
+import { useParams } from 'react-router-dom';
 
 const AddUsersModal = ({ setAddingUsers }) => {
 
+  const { tripId } = useParams();
   const [searchedUsers, setSearchedUsers] = useState([])
 
   const onChange = (e) => {
@@ -12,11 +14,26 @@ const AddUsersModal = ({ setAddingUsers }) => {
     if (e.target.value.length >= 1) {
       api.get(`/dashboard/search/${e.target.value}`)
           .then((response) => {
+            console.log(response.data);
             setSearchedUsers(response.data)
           })
     } else {
       setSearchedUsers([])
     }
+  }
+
+  const addUser = (e) => {
+    e.preventDefault();
+
+    var addedUserId = e.target.title;
+
+    api.push(`/dashboard/${tripId}/addUser`, { addedUserId })
+    .then((response) => {
+      setAddingUsers(false);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   return (
@@ -29,9 +46,10 @@ const AddUsersModal = ({ setAddingUsers }) => {
         <input style={{width: '50%', margin: '0 auto', border: 'solid'}} type="search" name="usersSearch" onChange={onChange} />
         <br />
         {searchedUsers.map((user) => (
-          <userProfile >
-            <img src={user.picture} style={{height: 'auto', width: 'auto'}}></img>
+          <userProfile key={user.id}>
+            <styledImg src={user.picture}></styledImg>
             <div>{user.nickname}</div>
+            <addUserButton onClick={addUser} title={user.id}>Add User to trip</addUserButton>
           </userProfile>
         ))}
       </TopModal>
@@ -72,4 +90,17 @@ const userProfile = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
+`
+
+const addUserButton = styled.button`
+  margin: auto;
+  width: 33%;
+  color: #020331fd;
+  background-color: #4a81efc3;
+  cursor: pointer;
+`
+
+const styledImg = styled.img`
+  height: auto;
+  width: auto;
 `

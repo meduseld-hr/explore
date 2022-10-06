@@ -33,21 +33,21 @@ export default function Dashboard() {
 
     // setStops([...stops, stop]);
   }
-  function swapStops(e, index1, index2) {
-    e.stopPropagation();
-    const newStops = stops.slice();
-    const stop = newStops[index1];
-    newStops[index1] = newStops[index2];
-    newStops[index2] = stop;
-    setStopIndex(index2);
-    setStops(newStops);
-  }
-  function deleteStop(e, index) {
-    e.stopPropagation();
-    const newStops = stops.slice()
-    newStops.splice(index, 1)
-    setStops(newStops);
-  }
+  // function swapStops(e, index1, index2) {
+  //   e.stopPropagation();
+  //   const newStops = stops.slice();
+  //   const stop = newStops[index1];
+  //   newStops[index1] = newStops[index2];
+  //   newStops[index2] = stop;
+  //   setStopIndex(index2);
+  //   setStops(newStops);
+  // }
+  // function deleteStop(e, index) {
+  //   e.stopPropagation();
+  //   const newStops = stops.slice()
+  //   newStops.splice(index, 1)
+  //   setStops(newStops);
+  // }
 
   useEffect(() => {
     socket.current = io(`http://localhost:3000`, {
@@ -129,6 +129,7 @@ export default function Dashboard() {
   useEffect(() => {
     api.get(`/dashboard/${tripId}`)
       .then((response) => {
+        console.log(response.data[0]);
         setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
         setMessages(response.data[1]);
       })
@@ -159,8 +160,6 @@ export default function Dashboard() {
               index={index}
               selected={index === stopIndex}
               changeIndex={() => setStopIndex(index)}
-              swapStops={swapStops}
-              deleteStop={deleteStop}
               setStops={setStops}
               socket={socket}
             />

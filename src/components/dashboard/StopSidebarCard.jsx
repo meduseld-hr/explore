@@ -6,10 +6,11 @@ import {useParams} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, swapStops, deleteStop, setStops, socket }) {
+export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, setStops, socket }) {
 
   const {tripId} = useParams();
   const navigate = useNavigate();
+  console.log(stop);
 
   const decreaseOrder = () => {
     api.put(`/dashboard/${stop.id}/decrease`, {tripId})
@@ -41,15 +42,15 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
       </Detail>
       <Actions>
         {index > 0 && <Action icon={faArrowUp} onClick={(e) => {
-          swapStops(e, index, index - 1);
+          // swapStops(e, index, index - 1);
           decreaseOrder();
         }}/>}
         <Delete icon={faXmark} onClick={(e) => {
-          deleteStop(e, index);
+          // deleteStop(e, index);
           removeStop();
         }}/>
         {index < length - 1 && <Action icon={faArrowDown} onClick={(e) => {
-          swapStops(e, index, index + 1);
+          // swapStops(e, index, index + 1);
           increaseOrder();
         }}/>}
       </Actions>

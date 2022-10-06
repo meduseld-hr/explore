@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import api from "../../../functions/api.js";
-import { MAPS_SECRET } from "../Expanded-Map/config.js";
+import MAPS_SECRET from "../Expanded-Map/config.js";
 
 const ReviewTile = (props) => {
   const locationName = props.place.name;

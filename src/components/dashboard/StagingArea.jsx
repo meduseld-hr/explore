@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import PostTrip from './Post-Trip/PostTrip.jsx';
-import { Outlet } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import PostTrip from "./Post-Trip/PostTrip.jsx";
+import { Outlet } from "react-router-dom";
 
-export default function StagingArea({ stops, addStop, stop }) {
+export default function StagingArea({ stops, addStop, stop, messages, socket }) {
   return (
     <StagingAreaContainer>
-      <Outlet context={{ stops, addStop, stop }} />
+      <Outlet context={{ stops, addStop, stop, messages, socket }} />
     </StagingAreaContainer>
   );
 }

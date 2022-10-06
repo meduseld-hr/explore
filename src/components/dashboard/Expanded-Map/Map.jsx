@@ -78,6 +78,7 @@ export default function App({ small, navigateDirection = '../details'}) {
           },
           (directions) => {
             setTripRoute(directions);
+            console.log(directions)
             // setDistance(directions.routes[0].legs[0].distance.text);
             // setDuration(directions.routes[0].legs[0].duration.text);
           }

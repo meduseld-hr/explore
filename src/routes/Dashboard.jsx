@@ -65,7 +65,7 @@ export default function Dashboard() {
         .catch((err) => {
           console.log(err);
         });
-      socket.current = io(`http://localhost:3000`, {
+      socket.current = io(`http://52.14.202.53:3000`, {
         withCredentials: false
       });
       socket.current.on('chat message', (message) => {

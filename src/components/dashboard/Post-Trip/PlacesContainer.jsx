@@ -73,7 +73,6 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  margin-left: 7px;
   background-color: ${(props) => props.theme.background};
   border: 1px solid ${(props) => props.theme.border};
   border-radius: 1.5em;

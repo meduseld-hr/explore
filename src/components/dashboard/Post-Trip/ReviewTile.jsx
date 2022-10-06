@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import api from "../../../functions/api.js";
-import { placesKey } from "../../../../config.js";
+import { MAPS_SECRET } from "../Expanded-Map/config.js";
 
 const ReviewTile = (props) => {
   const locationName = props.place.name;
   const photo_reference = props.place.photos[0].photo_reference;
-  const img_url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo_reference}&key=${placesKey}`;
+  const img_url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo_reference}&key=${MAPS_SECRET}`;
 
   return (
     <Tile>

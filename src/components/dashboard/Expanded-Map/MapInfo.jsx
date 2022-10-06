@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 
-export default function MapInfo ({marker: {name, photos = [], types, place_id, vicinity}, addStop}) {
+export default function MapInfo ({marker: {name, photos = [], types, place_id, vicinity, geometry}, addStop}) {
   const photoUrl = photos.length > 0 ? photos[0].getUrl() : '';
   function handleAdd() {
     const stop = {
@@ -11,7 +11,9 @@ export default function MapInfo ({marker: {name, photos = [], types, place_id, v
       type: types[0],
       googlePlaceId: place_id,
       thumbnailUrl: photoUrl,
-      greaterLocation: vicinity
+      greaterLocation: vicinity,
+      latitude: geometry.location.lat(),
+      longitude: geometry.location.lng(),
     }
     addStop(stop);
   }

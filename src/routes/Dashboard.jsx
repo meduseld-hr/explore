@@ -34,6 +34,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (user) {
+      api.get(`/dashboard/${tripId}`)
+        .then((response) => {
+          setMessages(response.data[1]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       socket.current = io(`http://localhost:3000`, {
         withCredentials: false
       });
@@ -117,7 +124,6 @@ export default function Dashboard() {
     api.get(`/dashboard/${tripId}`)
       .then((response) => {
         setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
-        setMessages(response.data[1]);
       })
       .catch((err) => {
         console.log(err);

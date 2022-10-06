@@ -21,7 +21,7 @@ const Tile = styled.div`
   width: 30%;
   height: 95%;
   border: solid;
-  border-radius: 1.5em;
+  border-radius: 15px;
   overflow: hidden;
 `;
 const Title = styled.div`

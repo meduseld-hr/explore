@@ -251,7 +251,7 @@ pool.getStops = (tripId, userId) => {
     .catch((err) => console.log(`Error receiving stops for trip: `, tripId, err))
 }
 
-pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId }, userId) => {
+pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId, latitude, longitude }, userId) => {
 
   return pool.getTrips(userId)
     .then((response) => {
@@ -265,10 +265,10 @@ pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterL
         return pool
           .query(
             `
-            INSERT INTO stops (stop_order, stop_name, trip_id, thumbnail_url, time_stamp, greater_location, google_place_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            INSERT INTO stops (stop_order, stop_name, trip_id, thumbnail_url, time_stamp, greater_location, google_place_id, latitude, longitude)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             `
-            , [stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId]
+            , [stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId, latitude, longitude]
           )
           .then((response) => response.rows)
           .catch((err) => console.log(`Error posting stop: `, stopName, err))

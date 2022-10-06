@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import api from '../../functions/api';
+import { useParams } from 'react-router-dom';
 
 const AddUsersModal = ({ setAddingUsers }) => {
 
+  const { tripId } = useParams();
   const [searchedUsers, setSearchedUsers] = useState([])
 
   const onChange = (e) => {
@@ -19,6 +21,11 @@ const AddUsersModal = ({ setAddingUsers }) => {
     }
   }
 
+  const addUser = (e) => {
+    e.preventDefault();
+    api.push(`/dashboard/${tripId}/addUser`)
+  }
+
   return (
     <div>
       <GreyBackground onClick={() => {
@@ -30,8 +37,9 @@ const AddUsersModal = ({ setAddingUsers }) => {
         <br />
         {searchedUsers.map((user) => (
           <userProfile >
-            <img src={user.picture} style={{height: 'auto', width: 'auto'}}></img>
+            <styledImg src={user.picture}></styledImg>
             <div>{user.nickname}</div>
+            <addUserButton onClick={addUser}>Add User to trip</addUserButton>
           </userProfile>
         ))}
       </TopModal>
@@ -72,4 +80,17 @@ const userProfile = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
+`
+
+const addUserButton = styled.button`
+  margin: auto;
+  width: 33%;
+  color: #020331fd;
+  background-color: #4a81efc3;
+  cursor: pointer;
+`
+
+const styledImg = styled.img`
+  height: auto;
+  width: auto;
 `

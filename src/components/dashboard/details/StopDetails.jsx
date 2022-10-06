@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import styled from 'styled-components';
 import api from '../../../functions/api';
+import MAP_KEY from '../Expanded-Map/config';
 
 export default function StopDetails({ stop }) {
   if (!stop) return <></>;
@@ -18,7 +19,7 @@ export default function StopDetails({ stop }) {
         <Name>{stop_name}</Name>
         <Loc>{greater_location}</Loc>
       </Details>
-      <Photos>{photos.map((photo, index) => <Photo key={index} src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo.photo_reference}&key=AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA`}/>)}</Photos>
+      <Photos>{photos.map((photo, index) => <Photo key={index} src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo.photo_reference}&key=${MAP_KEY}`}/>)}</Photos>
     </Container>
   );
 }

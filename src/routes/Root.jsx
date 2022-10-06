@@ -70,7 +70,7 @@ const App = styled.div`
   height: 100vh;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-  overflow: auto;
+  /* overflow: auto; */
 `;
 const Header = styled.header`
   width: 100%;

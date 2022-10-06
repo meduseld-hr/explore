@@ -138,7 +138,6 @@ export default function Dashboard() {
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
-          Current stop: {stopIndex}
           <Search
             type="text"
             value={search}

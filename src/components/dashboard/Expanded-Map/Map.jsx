@@ -130,6 +130,7 @@ export default function App({ small, navigateDirection = '../details' }) {
   };
 
   function handleIdle() {
+    console.log("handleIdle called")
     var bounds = mapRef.current.state.map.getBounds();
     const loader = new Loader({ apiKey: MAPS_SECRET });
     loader.load().then(() => {

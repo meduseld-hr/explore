@@ -24,3 +24,5 @@ src/components/dashboard/Expanded-Map/config.js
 *.njsproj
 *.sln
 *.sw?
+
+config.js

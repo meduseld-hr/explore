@@ -29,7 +29,6 @@ export default function Trips () {
     //Recommended Trips
     api.get('/trips/popular')
       .then((response) => {
-        console.log('popular trips include: ', response.data)
         setRecommendedTrips(response.data);
       })
       .catch(err => {
@@ -39,7 +38,6 @@ export default function Trips () {
     //Recent Trips
     api.get('/trips/recent')
       .then((response) => {
-        console.log('recent trips include: ', response.data)
         setRecentTrips(response.data);
       })
       .catch(err => {
@@ -50,7 +48,6 @@ export default function Trips () {
   const makeSearch = (destination) => {
     api.get('/trips/searchTripsByName', { params: { placeName: destination } })
       .then(res => {
-        console.log('this is the response for our Database for the name', res.data);
         setTripsFromSearch(res.data);
       })
       .catch((err)=> {
@@ -62,7 +59,6 @@ export default function Trips () {
 
     api.post('/trips/', { tripName: destination })
       .then((response)=> {
-        // NAVIGATE TO DASHBOARD/TRIPID
         let tripID = response.data.trip_id
         navigate(`../dashboard/${tripID}/details`)
       })
@@ -94,10 +90,14 @@ export default function Trips () {
 }
 
 const Container = styled.div`
+  height: 100%;
   width: 100%;
   /* border: 1px solid; */
   display: grid;
   grid-template-columns: 1fr 3fr;
+  padding: 1em;
+  grid-row-gap: 1em;
+  grid-column-gap: 1em;
 `
 const SidebarWrapper = styled.div`
   width: 100%;
@@ -105,6 +105,16 @@ const SidebarWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: .5em;
+`
+const TripContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  max-height: 60vh;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  };
 `
 const Dashboard = styled.div`
   grid-column: 2;
@@ -121,7 +131,7 @@ const PlanSelector = styled.div`
 `
 const Selection = styled.div`
   flex: 1;
-  border: 1px solid cyan;
+  /* border: 1px solid cyan; */
 `
 
 const Button = styled.button`

@@ -49,7 +49,6 @@ pool.searchTrips = (placeID) => {
 }
 
 pool.searchTripsByName = (tripName) => {
-  console.log('searching DATABASE by ', tripName)
   return pool
     .query(
       `

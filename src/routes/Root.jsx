@@ -37,11 +37,6 @@ export default function Root() {
           <Header>
             {/* <H2>Explore {user && <span>for {user.name}</span>}</H2> */}
             <Links>
-              <Link to={'dashboard'}>Dashboard</Link>
-              {/* <Link to={'profile'}>Profile</Link> */}
-              <Link to={'landing'}>Landing</Link>
-              <Link to={'trips'}>Trips</Link>
-
               {user ? (
                 <a href={`${window.location.origin}/api/logout?redirect_uri=${window.location.origin}`}>Logout</a>
               ) : (

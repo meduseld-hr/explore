@@ -6,9 +6,11 @@ import StagingArea from '../components/dashboard/StagingArea.jsx';
 import StopSidebarCard from '../components/dashboard/StopSidebarCard.jsx';
 import api from '../functions/api';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const { tripId } = useParams();
+  const navigate = useNavigate();
 
   const user = useContext(UserContext);
   const [search, setSearch] = useState('');
@@ -133,6 +135,9 @@ export default function Dashboard() {
         });
       return () => {
         socket.current.disconnect();
+        for (let id in cursors.current) {
+          document.body.removeChild(cursors.current[id]);
+        }
       }
     }
   }, [user])
@@ -178,7 +183,9 @@ export default function Dashboard() {
               <Input tripPublic={tripPublic} type="checkbox" onChange={handleChange} />
               <Switch />
             </Label>
-            <Save>Save Trip</Save>
+            <Save onClick={() => {
+              navigate('/trips');
+            }}>Save Trip</Save>
           </ActionBar>
         </SidebarWrapper>
       </SideBar>

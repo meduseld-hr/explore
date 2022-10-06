@@ -45,15 +45,10 @@ export default function Dashboard() {
         withCredentials: false
       });
       socket.current.on('chat message', (message) => {
-        if (message.tripId === tripId) {
+        if (parseInt(message.tripId) === parseInt(tripId)) {
           setMessages((messages) => (
             [...messages, message]
           ));
-          const messageList = document.getElementById('messages');
-          if (scrollBottom.current === messageList.scrollTop) {
-            messageList.scrollTo(0, messageList.scrollHeight);
-            scrollBottom.current = messageList.scrollTop;
-          }
         }
       });
       socket.current.on('rerender', (data) => {

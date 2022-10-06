@@ -22,9 +22,17 @@ const Chat = () => {
 
   useEffect(() => {
     const messageList = document.getElementById('messages');
+    if (scrollBottom.current === messageList.scrollTop) {
+      messageList.scrollTo(0, messageList.scrollHeight);
+      scrollBottom.current = messageList.scrollTop;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const messageList = document.getElementById('messages');
     messageList.scrollTo(0, messageList.scrollHeight);
     scrollBottom.current = messageList.scrollTop;
-  }, [messages]);
+  }, [messages])
 
   return (
     <ChatCont>
@@ -36,8 +44,8 @@ const Chat = () => {
       >
         Add Explorers
       </button>
-      <MessageWrapper>
-        <MessageCont id="messages">
+      <MessageWrapper id="messages">
+        <MessageCont>
           {messages.map((message, index) => (
             <Message key={index}>
               <Pfp src={message.picture} />
@@ -67,6 +75,7 @@ const Chat = () => {
               })
               .then(() => {
                 socket.current.emit("chat message", {
+                  tripId,
                   body,
                   time_stamp: Date.now() / 1000,
                   nickname: user.nickname,
@@ -111,6 +120,9 @@ const ChatCont = styled.div`
 const MessageWrapper = styled.div`
   flex: 1;
   overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const MessageCont = styled.div`
   display: flex;
@@ -118,9 +130,6 @@ const MessageCont = styled.div`
   gap: 1em;
   max-height: 10px;
   width: 100%;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const Message = styled.div`
@@ -144,7 +153,7 @@ const Pfp = styled.img`
   height: 3em;
   width: 3em;
   object-fit: cover;
-  border-radius: 1em;
+  border-radius: 1.5em;
   margin-right: 0.5em;
 `;
 

@@ -55,16 +55,30 @@ app.get('/api/profile', (req, res) => {
   res.send(JSON.stringify(req.oidc.user))
 });
 
+
 io.on('connection', (socket) => {
   console.log('connected to dashboard');
   socket.on('chat message', (message) => {
     io.emit('chat message', message);
   });
+  socket.on('mouse', (data) => {
+    socket.broadcast.emit('mouse', {
+      tripId: data.tripId,
+      x: data.x,
+      y: data.y,
+      pressed: data.pressed,
+      id: socket.id,
+      nickname: data.nickname
+    });
+  });
+  socket.on('rerender', (data) => {
+    io.emit('rerender', data);
+  })
   socket.on('disconnect', () => {
     console.log('disconnected from dashboard');
     io.emit('leave', socket.id);
   });
-});
+})
 
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

@@ -254,7 +254,7 @@ pool.getStops = (tripId, userId) => {
   return pool
     .query(
       `
-      SELECT *
+      SELECT s.id, s.stop_order, s.stop_name, s.trip_id, s.thumbnail_url, s.time_stamp, s.greater_location, s.google_place_id, s.latitude, s.longitude
       FROM stops s
       INNER JOIN trips_users tu ON tu.trip_id = s.trip_id
       WHERE tu.user_id = $1 AND s.trip_id = $2
@@ -265,7 +265,7 @@ pool.getStops = (tripId, userId) => {
     .catch((err) => console.log(`Error receiving stops for trip: `, tripId, err))
 }
 
-pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId }, userId) => {
+pool.addStop = ({ stopOrder, stopName,  thumbnailUrl, timeStamp, greaterLocation, googlePlaceId, latitude, longitude }, userId, tripId) => {
 
   return pool.getTrips(userId)
     .then((response) => {
@@ -279,10 +279,10 @@ pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterL
         return pool
           .query(
             `
-            INSERT INTO stops (stop_order, stop_name, trip_id, thumbnail_url, time_stamp, greater_location, google_place_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            INSERT INTO stops (stop_order, stop_name, trip_id, thumbnail_url, time_stamp, greater_location, google_place_id, latitude, longitude)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             `
-            , [stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId]
+            , [stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId, latitude, longitude]
           )
           .then((response) => response.rows)
           .catch((err) => console.log(`Error posting stop: `, stopName, err))
@@ -479,9 +479,11 @@ pool.searchUser = (searchTerm) => {
   return pool
     .query(
       `
-      SELECT id, nickname, picture
-      FROM users
+      SELECT u.id, array_agg(tu.trip_id),  u.nickname, u.picture
+      FROM users u
+      INNER JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1
+      GROUP BY u.id
       `
       , [searchTerm + '%']
     )

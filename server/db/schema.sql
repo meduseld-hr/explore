@@ -32,6 +32,8 @@ CREATE TABLE stops (
   time_stamp TIMESTAMP,
   greater_location VARCHAR(1000),
   google_place_id VARCHAR(10000),
+  latitude FLOAT,
+  longitude FLOAT,
 
   PRIMARY KEY(id),
   FOREIGN KEY(trip_id) REFERENCES trips(id)

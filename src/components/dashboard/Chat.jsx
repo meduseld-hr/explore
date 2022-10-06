@@ -144,7 +144,7 @@ const Pfp = styled.img`
   height: 3em;
   width: 3em;
   object-fit: cover;
-  border-radius: 1em;
+  border-radius: 1.5em;
   margin-right: 0.5em;
 `;
 

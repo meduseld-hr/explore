@@ -20,7 +20,7 @@ export default function Landing() {
     navigate(`../trips`)
   }
   return (
-    <div style={{margin: "auto"}}>
+    <Cont>
       <ColCont>
         <LOGOTop src={explorer} />
         <TopModal>
@@ -35,7 +35,7 @@ export default function Landing() {
           <Button onClick={onClick}>Start Your Adventure</Button>
         </TopModal>
       </ColCont>
-    </div>
+    </Cont>
   )
 }
 
@@ -43,6 +43,7 @@ const Cont = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10% auto auto auto;
 `
 
 const ColCont = styled.div`

@@ -14,7 +14,6 @@ const AddUsersModal = ({ setAddingUsers }) => {
     if (e.target.value.length >= 1) {
       api.get(`/dashboard/search/${e.target.value}`)
           .then((response) => {
-            console.log(response.data);
             setSearchedUsers(response.data)
           })
     } else {
@@ -27,7 +26,7 @@ const AddUsersModal = ({ setAddingUsers }) => {
 
     var addedUserId = e.target.title;
 
-    api.push(`/dashboard/${tripId}/addUser`, { addedUserId })
+    api.post(`/dashboard/${tripId}/addUser`, { addedUserId })
     .then((response) => {
       setAddingUsers(false);
     })
@@ -48,8 +47,8 @@ const AddUsersModal = ({ setAddingUsers }) => {
         {searchedUsers.map((user) => (
           <UserProfile key={user.id}>
             <StyledImg src={user.picture}></StyledImg>
-            <div>{user.nickname}</div>
-            {user.trip_ids.indexOf(parseInt(tripId)) !== -1 ? <div>Explorer is already on this trip</div> : <AddUserButton onClick={addUser} title={user.id}>Add User to trip</AddUserButton>}
+            <StyledName >{user.nickname}</StyledName>
+            {user.trip_ids.indexOf(parseInt(tripId)) !== -1 ? <StyledName>Explorer is already on this trip</StyledName> : <AddUserButton onClick={addUser} title={user.id}>Add User to trip</AddUserButton>}
           </UserProfile>
         ))}
       </TopModal>
@@ -78,7 +77,8 @@ z-index: 101;
 height: 50%;
 width: 90%;
 overflow: auto;
-background-color: white;
+background-color: ${(props) => props.theme.background};
+border: 1px solid ${(props) => props.theme.border};
 padding: 35px;
 border-radius: 10px;
 display: flex;
@@ -89,9 +89,11 @@ text-align: center;
 const UserProfile = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
   height: 20%;
+  margin: auto;
 `
 
 const AddUserButton = styled.button`
@@ -99,10 +101,20 @@ const AddUserButton = styled.button`
   width: 33%;
   color: #020331fd;
   background-color: #4a81efc3;
+  border-radius: 12px;
+  margin-left: auto;
+  margin: auto;
   cursor: pointer;
 `
 
 const StyledImg = styled.img`
   height: 100%;
   width: auto;
+  border-radius: 12px;
+`
+
+const StyledName = styled.div`
+  margin-left: 5%;
+  margin: auto;
+
 `

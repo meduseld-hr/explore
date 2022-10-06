@@ -506,7 +506,7 @@ pool.addUserToTrip = (tripId, addedUserID, authUserId) => {
         return pool
           .query(
             `
-            INSERT INTO trips_users (trip_id, user_id, owner, liked, added)
+            INSERT INTO trips_users (trip_id, user_id, trip_owner, liked, added)
             VALUES ($1, $2, $3, $4, $5)
             `
             , [tripId, addedUserID, false, false, false]

@@ -135,11 +135,11 @@ router.get('/search/:searchTerm', (req, res) => {
 // ADD USER TO TRIP
 
 router.post('/:tripId/addUser', (req, res) => {
-  const { addedUserID } = req.body
+  const { addedUserId } = req.body
   const { tripId } = req.params
   const authUserId = req.oidc.user.sub
 
-  db.addUserToTrip(tripId, addedUserID, authUserId)
+  db.addUserToTrip(parseInt(tripId), addedUserId, authUserId)
   .then(response => {
     res.status(201).end();
   })
@@ -153,7 +153,7 @@ router.post('/:tripId/addUser', (req, res) => {
 router.post('/:tripId/comment', (req, res) => {
   const commentData = {
     body: req.body.body,
-    tripId: req.params.tripId,
+    tripId: parseInt(req.params.tripId),
     userId: req.oidc.user.sub,
     timeStamp: Math.floor(req.body.timeStamp / 1000)
   }

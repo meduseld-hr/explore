@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function TripSidebarCard({ trip }) {
   const navigate = useNavigate();
-  console.log(trip, 'is the trip')
+
   return (
     <Card>
       {trip.thumbnail_url

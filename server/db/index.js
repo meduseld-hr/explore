@@ -495,7 +495,7 @@ pool.searchUser = (searchTerm) => {
   return pool
     .query(
       `
-      SELECT u.id, array_agg(tu.trip_id),  u.nickname, u.picture
+      SELECT u.id, array_agg(tu.trip_id) AS trip_ids,  u.nickname, u.picture
       FROM users u
       INNER JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1
@@ -522,7 +522,7 @@ pool.addUserToTrip = (tripId, addedUserID, authUserId) => {
         return pool
           .query(
             `
-            INSERT INTO trips_users (trip_id, user_id, owner, liked, added)
+            INSERT INTO trips_users (trip_id, user_id, trip_owner, liked, added)
             VALUES ($1, $2, $3, $4, $5)
             `
             , [tripId, addedUserID, false, false, false]

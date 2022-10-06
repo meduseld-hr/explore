@@ -29,6 +29,7 @@ const Title = styled.div`
   font-size: 15px;
   text-align: center;
   background-color: white;
+  color: black;
 `;
 
 const Img = styled.img`

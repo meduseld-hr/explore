@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import { UserContext } from "../contexts/user";
-import SideBar from "../components/dashboard/Sidebar.jsx";
-import StagingArea from "../components/dashboard/StagingArea.jsx";
-import StopSidebarCard from "../components/dashboard/StopSidebarCard.jsx";
+import { useContext, useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { UserContext } from '../contexts/user';
+import SideBar from '../components/dashboard/Sidebar.jsx';
+import StagingArea from '../components/dashboard/StagingArea.jsx';
+import StopSidebarCard from '../components/dashboard/StopSidebarCard.jsx';
 import api from '../functions/api';
 import { useParams } from 'react-router-dom';
 
@@ -56,19 +56,21 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (user) {
+      api.get(`/dashboard/${tripId}`)
+        .then((response) => {
+          setMessages(response.data[1]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       socket.current = io(`http://localhost:3000`, {
         withCredentials: false
       });
       socket.current.on('chat message', (message) => {
-        if (message.tripId === tripId) {
+        if (parseInt(message.tripId) === parseInt(tripId)) {
           setMessages((messages) => (
             [...messages, message]
           ));
-          const messageList = document.getElementById('messages');
-          if (scrollBottom.current === messageList.scrollTop) {
-            messageList.scrollTo(0, messageList.scrollHeight);
-            scrollBottom.current = messageList.scrollTop;
-          }
         }
       });
       socket.current.on('rerender', (data) => {
@@ -139,7 +141,6 @@ export default function Dashboard() {
     api.get(`/dashboard/${tripId}`)
       .then((response) => {
         setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
-        setMessages(response.data[1]);
       })
       .catch((err) => {
         console.log(err);
@@ -155,7 +156,7 @@ export default function Dashboard() {
       <SideBar>
         <SidebarWrapper>
           <Search
-            type="text"
+            type='text'
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -176,7 +177,7 @@ export default function Dashboard() {
               {tripPublic === false ? <div>Trip is Private</div> : <div>Trip is Public</div>}
               <Input tripPublic={tripPublic} type="checkbox" onChange={handleChange} />
               <Switch />
-              </Label>
+            </Label>
             <Save>Save Trip</Save>
           </ActionBar>
         </SidebarWrapper>

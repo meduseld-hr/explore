@@ -6,10 +6,23 @@ const router = new Router();
 const axios = require('axios');
 module.exports = router;
 
+router.get('/:tripId/singleTripInfo' , (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.getSingleTripInfo(parseInt(tripId), userId)
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(err => {
+      res.status(404).end();
+    })
+})
+
 
 router.get('/', (req, res) => {
 
-  const userId = req.oidc.user.sub;
+
   db.getTrips(userId).then(response => {
     res.status(200).send(response);
   })

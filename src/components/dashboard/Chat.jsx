@@ -43,8 +43,8 @@ const Chat = () => {
         }}
       >
         Add Explorers
-      </button>
-      <MessageWrapper id="messages">
+      </AddUserButton>
+      <MessageWrapper id='messages'>
         <MessageCont>
           {messages.map((message, index) => (
             <Message key={index}>
@@ -54,7 +54,7 @@ const Chat = () => {
                   <strong>{message.nickname}</strong>
                   <ReactTimeAgo
                     date={message.time_stamp * 1000}
-                    locale="en-US"
+                    locale='en-US'
                     style={timeStyle}
                   />
                 </MessageHead>
@@ -74,15 +74,15 @@ const Chat = () => {
                 timeStamp: Date.now(),
               })
               .then(() => {
-                socket.current.emit("chat message", {
+                socket.current.emit('chat message', {
                   tripId,
                   body,
                   time_stamp: Date.now() / 1000,
                   nickname: user.nickname,
                   picture: user.picture,
                 });
-                setBody("");
-                const messageList = document.getElementById("messages");
+                setBody('');
+                const messageList = document.getElementById('messages');
                 messageList.scrollTo(0, messageList.scrollHeight);
                 scrollBottom.current = messageList.scrollTop;
               })
@@ -94,13 +94,13 @@ const Chat = () => {
       >
         <div>
           <Input
-            type="text"
+            type='text'
             value={body}
             onChange={(e) => {
               setBody(e.target.value);
             }}
           />
-          <input type="submit" />
+          <input type='submit' />
         </div>
       </Form>
     </ChatCont>
@@ -158,8 +158,8 @@ const Pfp = styled.img`
 `;
 
 const timeStyle = {
-  fontSize: ".75em",
-  fontStyle: "italic",
+  fontSize: '.75em',
+  fontStyle: 'italic',
 };
 
 const Form = styled.form`

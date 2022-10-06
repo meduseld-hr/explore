@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import { UserContext } from "../contexts/user";
-import SideBar from "../components/dashboard/Sidebar.jsx";
-import StagingArea from "../components/dashboard/StagingArea.jsx";
-import StopSidebarCard from "../components/dashboard/StopSidebarCard.jsx";
+import { useContext, useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { UserContext } from '../contexts/user';
+import SideBar from '../components/dashboard/Sidebar.jsx';
+import StagingArea from '../components/dashboard/StagingArea.jsx';
+import StopSidebarCard from '../components/dashboard/StopSidebarCard.jsx';
 import api from '../functions/api';
 import { useParams } from 'react-router-dom';
 
@@ -134,7 +134,7 @@ export default function Dashboard() {
       <SideBar>
         <SidebarWrapper>
           <Search
-            type="text"
+            type='text'
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -152,7 +152,7 @@ export default function Dashboard() {
           ))}
           <ActionBar>
             Private
-            <input type="checkbox" />
+            <input type='checkbox' />
             Public
             <Save>Save Trip</Save>
           </ActionBar>

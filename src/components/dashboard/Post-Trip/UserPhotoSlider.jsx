@@ -24,6 +24,8 @@ const UserPhotos = styled.div`
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
+  border: 1px solid ${(props) => {props.theme.border}};
+  border-radius: 1.5em;
 `;
 
 const Row = styled.div`
@@ -50,7 +52,6 @@ const ImgGroup = styled.div`
 const Img = styled.img`
   flex-shrink: 0;
   object-fit: cover;
-  border: 3px solid white;
 `;
 
 export default UserPhotoSlider;

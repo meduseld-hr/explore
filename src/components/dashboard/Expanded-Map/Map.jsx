@@ -20,8 +20,7 @@ import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
-
-const MAPS_SECRET = '';
+import MAPS_SECRET from './config'
 
 const libraries = ['places'];
 
@@ -115,7 +114,7 @@ export default function App({ small, navigateDirection = '../details' }) {
         setTripRoute(null);
       }
 
-      }, [stops, tripRoute, /*distance, duration*/]);
+      }, [stops,/*distance, duration*/]);
 
       if (loadError) {
         return 'Error loading maps';

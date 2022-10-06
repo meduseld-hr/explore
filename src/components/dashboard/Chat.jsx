@@ -165,8 +165,8 @@ const Input = styled.input`
 const AddUserButton = styled.button`
   width: 33%;
   margin: auto;
-  color: #020331fd;
-  background-color: #4a81efc3;
+  color: ${(props) => props.theme.color}
+  background-color: ${(props) => props.theme.background};
   border-radius: 12px;
   cursor: pointer;
 `

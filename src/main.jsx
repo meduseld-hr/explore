@@ -19,7 +19,7 @@ import Map from './components/dashboard/Expanded-Map/Map';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route path="landing" element={<Landing />} />
+      <Route path="" element={<Landing />} />
       <Route path="trips" element={<Trips />} />
       <Route path="dashboard/:tripId/" element={<Dashboard />}>
         <Route path="chat" element={<Chat />} />

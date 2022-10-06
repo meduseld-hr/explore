@@ -1,16 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 import DarkmodeToggle from "./DarkModeToggle.jsx";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 export default function SideBar({ children }) {
   const { theme } = useOutletContext();
 
+  const navigate = useNavigate()
+
   return (
     <SideBarContainer>
       {theme === 'light'
-        ? <Img src="/Logo_Light_v2.png" alt="Explore Logo"/>
-        : <Img src="/Logo_Dark_v2.png" alt="Explore Logo"/>
+        ? <Img
+            src="/Logo_Light_v2.png"
+            alt="Explore Logo"
+            onClick={() => navigate('../trips')}
+          />
+        :
+          <Img
+            src="/Logo_Dark_v2.png"
+            alt="Explore Logo"
+            onClick={() => navigate('../trips')}
+          />
       }
       <Container>{children}</Container>
       <EndContainer>

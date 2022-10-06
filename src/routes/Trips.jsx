@@ -1,28 +1,66 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import TripRecommendations from "../components/trips/TripRecommendations";
 import TripSidebarCard from "../components/trips/TripSidebarCard";
 import SideBar from "../components/dashboard/Sidebar";
 import api from "../functions/api";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Trips () {
 
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [tripsFromSearch, setTripsFromSearch] = useState([])
+  const [myTrips, setMyTrips] = useState([])
+  const [recommendedTrips, setRecommendedTrips] = useState([])
+  const [recentTrips, setRecentTrips] = useState([])
+
+  useEffect(()=> {
+    //USER Trips for sidebar
+    api.get('/trips/')
+      .then((response) => {
+        setMyTrips(response.data);
+      })
+      .catch((err)=> {
+        console.log(err);
+      });
+
+    //Recommended Trips
+    api.get('/trips/popular')
+      .then((response) => {
+        setRecommendedTrips(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    //Recent Trips
+    api.get('/trips/recent')
+      .then((response) => {
+        setRecentTrips(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [])
 
   const makeSearch = (destination) => {
-    console.log('destination function: ', destination)
-    api.get('/googlePlaces/placesearch', { params: { destination: destination } })
-      .then((res) => {
-        let placeID = res.data.candidates[0].place_id;
-        api.get('/trips/searchPlaceID', { params: { placeID: placeID } })
-          .then(res => {
-            // use this data to populate trips they could add
-            console.log('this is the response for our Database for the placeID', res);
-          })
-          .catch((err)=> {
-            console.log(err);
-          })
+    api.get('/trips/searchTripsByName', { params: { placeName: destination } })
+      .then(res => {
+        setTripsFromSearch(res.data);
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
+  }
+
+  const makeNewTrip = (destination) => {
+
+    api.post('/trips/', { tripName: destination })
+      .then((response)=> {
+        let tripID = response.data.trip_id
+        navigate(`../dashboard/${tripID}/details`)
       })
       .catch((err)=> {
         console.log(err);
@@ -35,36 +73,31 @@ export default function Trips () {
         <SidebarWrapper>
           <Search type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Where to next?"/>
           <Button onClick={()=>{makeSearch(search)}}>Go!</Button>
-          <PlanSelector>
-            <Selection>Your plans<input type='checkbox'/></Selection>
-            <Selection>Shared plans<input type='checkbox'/></Selection>
-          </PlanSelector>
+          <Button onClick={()=>{makeNewTrip(search)}}>Create New Trip</Button>
           <div>Your Plans</div>
-          <TripSidebarCard id={1}/>
-          <TripSidebarCard id={2}/>
-          <TripSidebarCard id={3}/>
-          <TripSidebarCard id={4}/>
-          <div>Shared Plans</div>
-          <TripSidebarCard id={5}/>
-          <TripSidebarCard id={6}/>
-          <TripSidebarCard id={7}/>
-          <TripSidebarCard id={8}/>
+          {myTrips.length === 0 ? <div></div> : myTrips.map( (trip) => {
+            return <TripSidebarCard key={trip.id} trip={trip}/>
+          })}
         </SidebarWrapper>
       </SideBar>
       <Dashboard>
-        <TripRecommendations type='recommended'/>
-        <TripRecommendations type='friends'/>
-        <TripRecommendations type='popular'/>
+        {tripsFromSearch.length > 0 && <TripRecommendations type='Search Result' trips={tripsFromSearch} />}
+        <TripRecommendations type='Recommended' trips={recommendedTrips} />
+        <TripRecommendations type='Recent' trips={recentTrips} />
       </Dashboard>
     </Container>
   )
 }
 
 const Container = styled.div`
+  height: 100%;
   width: 100%;
   /* border: 1px solid; */
   display: grid;
   grid-template-columns: 1fr 3fr;
+  padding: 1em;
+  grid-row-gap: 1em;
+  grid-column-gap: 1em;
 `
 const SidebarWrapper = styled.div`
   width: 100%;
@@ -72,6 +105,16 @@ const SidebarWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: .5em;
+`
+const TripContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  max-height: 60vh;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  };
 `
 const Dashboard = styled.div`
   grid-column: 2;
@@ -88,7 +131,7 @@ const PlanSelector = styled.div`
 `
 const Selection = styled.div`
   flex: 1;
-  border: 1px solid cyan;
+  /* border: 1px solid cyan; */
 `
 
 const Button = styled.button`

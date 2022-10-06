@@ -37,7 +37,7 @@ const Chat = () => {
   return (
     <ChatCont>
       {addingUsers && <AddUsersModal setAddingUsers={setAddingUsers} />}
-      <button
+      <AddUserButton
         onClick={() => {
           setAddingUsers(true);
         }}
@@ -170,5 +170,14 @@ const Input = styled.input`
   display: inline-block;
   width: 80%;
 `;
+
+const AddUserButton = styled.button`
+  width: 33%;
+  margin: auto;
+  color: ${(props) => props.theme.color}
+  background-color: ${(props) => props.theme.background};
+  border-radius: 12px;
+  cursor: pointer;
+`
 
 export default Chat;

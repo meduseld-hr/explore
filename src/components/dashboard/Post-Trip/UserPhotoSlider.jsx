@@ -51,7 +51,7 @@ const travel = keyframes`
      transform: translate3d(0,0,0);
    }
   50% {
-     transform: translate3d(-28%,0,0);
+     transform: translate3d(-43%,0,0);
    }
 `;
 const ImgGroup = styled.div`
@@ -66,6 +66,7 @@ const Img = styled.img`
   object-fit: cover;
   height: 220px;
   border-radius: 10px;
+  margin-right: 2%;
 `;
 
 export default UserPhotoSlider;

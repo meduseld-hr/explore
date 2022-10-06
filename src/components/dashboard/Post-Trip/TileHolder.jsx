@@ -29,8 +29,9 @@ const Container = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
+  overflow: hidden;
 `;
 
 const Title = styled.div`

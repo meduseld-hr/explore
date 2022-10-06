@@ -7,7 +7,11 @@ export default function MapInfo ({marker: {name, photos = [], types, place_id, v
   const photoUrl = photos.length > 0 ? photos[0].getUrl() : '';
   function handleAdd() {
     const stop = {
-      stop_name: name, type: types[0], google_place_id: place_id, thumbnail_url: photoUrl, greater_location: vicinity
+      stopName: name,
+      type: types[0],
+      googlePlaceId: place_id,
+      thumbnailUrl: photoUrl,
+      greaterLocation: vicinity
     }
     addStop(stop);
   }

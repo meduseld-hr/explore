@@ -3,20 +3,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
-export default function TripSidebarCard({ id }) {
+export default function TripSidebarCard({ trip }) {
   const navigate = useNavigate();
 
   return (
     <Card>
-      <Thumbnail src="https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg" />
+      {trip.thumbnail_url
+        ? <Thumbnail src={trip.thumbnail_url} />
+        : <Thumbnail src="https://picsum.photos/200/300" />}
+
       <Detail>
-        <div>Name here</div>
-        <div>Location here</div>
-        <div>Other information</div>
+        <div>{trip.trip_name}</div>
       </Detail>
-      <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${id}/details`)}/>
+      <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${trip.id}/details`)}/>
     </Card>
-  );
+  )
 }
 
 const Thumbnail = styled.img`
@@ -42,6 +43,10 @@ const Card = styled.div`
   position: relative;
 `;
 const Detail = styled.div`
+  font-weight: 500;
+  font-size: 2em;
+  opacity: 0.9;
+  font-style: italic;
   display: flex;
   flex-direction: column;
   flex: 1;

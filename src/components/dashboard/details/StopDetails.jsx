@@ -29,6 +29,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.5em;
+  height: 100%;
 `;
 const Details = styled.div`
   display: flex;
@@ -47,9 +48,10 @@ const Photos = styled.div`
   flex-wrap: wrap;
   border-radius: 1.5em;
   gap: .5em;
+  margin-top: auto;
 `
 const Photo = styled.img`
+  aspect-ratio: 1;
   height: 10em;
-  width: 10em;
   object-fit: cover;
 `

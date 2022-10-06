@@ -1,16 +1,16 @@
-import TripTiles from "./TripTiles.jsx";
-import EditProfileModal from "./EditProfileModal.jsx";
-import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../contexts/user";
-import styled from "styled-components";
-import api from "../../functions/api";
-import { dummyDataTripsUsers } from "./dummyData.js";
+import TripTiles from './TripTiles.jsx';
+import EditProfileModal from './EditProfileModal.jsx';
+import { useContext, useState, useEffect } from 'react';
+import { UserContext } from '../../contexts/user';
+import styled from 'styled-components';
+import api from '../../functions/api';
+import { dummyDataTripsUsers } from './dummyData.js';
 
 export default function ProfileInfo({ setOpenProfile }) {
   const user = useContext(UserContext);
   let [editInProgress, setEditInProgress] = useState(false);
   let [profilePic, setProfilePic] = useState(
-    "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png"
+    'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'
   );
   let [username, setUsername] = useState(user.nickname);
   const [trips, setTrips] = useState(dummyDataTripsUsers.results);
@@ -36,7 +36,7 @@ export default function ProfileInfo({ setOpenProfile }) {
     e.preventDefault();
     let changeValue = e.target.form[0].value;
     if (changeValue.length > 0) {
-      if (field === "nickname") {
+      if (field === 'nickname') {
         api
           .patch(`/profileInfo/updateNickname`, {
             nickname: changeValue,
@@ -48,7 +48,7 @@ export default function ProfileInfo({ setOpenProfile }) {
           .catch((err) => {
             console.log(err);
           });
-      } else if (field === "picture") {
+      } else if (field === 'picture') {
         api
           .patch(`/profileInfo/updateProfilePic`, {
             picture: changeValue,
@@ -65,26 +65,37 @@ export default function ProfileInfo({ setOpenProfile }) {
   };
 
   return (
-    <div>
-    <GreyBackground onClick={()=> {setOpenProfile(false)}}/>
-    <TopModal>
-
-      {editInProgress ?
-        <EditProfileModal onSubmit={onSubmit} setEditInProgress={setEditInProgress} />
-        : <div style={{paddingTop: "30px"}}><RowContainer>
-        <Image
-
-          src={profilePic}
-          alt="profile pic"
-        />
-        <p><b>{username} </b></p>
-      </RowContainer>
-      <Button onClick={() => { setEditInProgress(true) }}>Update Profile</Button></div>}
-    </TopModal>
-        {trips.map((trip) => {
-          return <TripTiles key={trip.id} trip={trip} />;
-        })}
-    </div>
+    <>
+      <GreyBackground
+        onClick={() => {
+          setOpenProfile(false);
+        }}
+      />
+      <TopModal>
+        {editInProgress ? (
+          <EditProfileModal
+            onSubmit={onSubmit}
+            setEditInProgress={setEditInProgress}
+          />
+        ) : (
+          <div style={{ paddingTop: '30px' }}>
+            <RowContainer>
+              <Image src={profilePic} alt="profile pic" />
+              <p>
+                <b>{username} </b>
+              </p>
+            </RowContainer>
+            <Button
+              onClick={() => {
+                setEditInProgress(true);
+              }}
+            >
+              Update Profile
+            </Button>
+          </div>
+        )}
+      </TopModal>
+    </>
   );
 }
 

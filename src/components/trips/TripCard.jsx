@@ -43,7 +43,7 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
 const Card = styled.div`
   background-color: ${(props) => props.theme.background};
   border: 1px solid ${(props) => props.theme.border};
-  height: 20em;
+  height: 18em;
   width: 24%;
   min-width: 320px;
   display: flex;
@@ -66,7 +66,8 @@ const Info = styled.div`
 `
 const Image = styled.img`
   object-fit: cover;
-  -webkit-mask-image:-webkit-gradient(linear, left top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))
+  width: 100%;
+  -webkit-mask-image:-webkit-gradient(linear, left top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,.5)))
 `
 const Stops = styled.div`
   display: flex;

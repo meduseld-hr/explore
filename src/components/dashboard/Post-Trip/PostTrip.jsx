@@ -1,16 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import UserPhotoContainer from "./UserPhotoContainer.jsx";
 import PlacesContainer from "./PlacesContainer.jsx";
 import CommentContainer from "./CommentContainer.jsx";
+import api from "../../../functions/api.js";
 import { useParams } from "react-router-dom";
+import { completedTrip } from "./dummyData.js";
 
 const PostTrip = () => {
   const { tripId } = useParams();
+  // receieve an array of stops on a trip
+  // console.log(completedTrip);
+
+  // useEffect(() => {
+  //   let options = {
+  //     method: "GET",
+  //     url: "/googlePlaces/placesearch",
+  //     params: {
+  //       destination: "dennys",
+  //     },
+  //   };
+  //   api(options)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
   return (
     <PostTripContainer>
-      <UserPhotoContainer />
-      <PlacesContainer />
+      <UserPhotoContainer stops={completedTrip} />
+      <PlacesContainer stops={completedTrip} />
       <CommentContainer />
     </PostTripContainer>
   );

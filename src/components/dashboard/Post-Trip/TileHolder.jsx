@@ -22,7 +22,7 @@ const TileHolder = (props) => {
 const Holder = styled.div`
   width: 100%;
   height: 30%;
-  border-radius: 10px;
+  border-radius: 1.5em;
 `;
 
 const Container = styled.div`

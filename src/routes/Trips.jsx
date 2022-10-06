@@ -29,7 +29,6 @@ export default function Trips () {
     //Recommended Trips
     api.get('/trips/popular')
       .then((response) => {
-        console.log('popular trips include: ', response.data)
         setRecommendedTrips(response.data);
       })
       .catch(err => {
@@ -39,7 +38,6 @@ export default function Trips () {
     //Recent Trips
     api.get('/trips/recent')
       .then((response) => {
-        console.log('recent trips include: ', response.data)
         setRecentTrips(response.data);
       })
       .catch(err => {
@@ -50,7 +48,6 @@ export default function Trips () {
   const makeSearch = (destination) => {
     api.get('/trips/searchTripsByName', { params: { placeName: destination } })
       .then(res => {
-        console.log('this is the response for our Database for the name', res.data);
         setTripsFromSearch(res.data);
       })
       .catch((err)=> {
@@ -62,7 +59,6 @@ export default function Trips () {
 
     api.post('/trips/', { tripName: destination })
       .then((response)=> {
-        // NAVIGATE TO DASHBOARD/TRIPID
         let tripID = response.data.trip_id
         navigate(`../dashboard/${tripID}/details`)
       })

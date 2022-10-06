@@ -6,10 +6,23 @@ const router = new Router();
 const axios = require('axios');
 module.exports = router;
 
+router.get('/:tripId/singleTripInfo' , (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.getSingleTripInfo(parseInt(tripId), userId)
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(err => {
+      res.status(404).end();
+    })
+})
+
 
 router.get('/', (req, res) => {
 
-  const userId = req.oidc.user.sub;
+
   db.getTrips(userId).then(response => {
     res.status(200).send(response);
   })
@@ -45,9 +58,9 @@ router.get('/searchTripsByName', (req, res) => {
 
 
 router.post('/', (req, res) => {
+
   const tripData = req.body;
   const userId = req.oidc.user.sub;
-
   const searchString = req.body.tripName;
   const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchString}&inputtype=textquery&key=${process.env.GPLACES}`;
 
@@ -55,7 +68,6 @@ router.post('/', (req, res) => {
     method: "GET",
     url: url,
   };
-
   axios(options)
     .then((response) => {
       const googlePlaceId = response.data.candidates[0].place_id
@@ -70,19 +82,16 @@ router.post('/', (req, res) => {
       };
       axios(options)
         .then((response) => {
-          let photo = response.data.result.photos[0].html_attributions[0];
-          let arr = photo.split('=')
-          photo = arr[1];
-          arr = photo.split('>')
+          let photo = response.data.result.photos[0].photo_reference;
+          // const photo_reference = response.data.result.photos[0].photo_reference;
+          let img_url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo}&key=${process.env.GPLACES}`;
 
-          thumbnailUrl = arr[0]
           tripData.completed = false;
           tripData.public = true;
 
-
-          db.addTrip(tripData, googlePlaceId, thumbnailUrl, userId)
+          db.addTrip(tripData, googlePlaceId, img_url, userId)
           .then(response => {
-            // console.log('I ADDED A TRIP')
+
             let tripId = response[0]
             res.status(200).send(tripId);
           })

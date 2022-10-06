@@ -80,10 +80,10 @@ export default function ProfileInfo({ setOpenProfile }) {
         <p><b>{username} </b></p>
       </RowContainer>
       <Button onClick={() => { setEditInProgress(true) }}>Update Profile</Button></div>}
-    </TopModal>
-        {trips.map((trip) => {
+        {/* {trips.map((trip) => {
           return <TripTiles key={trip.id} trip={trip} />;
-        })}
+        })} */}
+    </TopModal>
     </div>
   );
 }

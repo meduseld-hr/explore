@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 const config = {
   auth0Logout: true,
   secret: process.env.SECRET,
-  baseURL: 'http://localhost:3000/',
+  baseURL: 'http://52.14.202.53:3000/',
   clientID: 'hxh4xcfvQpA7NtAlm0bm1DgkQbeyDyAn',
   issuerBaseURL: 'https://dev-1mdmd8kt.us.auth0.com',
   routes: {
@@ -25,7 +25,7 @@ const config = {
 const server = http.Server(app);
 const io = socketio(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'http://52.14.202.53:3000/',
     methods: ['GET', 'POST', 'PUT']
   }
 });

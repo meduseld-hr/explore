@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 
-const MAPS_SECRET = 'AIzaSyBSN7vnZvFPDtAVLBzu8LB0N_MEn5fzHXc';
+const MAPS_SECRET = '';
 
 const libraries = ['places'];
 

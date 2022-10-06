@@ -1,11 +1,46 @@
 import styled from 'styled-components';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import api from '../../functions/api';
+import {useParams} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, swapStops, deleteStop }) {
+export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, setStops, socket }) {
+
+  const {tripId} = useParams();
   const navigate = useNavigate();
+
+  const decreaseOrder = () => {
+    api.put(`/dashboard/${stop.id}/decrease`, {tripId})
+      .then(() => {
+        socket.current.emit('rerender', {tripId});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const increaseOrder = () => {
+    api.put(`/dashboard/${stop.id}/increase`, {tripId})
+      .then(() => {
+        socket.current.emit('rerender', {tripId});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const removeStop = () => {
+    api.delete(`/dashboard/${stop.id}`)
+      .then(() => {
+        socket.current.emit('rerender', {tripId});
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Card onClick={changeIndex} style={{border: selected ? '2px solid red' : '2px solid black'}}>
       <Thumbnail src={stop.thumbnail_url} />
@@ -14,9 +49,15 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
         <Loc>{stop.greater_location}</Loc>
       </Detail>
       <Actions>
-        {index > 0 &&<Action icon={faArrowUp} onClick={(e) => swapStops(e, index, index - 1)}/>}
-        <Delete icon={faXmark} onClick={(e) => deleteStop(e, index)}/>
-        {index < length - 1 && <Action icon={faArrowDown} onClick={(e) => swapStops(e, index, index + 1)}/>}
+        {index > 0 && <Action icon={faArrowUp} onClick={(e) => {
+          decreaseOrder();
+        }}/>}
+        <Delete icon={faXmark} onClick={(e) => {
+          removeStop();
+        }}/>
+        {index < length - 1 && <Action icon={faArrowDown} onClick={(e) => {
+          increaseOrder();
+        }}/>}
       </Actions>
     </Card>
   );

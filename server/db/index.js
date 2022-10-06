@@ -265,7 +265,7 @@ pool.getStops = (tripId, userId) => {
     .catch((err) => console.log(`Error receiving stops for trip: `, tripId, err))
 }
 
-pool.addStop = ({ stopOrder, stopName, tripId, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId }, userId) => {
+pool.addStop = ({ stopOrder, stopName, thumbnailUrl, timeStamp, greaterLocation, googlePlaceId }, userId, tripId) => {
 
   return pool.getTrips(userId)
     .then((response) => {
@@ -335,6 +335,7 @@ pool.decreaseStopOrder = (stopId, tripId, userId) => {
       , [stopId, tripId, userId]
     )
     .then((response) => {
+      console.log('response', response);
       var stopOrder = response.rows.stop_order
       return pool
         .query(

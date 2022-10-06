@@ -20,8 +20,8 @@ import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
-
-const MAPS_SECRET = '';
+import MAP_KEY from './components/dashboard/Expanded-Map/config.js'
+const MAPS_SECRET = MAP_KEY;
 
 const libraries = ['places'];
 
@@ -54,68 +54,49 @@ export default function App({ small, navigateDirection = '../details' }) {
   const {stops, addStop} = useOutletContext();
 
   useEffect(() => {
-    // console.log("useEffect called")
     if(stops.length >= 2) {
 
-      const promiseAllStops = [];
-      for (let i = 0; i < stops.length; i++) {
-        // console.log(stops[i].google_place_id)
-        let options = {
-          method: "GET",
-          url: "/googlePlaces/placeinfo",
-          params: {
-            placeID: stops[i].google_place_id
-          }
+      const tempAllStops = [];
+      for (let i = 0; i < stops.length; i++){
+        tempAllStops.push({
+          location: {
+            lat: stops[i].lat,
+            lng: stops[i].lng
+          },
+          stopover: true,
         }
-        promiseAllStops.push(api(options));
+        );
       }
-      let tempAllStops = [];
-      Promise.all(promiseAllStops)
-      .then(response => {
-        for (let i = 0; i < response.length; i++){
-          tempAllStops.push({
-            location: {
-              lat: response[i].data.result.geometry.location.lat,
-              lng: response[i].data.result.geometry.location.lng
-            },
-            stopover: true,
-          }
-          );
+
+      // mutate tripStops clone to get waypoints
+      const tempWaypoints = tempAllStops.slice();
+      tempWaypoints.shift()
+      tempWaypoints.pop();
+      // load directions from Google API
+      const loader = new Loader({apiKey:MAPS_SECRET});
+      loader.load().then(() => {
+        const directionsService = new google.maps.DirectionsService();
+        directionsService.route({
+          origin:  tempAllStops[0].location,//first stop
+          destination:  tempAllStops[tempAllStops.length - 1].location,//last stop
+          travelMode: google.maps.TravelMode.DRIVING,
+          waypoints: tempWaypoints,//all stops without first and last
+        }, (directions) => {
+          setTripRoute(directions);
+          console.log(directions)
+          setDistance(directions.routes[0].legs[0].distance.text);
+          setDuration(directions.routes[0].legs[0].duration.text);
         }
-        return tempAllStops;
-      })
-      .then((tempAllStops) => {
-        // mutate tripStops clone to get waypoints
-        const tempWaypoints = tempAllStops.slice();
-        tempWaypoints.shift()
-        tempWaypoints.pop();
-        // load directions from Google API
-        const loader = new Loader({apiKey:MAPS_SECRET});
-        loader.load().then(() => {
-          const directionsService = new google.maps.DirectionsService();
-          directionsService.route({
-            origin:  tempAllStops[0].location,//first stop
-            destination:  tempAllStops[tempAllStops.length - 1].location,//last stop
-            travelMode: google.maps.TravelMode.DRIVING,
-            waypoints: tempWaypoints,//all stops without first and last
-          }, (directions) => {
-            setTripRoute(directions);
-            // setDistance(directions.routes[0].legs[0].distance.text);
-            // setDuration(directions.routes[0].legs[0].duration.text);
-          }
-          )})
-          .catch(err => {
-            console.log(err)
-          });
-        })
+        )})
         .catch(err => {
           console.log(err)
         });
+
       } else {
         setTripRoute(null);
       }
 
-      }, [stops, /*distance, duration*/]);
+      }, [stops]);
 
       if (loadError) {
         return 'Error loading maps';

@@ -19,6 +19,8 @@ export default function Dashboard() {
   const [stop, setStop] = useState(null);
   const [rerender, setRerender] = useState(false);
 
+  const [tripPublic, setTripPublic] = useState(true);
+
   const cursors = useRef({});
 
   function addStop(stop) {
@@ -31,6 +33,26 @@ export default function Dashboard() {
         console.log(err);
       });
   }
+
+  const handleChange = (e) => {
+    if (tripPublic === false) {
+      api.put(`/trips/${tripId}/public`)
+      .then((response) => {
+        setTripPublic(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    } else {
+      api.put(`/trips/${tripId}/private`)
+      .then((response) => {
+        setTripPublic(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -150,9 +172,11 @@ export default function Dashboard() {
             />
           ))}
           <ActionBar>
-            Private
-            <input type="checkbox" />
-            Public
+            <Label>
+              {tripPublic === false ? <div>Trip is Private</div> : <div>Trip is Public</div>}
+              <Input tripPublic={tripPublic} type="checkbox" onChange={handleChange} />
+              <Switch />
+              </Label>
             <Save>Save Trip</Save>
           </ActionBar>
         </SidebarWrapper>
@@ -184,4 +208,49 @@ const ActionBar = styled.div`
 const Slider = styled.input``;
 const Save = styled.button`
   flex: 1;
+`;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+`;
+
+const Switch = styled.div`
+  position: relative;
+  width: 60px;
+  height: 28px;
+  background: white;
+  border-radius: 32px;
+  padding: 4px;
+  transition: 300ms all;
+
+  &:before {
+    transition: 300ms all;
+    content: "";
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 35px;
+    top: 50%;
+    left: 0px;
+    background: white;
+    border: solid;
+    border-width: thin;
+    transform: translate(0, -50%);
+  }
+`;
+
+  const Input = styled.input`
+  opacity: 0;
+  position: absolute;
+
+  &:checked + ${Switch} {
+    background: darkgrey;
+
+    &:before {
+      transform: translate(32px, -50%);
+    }
+  }
 `;

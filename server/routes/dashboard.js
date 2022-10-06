@@ -74,7 +74,6 @@ router.put('/:stopId/decrease', (req, res) => {
   const { tripId } = req.body
   const { stopId } = req.params
   const userId = req.oidc.user.sub
-  console.log(stopId, tripId, userId)
 
   db.decreaseStopOrder(parseInt(stopId), parseInt(tripId), userId)
   .then(() => {

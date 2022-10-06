@@ -32,7 +32,7 @@ const Chat = () => {
     const messageList = document.getElementById('messages');
     messageList.scrollTo(0, messageList.scrollHeight);
     scrollBottom.current = messageList.scrollTop;
-  }, [messages])
+  }, [])
 
   return (
     <ChatCont>

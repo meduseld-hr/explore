@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import { UserContext } from "../contexts/user";
-import SideBar from "../components/dashboard/Sidebar.jsx";
-import StagingArea from "../components/dashboard/StagingArea.jsx";
-import StopSidebarCard from "../components/dashboard/StopSidebarCard.jsx";
+import { useContext, useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { UserContext } from '../contexts/user';
+import SideBar from '../components/dashboard/Sidebar.jsx';
+import StagingArea from '../components/dashboard/StagingArea.jsx';
+import StopSidebarCard from '../components/dashboard/StopSidebarCard.jsx';
 import api from '../functions/api';
 import { useParams } from 'react-router-dom';
 
@@ -18,6 +18,8 @@ export default function Dashboard() {
   const [stopIndex, setStopIndex] = useState(0);
   const [stop, setStop] = useState(null);
   const [rerender, setRerender] = useState(false);
+
+  const [tripPublic, setTripPublic] = useState(true);
 
   const cursors = useRef({});
   const [distance, setDistance] = useState('');
@@ -34,21 +36,43 @@ export default function Dashboard() {
       });
   }
 
+  const handleChange = (e) => {
+    if (tripPublic === false) {
+      api.put(`/trips/${tripId}/public`)
+      .then((response) => {
+        setTripPublic(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    } else {
+      api.put(`/trips/${tripId}/private`)
+      .then((response) => {
+        setTripPublic(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
+  };
+
   useEffect(() => {
     if (user) {
+      api.get(`/dashboard/${tripId}`)
+        .then((response) => {
+          setMessages(response.data[1]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       socket.current = io(`http://localhost:3000`, {
         withCredentials: false
       });
       socket.current.on('chat message', (message) => {
-        if (message.tripId === tripId) {
+        if (parseInt(message.tripId) === parseInt(tripId)) {
           setMessages((messages) => (
             [...messages, message]
           ));
-          const messageList = document.getElementById('messages');
-          if (scrollBottom.current === messageList.scrollTop) {
-            messageList.scrollTo(0, messageList.scrollHeight);
-            scrollBottom.current = messageList.scrollTop;
-          }
         }
       });
       socket.current.on('rerender', (data) => {
@@ -119,7 +143,6 @@ export default function Dashboard() {
     api.get(`/dashboard/${tripId}`)
       .then((response) => {
         setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
-        setMessages(response.data[1]);
       })
       .catch((err) => {
         console.log(err);
@@ -145,7 +168,7 @@ export default function Dashboard() {
           } */}
 
           <Search
-            type="text"
+            type='text'
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -162,9 +185,11 @@ export default function Dashboard() {
             />
           ))}
           <ActionBar>
-            Private
-            <input type="checkbox" />
-            Public
+            <Label>
+              {tripPublic === false ? <div>Trip is Private</div> : <div>Trip is Public</div>}
+              <Input tripPublic={tripPublic} type="checkbox" onChange={handleChange} />
+              <Switch />
+            </Label>
             <Save>Save Trip</Save>
           </ActionBar>
         </SidebarWrapper>
@@ -196,4 +221,49 @@ const ActionBar = styled.div`
 const Slider = styled.input``;
 const Save = styled.button`
   flex: 1;
+`;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+`;
+
+const Switch = styled.div`
+  position: relative;
+  width: 60px;
+  height: 28px;
+  background: white;
+  border-radius: 32px;
+  padding: 4px;
+  transition: 300ms all;
+
+  &:before {
+    transition: 300ms all;
+    content: "";
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 35px;
+    top: 50%;
+    left: 0px;
+    background: white;
+    border: solid;
+    border-width: thin;
+    transform: translate(0, -50%);
+  }
+`;
+
+  const Input = styled.input`
+  opacity: 0;
+  position: absolute;
+
+  &:checked + ${Switch} {
+    background: darkgrey;
+
+    &:before {
+      transform: translate(32px, -50%);
+    }
+  }
 `;

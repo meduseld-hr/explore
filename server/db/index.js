@@ -335,7 +335,6 @@ pool.decreaseStopOrder = (stopId, tripId, userId) => {
       , [stopId, tripId, userId]
     )
     .then((response) => {
-      console.log('response', response);
       var stopOrder = response.rows.stop_order
       return pool
         .query(

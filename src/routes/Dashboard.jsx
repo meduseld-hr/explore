@@ -30,106 +30,92 @@ export default function Dashboard() {
       .catch((err) => {
         console.log(err);
       });
-
-    // setStops([...stops, stop]);
   }
-  // function swapStops(e, index1, index2) {
-  //   e.stopPropagation();
-  //   const newStops = stops.slice();
-  //   const stop = newStops[index1];
-  //   newStops[index1] = newStops[index2];
-  //   newStops[index2] = stop;
-  //   setStopIndex(index2);
-  //   setStops(newStops);
-  // }
-  // function deleteStop(e, index) {
-  //   e.stopPropagation();
-  //   const newStops = stops.slice()
-  //   newStops.splice(index, 1)
-  //   setStops(newStops);
-  // }
 
   useEffect(() => {
-    socket.current = io(`http://localhost:3000`, {
-      withCredentials: false
-    });
-    socket.current.on('chat message', (message) => {
-      if (message.tripId === tripId) {
-        setMessages((messages) => (
-          [...messages, message]
-        ));
-        const messageList = document.getElementById('messages');
-        if (scrollBottom.current === messageList.scrollTop) {
-          messageList.scrollTo(0, messageList.scrollHeight);
-          scrollBottom.current = messageList.scrollTop;
+    if (user) {
+      socket.current = io(`http://localhost:3000`, {
+        withCredentials: false
+      });
+      socket.current.on('chat message', (message) => {
+        if (message.tripId === tripId) {
+          setMessages((messages) => (
+            [...messages, message]
+          ));
+          const messageList = document.getElementById('messages');
+          if (scrollBottom.current === messageList.scrollTop) {
+            messageList.scrollTo(0, messageList.scrollHeight);
+            scrollBottom.current = messageList.scrollTop;
+          }
         }
-      }
-    });
-    socket.current.on('rerender', (data) => {
-      if (data.tripId === tripId) {
-        setRerender(!rerender);
-      }
-    })
-    socket.current.on('mouse', (data) => {
-      if (data.tripId === tripId) {
-        let cursor = cursors.current[data.id];
-        if (!cursor) {
-          cursor = cursors.current[data.id] = document.createElement('div');
-          cursor.className = 'cursor';
-          let cursorImg = document.createElement('img');
-          cursorImg.src = 'https://www.freeiconspng.com/uploads/white-mouse-cursor-arrow-by-qubodup-11.png';
-          cursorImg.height = 15;
-          document.body.appendChild(cursor);
-          let label = document.createElement('div');
-          label.innerText = data.nickname;
-          cursor.appendChild(cursorImg);
-          cursor.appendChild(label);
+      });
+      socket.current.on('rerender', (data) => {
+        if (parseInt(data.tripId) === parseInt(tripId)) {
+          setRerender((rerender) => (
+            !rerender
+          ));
         }
-        cursor.style.transform = `translate(${data.x}px, ${data.y}px)`;
-        if (data.pressed) {
-          let clickEffectDiv = document.createElement('div');
-          clickEffectDiv.className = 'clickEffect';
-          clickEffectDiv.style.top = `${data.y + window.innerHeight / 2}px`;
-          clickEffectDiv.style.left = `${data.x + window.innerWidth / 2}px`;
-          document.body.appendChild(clickEffectDiv);
-          clickEffectDiv.addEventListener('animationend', () => {
-            clickEffectDiv.parentElement.removeChild(clickEffectDiv);
+      })
+      socket.current.on('mouse', (data) => {
+        if (data.tripId === tripId) {
+          let cursor = cursors.current[data.id];
+          if (!cursor) {
+            cursor = cursors.current[data.id] = document.createElement('div');
+            cursor.className = 'cursor';
+            let cursorImg = document.createElement('img');
+            cursorImg.src = 'https://www.freeiconspng.com/uploads/white-mouse-cursor-arrow-by-qubodup-11.png';
+            cursorImg.height = 15;
+            document.body.appendChild(cursor);
+            let label = document.createElement('div');
+            label.innerText = data.nickname;
+            cursor.appendChild(cursorImg);
+            cursor.appendChild(label);
+          }
+          cursor.style.transform = `translate(${data.x}px, ${data.y}px)`;
+          if (data.pressed) {
+            let clickEffectDiv = document.createElement('div');
+            clickEffectDiv.className = 'clickEffect';
+            clickEffectDiv.style.top = `${data.y + window.innerHeight / 2}px`;
+            clickEffectDiv.style.left = `${data.x + window.innerWidth / 2}px`;
+            document.body.appendChild(clickEffectDiv);
+            clickEffectDiv.addEventListener('animationend', () => {
+              clickEffectDiv.parentElement.removeChild(clickEffectDiv);
+            });
+          }
+        }
+      });
+      socket.current.on('leave', (id) => {
+        if (cursors.current[id]) {
+          document.body.removeChild(cursors.current[id]);
+        }
+      });
+        window.addEventListener('mousedown', (e) => {
+          socket.current.emit('mouse', {
+            tripId,
+            x: e.pageX - window.innerWidth / 2,
+            y: e.pageY - window.innerHeight / 2,
+            pressed: true,
+            nickname: user.nickname
           });
-        }
+        });
+        window.addEventListener('mousemove', (e) => {
+          socket.current.emit('mouse', {
+            tripId,
+            x: e.pageX - window.innerWidth / 2,
+            y: e.pageY - window.innerHeight / 2,
+            pressed: false,
+            nickname: user.nickname
+          });
+        });
+      return () => {
+        socket.current.disconnect();
       }
-    });
-    socket.current.on('leave', (id) => {
-      if (cursors.current[id]) {
-        document.body.removeChild(cursors.current[id]);
-      }
-    });
-    window.addEventListener('mousedown', (e) => {
-      socket.current.emit('mouse', {
-        tripId,
-        x: e.pageX - window.innerWidth / 2,
-        y: e.pageY - window.innerHeight / 2,
-        pressed: true,
-        nickname: user.nickname
-      });
-    });
-    window.addEventListener('mousemove', (e) => {
-      socket.current.emit('mouse', {
-        tripId,
-        x: e.pageX - window.innerWidth / 2,
-        y: e.pageY - window.innerHeight / 2,
-        pressed: false,
-        nickname: user.nickname
-      });
-    });
-    return () => {
-      socket.current.disconnect();
     }
   }, [user])
 
   useEffect(() => {
     api.get(`/dashboard/${tripId}`)
       .then((response) => {
-        console.log(response.data[0]);
         setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
         setMessages(response.data[1]);
       })

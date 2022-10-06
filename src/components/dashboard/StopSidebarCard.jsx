@@ -10,13 +10,15 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
 
   const {tripId} = useParams();
   const navigate = useNavigate();
-  console.log(stop);
 
   const decreaseOrder = () => {
     api.put(`/dashboard/${stop.id}/decrease`, {tripId})
       .then(() => {
         socket.current.emit('rerender', {tripId});
       })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const increaseOrder = () => {
@@ -24,6 +26,9 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
       .then(() => {
         socket.current.emit('rerender', {tripId});
       })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const removeStop = () => {
@@ -31,6 +36,9 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
       .then(() => {
         socket.current.emit('rerender', {tripId});
       })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -42,15 +50,12 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
       </Detail>
       <Actions>
         {index > 0 && <Action icon={faArrowUp} onClick={(e) => {
-          // swapStops(e, index, index - 1);
           decreaseOrder();
         }}/>}
         <Delete icon={faXmark} onClick={(e) => {
-          // deleteStop(e, index);
           removeStop();
         }}/>
         {index < length - 1 && <Action icon={faArrowDown} onClick={(e) => {
-          // swapStops(e, index, index + 1);
           increaseOrder();
         }}/>}
       </Actions>

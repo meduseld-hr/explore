@@ -10,6 +10,7 @@ import StopDetails from './details/StopDetails';
 export default function Details() {
   const { stop } = useOutletContext();
   const navigate = useNavigate();
+  const {setDistance, setDuration} = useOutletContext();
 
   return (
 

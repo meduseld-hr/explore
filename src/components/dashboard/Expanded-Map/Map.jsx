@@ -43,15 +43,14 @@ export default function App({ small, navigateDirection = '../details'}) {
   const [selected, setSelected] = useState(null);
   const [locationSearch, setLocationSearch] = useState('');
 
-  const [tripRoute, setTripRoute] = useState(null);
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [tripRoute, setTripRoute] = useState(null)
   const originRef = useRef();
   const destinationRef = useRef();
   const searchRef = useRef(null);
   const mapRef = useRef();
   const { stops, addStop } = useOutletContext();
   const [showLocs, setShowLocs] = useState(true);
+  const {setDistance, setDuration} = useOutletContext();
 
   useEffect(() => {
     // console.log("useEffect called")
@@ -102,6 +101,7 @@ export default function App({ small, navigateDirection = '../details'}) {
   };
 
   function handleIdle() {
+    console.log("handleIdle called")
     var bounds = mapRef.current.state.map.getBounds();
     const loader = new Loader({ apiKey: MAPS_SECRET });
     loader.load().then(() => {

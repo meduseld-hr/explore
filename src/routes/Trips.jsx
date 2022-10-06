@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import TripRecommendations from "../components/trips/TripRecommendations";
 import TripSidebarCard from "../components/trips/TripSidebarCard";
@@ -9,9 +9,20 @@ export default function Trips () {
 
   const [search, setSearch] = useState('');
   const [tripsFromSearch, setTripsFromSearch] = useState([])
+  const [myTrips, setMyTrips] = useState([])
+
+  useEffect(()=> {
+    api.get('/trips/')
+      .then((trips) => {
+        console.log('trips', trips.data);
+        setMyTrips(trips.data);
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
+  }, [])
 
   const makeSearch = (destination) => {
-    console.log('destination function: ', destination)
     api.get('/googlePlaces/placesearch', { params: { destination: destination } })
       .then((res) => {
         let placeID = res.data.candidates[0].place_id;
@@ -35,25 +46,25 @@ export default function Trips () {
         <SidebarWrapper>
           <Search type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Where to next?"/>
           <Button onClick={()=>{makeSearch(search)}}>Go!</Button>
-          <PlanSelector>
+          {/* <PlanSelector>
             <Selection>Your plans<input type='checkbox'/></Selection>
             <Selection>Shared plans<input type='checkbox'/></Selection>
-          </PlanSelector>
+          </PlanSelector> */}
           <div>Your Plans</div>
-          <TripSidebarCard id={1}/>
-          <TripSidebarCard id={2}/>
-          <TripSidebarCard id={3}/>
-          <TripSidebarCard id={4}/>
-          <div>Shared Plans</div>
+          {myTrips.length === 0 ? <div></div> : myTrips.map( (trip) => {
+            return <TripSidebarCard key={trip.id} trip={trip}/>
+          })}
+
+          {/* <div>Shared Plans</div>
           <TripSidebarCard id={5}/>
           <TripSidebarCard id={6}/>
           <TripSidebarCard id={7}/>
-          <TripSidebarCard id={8}/>
+          <TripSidebarCard id={8}/> */}
         </SidebarWrapper>
       </SideBar>
       <Dashboard>
         <TripRecommendations type='recommended'/>
-        <TripRecommendations type='friends'/>
+        {/* <TripRecommendations type='friends'/> */}
         <TripRecommendations type='popular'/>
       </Dashboard>
     </Container>

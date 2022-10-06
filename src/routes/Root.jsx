@@ -55,7 +55,7 @@ export default function Root() {
               {openProfile ? <ProfileInfo setOpenProfile={setOpenProfile}/> : <div></div>}
             </Links>
           </Header>
-          <Outlet />
+          <Outlet context={{theme, setTheme}}/>
         </App>
       </UserContext.Provider>
     </ThemeProvider>
@@ -70,13 +70,14 @@ const App = styled.div`
   height: 100vh;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-  overflow: auto;
+  /* overflow: auto; */
 `;
 const Header = styled.header`
   width: 100%;
-  border: 1px solid;
+  /* border: 1px solid; */
   display: flex;
   align-items: center;
+  margin: 1em;
 `;
 const Links = styled.div`
   display: flex;

@@ -29,8 +29,8 @@ const MainGridCont = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 1em;
-  grid-row-gap: 1em;
+  grid-column-gap: 1.5em;
+  grid-row-gap: 1.5em;
   width: 100%;
   height: 100%;
 `

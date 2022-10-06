@@ -51,7 +51,7 @@ app.use(connection);
 mountRoutes(app);
 
 app.get('/api/profile', (req, res) => {
-  console.log(req.oidc.user);
+  // console.log(req.oidc.user);
   res.send(JSON.stringify(req.oidc.user))
 });
 

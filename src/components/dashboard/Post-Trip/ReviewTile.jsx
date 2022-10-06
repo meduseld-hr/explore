@@ -3,12 +3,14 @@ import styled from "styled-components";
 import api from "../../../functions/api.js";
 
 const ReviewTile = (props) => {
-  // console.log(props.img);
+  const locationName = props.place.name;
+  const photo_reference = props.place.photos[0].photo_reference;
+  const img_url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo_reference}&key=AIzaSyBWNNF-l95ID334274nOsP0JdPa79H96BA`;
 
   return (
     <Tile>
-      <Title>Location Name</Title>
-      <Img src={props.img}></Img>
+      <Title>{locationName}</Title>
+      <Img src={img_url}></Img>
     </Tile>
   );
 };

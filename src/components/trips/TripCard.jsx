@@ -31,7 +31,8 @@ export default function TripCard({ title = '', image = 'https://cdn.britannica.c
 }
 
 const Card = styled.div`
-  background-color: #dddddd;
+  background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
   height: 20em;
   width: 24%;
   min-width: 320px;

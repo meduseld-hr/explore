@@ -39,7 +39,8 @@ const Card = styled.div`
   border-radius: 1em;
   overflow: hidden;
   align-items: center;
-  background-color: #f0f0f0;
+  background-color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.border};
   position: relative;
 `;
 const Detail = styled.div`

@@ -1,29 +1,67 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TileHolder from "./TileHolder.jsx";
 import api from "../../../functions/api.js";
 
-const PlacesContainer = () => {
+const PlacesContainer = (props) => {
+  const [buckets, setBuckets] = useState(null);
+
+  //sort stops by location details
+  const locationBuckets = {
+    lodging: [],
+    dining: [],
+    explored: [],
+  };
   useEffect(() => {
-    let options = {
-      method: "GET",
-      url: "/trips",
-    };
-    api(options)
+    let promises = [];
+    setBuckets(null);
+
+    for (let i = 0; i < props.stops.length; i++) {
+      let options = {
+        method: "GET",
+        url: "/googlePlaces/placeinfo",
+        params: {
+          placeID: props.stops[i].google_place_id,
+        },
+      };
+      promises.push(api(options));
+    }
+    Promise.all(promises)
       .then((response) => {
-        // console.log(response.data);
+        response.forEach((response) => {
+          var locationTypes = response.data.result.types;
+          if (
+            !locationTypes.includes("restraunt") &&
+            !locationTypes.includes("food") &&
+            !locationTypes.includes("lodging")
+          ) {
+            locationBuckets.explored.push(response.data.result);
+          } else if (
+            locationTypes.includes("restraunt") ||
+            locationTypes.includes("food")
+          ) {
+            locationBuckets.dining.push(response.data.result);
+          } else if (locationTypes.includes("lodging")) {
+            locationBuckets.lodging.push(response.data.result);
+          }
+        });
+        setBuckets(locationBuckets);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
   }, []);
 
   return (
     <ReviewContainer>
       <Title>Review your Trip:</Title>
-      <TileHolder title={"Stayed"} />
-      <TileHolder title={"Eaten"} />
-      <TileHolder title={"Explored"} />
+      {buckets && (
+        <>
+          <TileHolder title={"Stayed"} places={buckets.lodging} />
+          <TileHolder title={"Eaten"} places={buckets.dining} />
+          <TileHolder title={"Explored"} places={buckets.explored} />
+        </>
+      )}
     </ReviewContainer>
   );
 };

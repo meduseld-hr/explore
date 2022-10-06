@@ -40,7 +40,7 @@ const Card = styled.div`
   border-radius: 1em;
   overflow: hidden;
   align-items: center;
-  background-color: #f0f0f0;
+  background: ${(props) => {props.theme.modal}};
   position: relative;
 `;
 const Actions = styled.div`

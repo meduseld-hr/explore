@@ -25,26 +25,26 @@ const CommentContainer = () => {
 
   return (
     <CommentGrid>
-      <MessageWrapper>
-        <MessageCont id="messages">
-          {comments.map((message, index) => (
-            <Message key={index}>
-              <Pfp src={message.picture} />
-              <MessageBody>
-                <MessageHead>
-                  <strong>{message.nickname}</strong>
+      <CommentWrapper>
+        <CommentCont id="messages">
+          {comments.map((comment, index) => (
+            <Comment key={index}>
+              <Pfp src={comment.picture} />
+              <CommentBody>
+                <CommentHead>
+                  <strong>{comment.nickname}</strong>
                   <ReactTimeAgo
-                    date={message.time_stamp * 1000}
+                    date={comment.time_stamp * 1000}
                     locale="en-US"
                     style={timeStyle}
                   />
-                </MessageHead>
-                <div>{message.body}</div>
-              </MessageBody>
-            </Message>
+                </CommentHead>
+                <div>{comment.body}</div>
+              </CommentBody>
+            </Comment>
           ))}
-        </MessageCont>
-      </MessageWrapper>
+        </CommentCont>
+      </CommentWrapper>
       <AddCommentWrapper>
         <Input placeholder="Add Comment Here"></Input>
         <Button
@@ -96,7 +96,7 @@ const AddCommentWrapper = styled.div`
   margin-top: 5px;
 `;
 
-const MessageWrapper = styled.div`
+const CommentWrapper = styled.div`
   flex: 1;
   width: 100%;
   height: auto;
@@ -104,7 +104,7 @@ const MessageWrapper = styled.div`
   display: flex;
   align-items: end;
 `;
-const MessageCont = styled.div`
+const CommentCont = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -114,18 +114,18 @@ const MessageCont = styled.div`
   }
 `;
 
-const Message = styled.div`
+const Comment = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
-const MessageBody = styled(Message)`
+const CommentBody = styled(Comment)`
   flex-direction: column;
   align-items: flex-start;
 `;
 
-const MessageHead = styled.div`
+const CommentHead = styled.div`
   display: flex;
   align-items: baseline;
   gap: 0.25em;

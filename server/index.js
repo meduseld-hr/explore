@@ -7,7 +7,6 @@ require('dotenv').config();
 const http = require('http');
 const socketio = require('socket.io');
 const db = require('./db');
-const authentication = require('./authentication.js')
 
 //VARIABLE INITIALIZATION
 const app = express();

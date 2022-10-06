@@ -14,7 +14,6 @@ const AddUsersModal = ({ setAddingUsers }) => {
     if (e.target.value.length >= 1) {
       api.get(`/dashboard/search/${e.target.value}`)
           .then((response) => {
-            console.log(response.data);
             setSearchedUsers(response.data)
           })
     } else {
@@ -27,7 +26,7 @@ const AddUsersModal = ({ setAddingUsers }) => {
 
     var addedUserId = e.target.title;
 
-    api.push(`/dashboard/${tripId}/addUser`, { addedUserId })
+    api.post(`/dashboard/${tripId}/addUser`, { addedUserId })
     .then((response) => {
       setAddingUsers(false);
     })
@@ -46,11 +45,11 @@ const AddUsersModal = ({ setAddingUsers }) => {
         <input style={{width: '50%', margin: '0 auto', border: 'solid'}} type="search" name="usersSearch" onChange={onChange} />
         <br />
         {searchedUsers.map((user) => (
-          <userProfile key={user.id}>
-            <styledImg src={user.picture}></styledImg>
-            <div>{user.nickname}</div>
-            <addUserButton onClick={addUser} title={user.id}>Add User to trip</addUserButton>
-          </userProfile>
+          <UserProfile key={user.id}>
+            <StyledImg src={user.picture}></StyledImg>
+            <StyledName >{user.nickname}</StyledName>
+            {user.trip_ids.indexOf(parseInt(tripId)) !== -1 ? <StyledName>Explorer is already on this trip</StyledName> : <AddUserButton onClick={addUser} title={user.id}>Add User to trip</AddUserButton>}
+          </UserProfile>
         ))}
       </TopModal>
     </div>
@@ -78,7 +77,8 @@ z-index: 101;
 height: 50%;
 width: 90%;
 overflow: auto;
-background-color: white;
+background-color: ${(props) => props.theme.background};
+border: 1px solid ${(props) => props.theme.border};
 padding: 35px;
 border-radius: 10px;
 display: flex;
@@ -86,21 +86,35 @@ flex-direction: column;
 text-align: center;
 `;
 
-const userProfile = styled.div`
+const UserProfile = styled.div`
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 20%;
+  margin: auto;
 `
 
-const addUserButton = styled.button`
-  margin: auto;
+const AddUserButton = styled.button`
+  height: 50%;
   width: 33%;
   color: #020331fd;
   background-color: #4a81efc3;
+  border-radius: 12px;
+  margin-left: auto;
+  margin: auto;
   cursor: pointer;
 `
 
-const styledImg = styled.img`
-  height: auto;
+const StyledImg = styled.img`
+  height: 100%;
   width: auto;
+  border-radius: 12px;
+`
+
+const StyledName = styled.div`
+  margin-left: 5%;
+  margin: auto;
+
 `

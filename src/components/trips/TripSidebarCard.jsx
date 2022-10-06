@@ -3,20 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
-export default function TripSidebarCard({ id }) {
+export default function TripSidebarCard({ trip }) {
   const navigate = useNavigate();
 
   return (
     <Card>
-      <Thumbnail src="https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg" />
+      {trip.thumbnail_url
+        ? <Thumbnail src={trip.thumbnail_url} />
+        : <Thumbnail src="https://picsum.photos/200/300" />}
+
       <Detail>
-        <div>Name here</div>
+        <div>{trip.trip_name}</div>
         <div>Location here</div>
-        <div>Other information</div>
       </Detail>
-      <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${id}/details`)}/>
+      <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${trip.id}/details`)}/>
     </Card>
-  );
+  )
 }
 
 const Thumbnail = styled.img`

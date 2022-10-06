@@ -26,7 +26,7 @@ const CommentContainer = () => {
   return (
     <CommentGrid>
       <CommentWrapper>
-        <CommentCont id="messages">
+        <CommentCont>
           {comments.map((comment, index) => (
             <Comment key={index}>
               <Pfp src={comment.picture} />

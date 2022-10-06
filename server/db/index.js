@@ -19,6 +19,21 @@ pool.connect((err) => {
 
 // TRIPS
 
+pool.getSingleTripInfo = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public
+      FROM trips t
+      INNER JOIN trips_users tu ON tu.trip_id = t.id
+      WHERE t.id = $1 AND tu.user_id = $2
+      `
+      , [tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error getting single trip info `, err))
+}
+
 pool.getTrips = (userId) => {
   return pool
     .query(
@@ -48,7 +63,21 @@ pool.searchTrips = (placeID) => {
     .catch((err) => console.log('Error retrieving trips', err));
 }
 
-pool.addTrip = ({ tripName, googlePlaceId, thumbnailUrl, completed, public }, userId) => {
+pool.searchTripsByName = (tripName) => {
+  return pool
+    .query(
+      `
+    SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url
+    FROM trips AS t
+    WHERE t.trip_name LIKE $1 AND t.public = true;
+  `,
+    [tripName]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log('Error retrieving trips', err));
+}
+
+pool.addTrip = ({ tripName, completed, public }, googlePlaceId, thumbnailUrl, userId) => {
   return pool
     .query(
       `
@@ -59,13 +88,14 @@ pool.addTrip = ({ tripName, googlePlaceId, thumbnailUrl, completed, public }, us
       , [tripName, googlePlaceId, thumbnailUrl, completed, public]
   )
   .then((response) => {
-    var tripId = response.rows.id;
+    var tripId = response.rows[0].id;
 
     return pool
       .query(
         `
         INSERT INTO trips_users (trip_id, user_id, trip_owner, liked, added)
         VALUES ($1, $2, $3, $4, $5)
+        RETURNING trip_id
         `
         , [tripId, userId, true, true, true]
       )
@@ -479,7 +509,7 @@ pool.searchUser = (searchTerm) => {
   return pool
     .query(
       `
-      SELECT u.id, array_agg(tu.trip_id),  u.nickname, u.picture
+      SELECT u.id, array_agg(tu.trip_id) AS trip_ids,  u.nickname, u.picture
       FROM users u
       INNER JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1
@@ -506,7 +536,7 @@ pool.addUserToTrip = (tripId, addedUserID, authUserId) => {
         return pool
           .query(
             `
-            INSERT INTO trips_users (trip_id, user_id, owner, liked, added)
+            INSERT INTO trips_users (trip_id, user_id, trip_owner, liked, added)
             VALUES ($1, $2, $3, $4, $5)
             `
             , [tripId, addedUserID, false, false, false]

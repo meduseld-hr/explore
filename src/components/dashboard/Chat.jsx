@@ -12,14 +12,13 @@ import { useOutletContext } from 'react-router-dom';
 TimeAgo.addDefaultLocale(en);
 
 const Chat = () => {
-
   const user = useContext(UserContext);
-  const {tripId} = useParams();
+  const { tripId } = useParams();
 
   const [body, setBody] = useState('');
   const {messages, socket} = useOutletContext();
   const [addingUsers, setAddingUsers] = useState(false);
-  const scrollBottom = useRef();
+  const scrollBottom = useRef(0);
 
   useEffect(() => {
     const messageList = document.getElementById('messages');
@@ -30,63 +29,73 @@ const Chat = () => {
   return (
     <ChatCont>
       {addingUsers && <AddUsersModal setAddingUsers={setAddingUsers} />}
-      <button onClick={() => {
-        setAddingUsers(true);
-      }}>Add Explorers</button>
-      <MessageCont id='messages'>
-        {messages.map((message, index) => (
-          <Message key={index}>
-            <Pfp src={message.picture} />
-            <MessageBody>
-              <MessageHead>
-                <strong>{message.nickname}</strong>
-                <ReactTimeAgo
-                  date={message.time_stamp * 1000}
-                  locale='en-US'
-                  style={timeStyle}
-                />
-              </MessageHead>
-              <div>{message.body}</div>
-            </MessageBody>
-          </Message>
-        ))}
-      </MessageCont>
-      <Form onSubmit={(e) => {
-        e.preventDefault();
-        if (body.length) {
-          api.post(`/dashboard/${tripId}/chat`, {body, timeStamp: Date.now()})
-            .then(() => {
-              socket.current.emit('chat message', {
-                tripId,
+      <button
+        onClick={() => {
+          setAddingUsers(true);
+        }}
+      >
+        Add Explorers
+      </button>
+      <MessageWrapper>
+        <MessageCont id="messages">
+          {messages.map((message, index) => (
+            <Message key={index}>
+              <Pfp src={message.picture} />
+              <MessageBody>
+                <MessageHead>
+                  <strong>{message.nickname}</strong>
+                  <ReactTimeAgo
+                    date={message.time_stamp * 1000}
+                    locale="en-US"
+                    style={timeStyle}
+                  />
+                </MessageHead>
+                <div>{message.body}</div>
+              </MessageBody>
+            </Message>
+          ))}
+        </MessageCont>
+      </MessageWrapper>
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (body.length) {
+            api
+              .post(`/dashboard/${tripId}/chat`, {
                 body,
-                time_stamp: Date.now() / 1000,
-                nickname: user.nickname,
-                picture: user.picture
+                timeStamp: Date.now(),
+              })
+              .then(() => {
+                socket.current.emit("chat message", {
+                  body,
+                  time_stamp: Date.now() / 1000,
+                  nickname: user.nickname,
+                  picture: user.picture,
+                });
+                setBody("");
+                const messageList = document.getElementById("messages");
+                messageList.scrollTo(0, messageList.scrollHeight);
+                scrollBottom.current = messageList.scrollTop;
+              })
+              .catch((err) => {
+                console.log(err);
               });
-              setBody('');
-              const messageList = document.getElementById('messages');
-              messageList.scrollTo(0, messageList.scrollHeight);
-              scrollBottom.current = messageList.scrollTop;
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      }}>
+          }
+        }}
+      >
         <div>
           <Input
-            type='text'
+            type="text"
             value={body}
             onChange={(e) => {
               setBody(e.target.value);
-              }
-            } />
-          <input type='submit' />
+            }}
+          />
+          <input type="submit" />
         </div>
       </Form>
     </ChatCont>
-  )
-
+  );
 };
 
 const ChatCont = styled.div`
@@ -95,57 +104,62 @@ const ChatCont = styled.div`
   border-radius: 1.5em;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background-color: ${(props) => props.theme.background};
   border: 1px solid ${(props) => props.theme.border};
-`
-
+`;
+const MessageWrapper = styled.div`
+  flex: 1;
+  overflow: auto;
+`;
 const MessageCont = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
   gap: 1em;
-  max-height: 30vh;
+  max-height: 10px;
   width: 100%;
   &::-webkit-scrollbar {
     display: none;
   }
-`
+`;
 
 const Message = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`
+`;
 
 const MessageBody = styled(Message)`
   flex-direction: column;
   align-items: flex-start;
-`
+`;
 
 const MessageHead = styled.div`
   display: flex;
   align-items: baseline;
-  gap: .25em;
-`
+  gap: 0.25em;
+`;
 
 const Pfp = styled.img`
   height: 3em;
-  border-radius: 1.5em;
+  width: 3em;
+  object-fit: cover;
+  border-radius: 1em;
   margin-right: 0.5em;
-`
+`;
 
 const timeStyle = {
   fontSize: ".75em",
-  fontStyle: "italic"
-}
+  fontStyle: "italic",
+};
 
 const Form = styled.form`
   width: 100%;
-`
+`;
 
 const Input = styled.input`
   display: inline-block;
-  width: 80%
-`
+  width: 80%;
+`;
 
 export default Chat;

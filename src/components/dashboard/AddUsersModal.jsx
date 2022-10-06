@@ -1,18 +1,42 @@
-import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
+import api from '../../functions/api';
 
-const AddUsersModal = ({setAddingUsers}) => {
+const AddUsersModal = ({ setAddingUsers }) => {
+
+  const [searchedUsers, setSearchedUsers] = useState([])
+
+  const onChange = (e) => {
+    e.preventDefault();
+
+    if (e.target.value.length >= 1) {
+      api.get(`/dashboard/search/${e.target.value}`)
+          .then((response) => {
+            setSearchedUsers(response.data)
+          })
+    } else {
+      setSearchedUsers([])
+    }
+  }
 
   return (
-    <GreyBackground onClick={() => {
-      setAddingUsers(false);
-    }}>
+    <div>
+      <GreyBackground onClick={() => {
+        setAddingUsers(false);
+      }} />
       <TopModal>
-        hello
+        <label htmlFor="usersSearch">Explorer Name: </label> <br />
+        <input style={{width: '50%', margin: '0 auto', border: 'solid'}} type="search" name="usersSearch" onChange={onChange} />
+        <br />
+        {searchedUsers.map((user) => (
+          <userProfile >
+            <img src={user.picture} style={{height: 'auto', width: 'auto'}}></img>
+            <div>{user.nickname}</div>
+          </userProfile>
+        ))}
       </TopModal>
-    </GreyBackground>
+    </div>
   )
-
 };
 
 export default AddUsersModal;
@@ -33,11 +57,19 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 z-index: 101;
+height: 50%;
+width: 90%;
 overflow: auto;
 background-color: white;
 padding: 35px;
 border-radius: 10px;
 display: flex;
 flex-direction: column;
-align-items: center;
+text-align: center;
 `;
+
+const userProfile = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+`

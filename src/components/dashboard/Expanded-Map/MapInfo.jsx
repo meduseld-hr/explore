@@ -27,6 +27,7 @@ export default function MapInfo ({marker: {name, photos = [], types, place_id, v
 }
 
 const Popup = styled.div`
+  color: black;
   font-size: 16px;
   display: flex;
   flex-direction: column;

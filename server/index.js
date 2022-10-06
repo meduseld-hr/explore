@@ -30,7 +30,6 @@ const io = socketio(server, {
   }
 });
 function connection (req, res, next) {
-  console.log('I am the connection')
   let userId = req.oidc.user.sub;
   let nickname = req.oidc.user.nickname;
   let picture = req.oidc.user.picture;
@@ -52,7 +51,7 @@ app.use(connection);
 mountRoutes(app);
 
 app.get('/api/profile', (req, res) => {
-  console.log(req.oidc.user);
+  // console.log(req.oidc.user);
   res.send(JSON.stringify(req.oidc.user))
 });
 
@@ -62,6 +61,19 @@ io.on('connection', (socket) => {
   socket.on('chat message', (message) => {
     io.emit('chat message', message);
   });
+  socket.on('mouse', (data) => {
+    socket.broadcast.emit('mouse', {
+      tripId: data.tripId,
+      x: data.x,
+      y: data.y,
+      pressed: data.pressed,
+      id: socket.id,
+      nickname: data.nickname
+    });
+  });
+  socket.on('rerender', (data) => {
+    io.emit('rerender', data);
+  })
   socket.on('disconnect', () => {
     console.log('disconnected from dashboard');
     io.emit('leave', socket.id);

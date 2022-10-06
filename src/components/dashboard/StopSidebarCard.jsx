@@ -6,7 +6,7 @@ import {useParams} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected, setStops }) {
+export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, swapStops, deleteStop, setStops, socket }) {
 
   const {tripId} = useParams();
   const navigate = useNavigate();
@@ -14,39 +14,21 @@ export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected
   const decreaseOrder = () => {
     api.put(`/dashboard/${stop.id}/decrease`, {tripId})
       .then(() => {
-        api.get(`/dashboard/${tripId}`)
-          .then((response) => {
-            setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        socket.current.emit('rerender', {tripId});
       })
   };
 
   const increaseOrder = () => {
     api.put(`/dashboard/${stop.id}/increase`, {tripId})
       .then(() => {
-        api.get(`/dashboard/${tripId}`)
-          .then((response) => {
-            setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        socket.current.emit('rerender', {tripId});
       })
   };
 
-  const deleteStop = () => {
+  const removeStop = () => {
     api.delete(`/dashboard/${stop.id}`)
       .then(() => {
-        api.get(`/dashboard/${tripId}`)
-          .then((response) => {
-            setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        socket.current.emit('rerender', {tripId});
       })
   };
 
@@ -58,9 +40,18 @@ export default function StopSidebarCard({ stop, changeIndex, stopIndex, selected
         <Loc>{stop.greater_location}</Loc>
       </Detail>
       <Actions>
-        <Action icon={faArrowUp} onClick={decreaseOrder}/>
-        <Delete icon={faXmark} onClick={deleteStop}/>
-        <Action icon={faArrowDown} onClick={increaseOrder}/>
+        {index > 0 && <Action icon={faArrowUp} onClick={(e) => {
+          swapStops(e, index, index - 1);
+          decreaseOrder();
+        }}/>}
+        <Delete icon={faXmark} onClick={(e) => {
+          deleteStop(e, index);
+          removeStop();
+        }}/>
+        {index < length - 1 && <Action icon={faArrowDown} onClick={(e) => {
+          swapStops(e, index, index + 1);
+          increaseOrder();
+        }}/>}
       </Actions>
     </Card>
   );
@@ -84,7 +75,7 @@ const Card = styled.div`
   border-radius: 1em;
   overflow: hidden;
   align-items: center;
-  background-color: #f0f0f0;
+  background: ${(props) => {props.theme.modal}};
   position: relative;
 `;
 const Actions = styled.div`
@@ -97,7 +88,7 @@ const Action = styled(FontAwesomeIcon)`
   font-size: 1.8em;
   color: #030333;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1;
 `
 const Delete = styled(Action)`
   color: red;
@@ -107,7 +98,7 @@ const Detail = styled.div`
   flex-direction: column;
   flex: 1;
   position: absolute;
-  left: 50%;
+  left: 40%;
 `;
 const OpenTrip = styled(FontAwesomeIcon)`
   color: #383838;

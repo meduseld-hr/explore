@@ -42,14 +42,13 @@ const Loc = styled.div`
 `;
 
 const Photos = styled.div`
-  grid-area: 2 / 1 / 3 / 2;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   border-radius: 1.5em;
+  gap: .5em;
 `
 const Photo = styled.img`
-  width: 100%;
-  aspect-ratio: 1;
+  height: 10em;
+  width: 10em;
   object-fit: cover;
 `

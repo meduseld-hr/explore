@@ -24,11 +24,11 @@ export default function Landing() {
       <ColCont>
         <LOGOTop src={explorer} />
         <TopModal>
-        <p>Travel to Live.</p>
-        <p>Live to Travel.</p>
-        <p>Travel to meet yourself.</p>
-        <p>Travel with excellence.</p>
-        <br></br>
+          <p>Travel to Live.</p>
+          <p>Live to Travel.</p>
+          <p>Travel to meet yourself.</p>
+          <p>Travel with excellence.</p>
+          <br></br>
           {/*<label htmlFor="destinationSearch">Where would you like to go next:</label> <br />
           <input style={{width: '50%', margin: '0 auto'}} type="search" name="destinationSearch" onChange={onChange} /> */}
           <br />
@@ -67,7 +67,7 @@ const LOGOTop = styled.img`
 
 const TopModal = styled(ColCont)`
   font: 3em "Balthazar", sans-serif;
-  line-height: .3em;
+  line-height: .1em;
   height: 100%;
   width: 100%;
   border-radius: 1.5em;

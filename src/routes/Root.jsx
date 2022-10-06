@@ -35,7 +35,7 @@ export default function Root() {
       <UserContext.Provider value={user}>
         <App>
           <Header>
-            <H2>Explore {user && <span>for {user.name}</span>}</H2>
+            {/* <H2>Explore {user && <span>for {user.name}</span>}</H2> */}
             <Links>
               <Link to={'dashboard'}>Dashboard</Link>
               {/* <Link to={'profile'}>Profile</Link> */}
@@ -70,7 +70,7 @@ const App = styled.div`
   height: 100vh;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-  overflow: auto;
+  /* overflow: auto; */
 `;
 const Header = styled.header`
   width: 100%;

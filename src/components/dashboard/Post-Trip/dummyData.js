@@ -67,6 +67,6 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "Down the Rabbit Hole",
-    google_place_id: "ChIJ6SmmViw_xIkRlTUgLSZmszY",
+    google_place_id: "ChIJ2a6Vv9yPxokRHXfjsTNJb2I",
   },
 ];

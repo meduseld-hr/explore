@@ -6,9 +6,11 @@ export default function TripRecommendations({type}) {
 
   return(
     <Container>
+    <TitleWrapper>
       <Title>
-        {type} trips
+        {type} Trips
       </Title>
+    </TitleWrapper>
       <Cards>
         <TripCard title='rome, italy' image='https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg'/>
         <TripCard title={'paris, france'} image='https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg'/>
@@ -20,8 +22,19 @@ export default function TripRecommendations({type}) {
 }
 
 const Title = styled.h2`
-  margin: 0;
+  color: ${(props) => {props.theme.color}};
+  margin: 0px;
 `
+
+const TitleWrapper = styled.div`
+  background-color: ${(props) => {props.theme.background}};
+  border: 1px solid ${(props) => {props.theme.border}};
+  border-radius: 1.5em;
+  width: fit-content;
+  padding: 0 1em 0 1em;
+  margin: 1em 0 1em 0;
+`
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

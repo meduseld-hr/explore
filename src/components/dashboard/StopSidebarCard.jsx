@@ -8,10 +8,10 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
   const navigate = useNavigate();
   return (
     <Card onClick={changeIndex} style={{border: selected ? '2px solid red' : '2px solid black'}}>
-      <Thumbnail src={stop.thumbnailUrl} />
+      <Thumbnail src={stop.thumbnail_url} />
       <Detail>
-        <Name>{stop.stopName}</Name>
-        <Loc>{stop.greaterLocation}</Loc>
+        <Name>{stop.stop_name}</Name>
+        <Loc>{stop.greater_location}</Loc>
       </Detail>
       <Actions>
         {index > 0 &&<Action icon={faArrowUp} onClick={(e) => swapStops(e, index, index - 1)}/>}

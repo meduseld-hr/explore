@@ -16,7 +16,7 @@ import usePlacesAutocomplete, {
 import styled from 'styled-components';
 import _ from 'lodash';
 import MapInfo from './MapInfo';
-import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
+import { faExpand, faCompress, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
@@ -24,7 +24,7 @@ import MAPS_SECRET from './config';
 
 const libraries = ['places'];
 
-export default function App({ small, navigateDirection = '../details' }) {
+export default function App({ small, navigateDirection = '../details'}) {
   //setting libraries variable so that console doesn't give warning anymore, per stackOverflow
   const [libraries] = useState(['places']);
   const { isLoaded, loadError } = useLoadScript({
@@ -51,6 +51,7 @@ export default function App({ small, navigateDirection = '../details' }) {
   const searchRef = useRef(null);
   const mapRef = useRef();
   const { stops, addStop } = useOutletContext();
+  const [showLocs, setShowLocs] = useState(true);
 
   useEffect(() => {
     // console.log("useEffect called")
@@ -142,6 +143,7 @@ export default function App({ small, navigateDirection = '../details' }) {
         icon={!small ? faCompress : faExpand}
         onClick={() => setShouldRedirect(true)}
       />
+      <EyeSlash icon={faEyeSlash} onClick={() => setShowLocs(locs => !locs)}/>
       <GoogleMap
         mapContainerClassName="map-container"
         mapContainerStyle={mapContainerStyle}
@@ -152,7 +154,7 @@ export default function App({ small, navigateDirection = '../details' }) {
         ref={mapRef}
         options={mapOptions}
       >
-        {markers.map((marker, index) => (
+        {showLocs && markers.map((marker, index) => (
           <InfoWindow key={index} position={marker.geometry.location}>
             <MapInfo addStop={addStop} marker={marker} />
           </InfoWindow>
@@ -195,6 +197,9 @@ const Icon = styled(FontAwesomeIcon)`
   filter: drop-shadow(1px 1px 2px black);
   cursor: pointer;
 `;
+const EyeSlash = styled(Icon)`
+  left: 0.5em;
+`
 const Container = styled.div`
   height: 100%;
   width: 100%;

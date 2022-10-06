@@ -479,7 +479,7 @@ pool.searchUser = (searchTerm) => {
   return pool
     .query(
       `
-      SELECT u.id, array_agg(tu.trip_id),  u.nickname, u.picture
+      SELECT u.id, array_agg(tu.trip_id) AS trip_ids,  u.nickname, u.picture
       FROM users u
       INNER JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1

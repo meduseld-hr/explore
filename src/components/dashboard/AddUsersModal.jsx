@@ -46,11 +46,11 @@ const AddUsersModal = ({ setAddingUsers }) => {
         <input style={{width: '50%', margin: '0 auto', border: 'solid'}} type="search" name="usersSearch" onChange={onChange} />
         <br />
         {searchedUsers.map((user) => (
-          <userProfile key={user.id}>
-            <styledImg src={user.picture}></styledImg>
+          <UserProfile key={user.id}>
+            <StyledImg src={user.picture}></StyledImg>
             <div>{user.nickname}</div>
-            <addUserButton onClick={addUser} title={user.id}>Add User to trip</addUserButton>
-          </userProfile>
+            {user.trip_ids.indexOf(parseInt(tripId)) !== -1 ? <div>Explorer is already on this trip</div> : <AddUserButton onClick={addUser} title={user.id}>Add User to trip</AddUserButton>}
+          </UserProfile>
         ))}
       </TopModal>
     </div>
@@ -86,21 +86,23 @@ flex-direction: column;
 text-align: center;
 `;
 
-const userProfile = styled.div`
+const UserProfile = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   width: 100%;
+  height: 20%;
 `
 
-const addUserButton = styled.button`
-  margin: auto;
+const AddUserButton = styled.button`
+  height: 50%;
   width: 33%;
   color: #020331fd;
   background-color: #4a81efc3;
   cursor: pointer;
 `
 
-const styledImg = styled.img`
-  height: auto;
+const StyledImg = styled.img`
+  height: 100%;
   width: auto;
 `

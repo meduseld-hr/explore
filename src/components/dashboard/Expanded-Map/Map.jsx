@@ -20,12 +20,12 @@ import { faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
-import MAP_KEY from './components/dashboard/Expanded-Map/config.js'
+import MAP_KEY from './config.js'
 const MAPS_SECRET = MAP_KEY;
 
 const libraries = ['places'];
 
-export default function App({ small, navigateDirection = '../details' }) {
+export default function App({ small, navigateDirection = '../details', }) {
   //setting libraries variable so that console doesn't give warning anymore, per stackOverflow
   const [libraries] = useState(['places']);
   const { isLoaded, loadError } = useLoadScript({
@@ -45,15 +45,15 @@ export default function App({ small, navigateDirection = '../details' }) {
   const [locationSearch, setLocationSearch] = useState('');
 
   const [tripRoute, setTripRoute] = useState(null)
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
   const originRef = useRef();
   const destinationRef = useRef();
   const searchRef = useRef(null);
   const mapRef = useRef();
   const {stops, addStop} = useOutletContext();
+  const {setDistance, setDuration} = useOutletContext();
 
   useEffect(() => {
+    console.log(stops)
     if(stops.length >= 2) {
 
       const tempAllStops = [];
@@ -82,8 +82,8 @@ export default function App({ small, navigateDirection = '../details' }) {
           travelMode: google.maps.TravelMode.DRIVING,
           waypoints: tempWaypoints,//all stops without first and last
         }, (directions) => {
-          setTripRoute(directions);
           console.log(directions)
+          setTripRoute(directions);
           setDistance(directions.routes[0].legs[0].distance.text);
           setDuration(directions.routes[0].legs[0].duration.text);
         }
@@ -96,14 +96,14 @@ export default function App({ small, navigateDirection = '../details' }) {
         setTripRoute(null);
       }
 
-      }, [stops]);
+    }, [stops]);
 
-      if (loadError) {
-        return 'Error loading maps';
-      }
-      if (!isLoaded) {
-        return 'Loading Maps';
-      }
+    if (loadError) {
+      return 'Error loading maps';
+    }
+    if (!isLoaded) {
+      return 'Loading Maps';
+    }
 
   const mapOptions = {
     disableDefaultUI: true,

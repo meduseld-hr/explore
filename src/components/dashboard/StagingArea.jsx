@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import PostTrip from './Post-Trip/PostTrip.jsx';
 import { Outlet } from 'react-router-dom';
 
-export default function StagingArea({ stops, addStop, stop }) {
+export default function StagingArea({ stops, addStop, stop, setDistance, setDuration}) {
   return (
     <StagingAreaContainer>
-      <Outlet context={{ stops, addStop, stop }} />
+      <Outlet context={{ stops, addStop, stop, setDistance, setDuration }} />
     </StagingAreaContainer>
   );
 }

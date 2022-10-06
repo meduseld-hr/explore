@@ -15,6 +15,8 @@ export default function Dashboard() {
   const [stops, setStops] = useState([]);
   const [stopIndex, setStopIndex] = useState(0);
   const [stop, setStop ] = useState(null);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
 
   function addStop(stop) {
     stop.stop_order = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
@@ -54,7 +56,16 @@ export default function Dashboard() {
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
-          Current stop: {stopIndex}
+            Current stop: {stopIndex}<br />
+            Trip Distance: {distance}<br />
+            Trip Duration: {duration}
+
+          {/* {(stopIndex > 1) ?
+            (Trip Distance: {distance},
+            Trip Duration: {duration})
+            : null
+          } */}
+
           <Search
             type="text"
             value={search}
@@ -80,7 +91,7 @@ export default function Dashboard() {
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea stops={stops} addStop={addStop} stop={stop} />
+      <StagingArea stops={stops} addStop={addStop} stop={stop} setDistance={setDistance} setDuration={setDuration}/>
     </DashContainer>
   );
 }

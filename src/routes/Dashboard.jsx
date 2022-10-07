@@ -172,7 +172,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if(!distDurat) return;
-    if (stops.length >= 2 && distDurat.routes) {
+    if (stops.length >= 2 && distDurat.routes[0]) {
       let legsArr = distDurat.routes[0].legs;
       let tempTotalDist = 0;
       let tempTotalDur = 0;

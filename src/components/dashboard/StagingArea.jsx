@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 export default function StagingArea({ stops, addStop, stop, messages, socket, setDistance, setDuration, trip}) {
   return (
     <StagingAreaContainer>
-      <Outlet context={{ stops, addStop, stop, messages, socket, setDistance, setDuration }} />
+      <Outlet context={{ stops, addStop, stop, messages, socket, setDistance, setDuration, trip }} />
     </StagingAreaContainer>
   );
 }

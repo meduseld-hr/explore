@@ -29,6 +29,11 @@ const Title = styled.div`
   text-align: center;
   background-color: white;
   color: black;
+  height: -webkit-fill-available;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
 `;
 
 const Img = styled.img`

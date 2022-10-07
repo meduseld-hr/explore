@@ -7,7 +7,6 @@ const ReviewTile = (props) => {
   const locationName = props.place.name;
   const photo_reference = props.place.photos[0].photo_reference;
   const img_url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo_reference}&key=${MAPS_SECRET}`;
-
   return (
     <Tile>
       <Title>{locationName}</Title>
@@ -33,8 +32,10 @@ const Title = styled.div`
 `;
 
 const Img = styled.img`
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  margin-top: auto;
 `;
 
 export default ReviewTile;

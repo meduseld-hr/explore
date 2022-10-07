@@ -43,18 +43,28 @@ export default function App({ small, navigateDirection = '../details'}) {
   const [selected, setSelected] = useState(null);
   const [locationSearch, setLocationSearch] = useState('');
 
-  const [tripRoute, setTripRoute] = useState(null);
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [tripRoute, setTripRoute] = useState(null)
   const originRef = useRef();
   const destinationRef = useRef();
   const searchRef = useRef(null);
   const mapRef = useRef();
-  const { stops, addStop } = useOutletContext();
+  const { stops, addStop, trip } = useOutletContext();
   const [showLocs, setShowLocs] = useState(true);
+  const {setDistance, setDuration} = useOutletContext();
+
+  useEffect(() => { //Load trip center
+    if(!trip) return;
+    if(!mapRef.current) return;
+    let service = new google.maps.places.PlacesService(mapRef.current.state.map);
+    service.getDetails({placeId: trip.origin_google_place_id, fields: ['geometry']}, (res => {
+      setCenter({
+        lat: res.geometry.location.lat(),
+        lng: res.geometry.location.lng(),
+      });
+    }))
+  }, [trip])
 
   useEffect(() => {
-    // console.log("useEffect called")
     if (stops.length >= 2) {
       const tempAllStops = [];
       for (const stop of stops) {
@@ -79,13 +89,15 @@ export default function App({ small, navigateDirection = '../details'}) {
           },
           (directions) => {
             setTripRoute(directions);
-            // setDistance(directions.routes[0].legs[0].distance.text);
-            // setDuration(directions.routes[0].legs[0].duration.text);
+            setDistance(directions.routes[0].legs[0].distance.text);
+            setDuration(directions.routes[0].legs[0].duration.text);
           }
         );
       });
     } else {
       setTripRoute(null);
+      setDistance(null);
+      setDuration(null);
     }
   }, [stops /*distance, duration*/]);
 
@@ -172,16 +184,6 @@ export default function App({ small, navigateDirection = '../details'}) {
           </div>
         </Autocomplete>
 
-        {/*Not needed because of Autocomplete functionality*/}
-        {/* <SearchButton
-          type="submit"
-          value="Search"
-          onClick={(e) => {
-            console.log(searchRef.current.value);
-            setLocationSearch(searchRef.current.value);
-            searchRef.current.value = '';
-          }}
-        /> */}
       </GoogleMap>
     </Container>
   );

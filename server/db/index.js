@@ -64,13 +64,14 @@ pool.searchTrips = (placeID) => {
 }
 
 pool.searchTripsByName = (tripName) => {
+  tripName = '%' + tripName
   return pool
     .query(
-      `
+    `
     SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url
     FROM trips AS t
-    WHERE t.trip_name LIKE $1 AND t.public = true;
-  `,
+    WHERE t.trip_name LIKE $1
+    `,
     [tripName]
     )
     .then((response) => response.rows)

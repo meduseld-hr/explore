@@ -15,11 +15,14 @@ export default function Trips () {
   const [myTrips, setMyTrips] = useState([])
   const [recommendedTrips, setRecommendedTrips] = useState([])
   const [recentTrips, setRecentTrips] = useState([])
+  const [popularTrips, setPopularTrips] = useState([]);
+  const [update, setUpdate] = useState(false);
 
   useEffect(()=> {
     //USER Trips for sidebar
     api.get('/trips/')
       .then((response) => {
+        console.log('mytrips', response.data);
         setMyTrips(response.data);
       })
       .catch((err)=> {
@@ -27,9 +30,19 @@ export default function Trips () {
       });
 
     //Recommended Trips
-    api.get('/trips/popular')
+    api.get('/trips/recommended')
       .then((response) => {
+        console.log('recommended', response.data);
         setRecommendedTrips(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+      api.get('/trips/popular')
+      .then((response) => {
+        console.log('popular trips include: ', response.data)
+        setPopularTrips(response.data);
       })
       .catch(err => {
         console.log(err);
@@ -43,7 +56,7 @@ export default function Trips () {
       .catch(err => {
         console.log(err);
       });
-  }, [])
+  }, [update])
 
   const makeSearch = (destination) => {
     api.get('/trips/searchTripsByName', { params: { placeName: destination } })
@@ -67,6 +80,12 @@ export default function Trips () {
       })
   }
 
+  function deleteTrip(tripId) {
+    api.delete(`/trips/${tripId}`).then(() => {
+      setUpdate(update => !update);
+    }).catch(err => console.log(err))
+  }
+
   return (
     <Container>
       <SideBar>
@@ -76,7 +95,7 @@ export default function Trips () {
           <Button onClick={()=>{makeNewTrip(search)}}>Create New Trip</Button>
           <div>Your Plans</div>
           {myTrips.length === 0 ? <div></div> : myTrips.map( (trip) => {
-            return <TripSidebarCard key={trip.id} trip={trip}/>
+            return <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip}/>
           })}
         </SidebarWrapper>
       </SideBar>
@@ -84,6 +103,7 @@ export default function Trips () {
         {tripsFromSearch.length > 0 && <TripRecommendations type='Search Result' trips={tripsFromSearch} />}
         <TripRecommendations type='Recommended' trips={recommendedTrips} />
         <TripRecommendations type='Recent' trips={recentTrips} />
+        <TripRecommendations type='Popular' trips={popularTrips} />
       </Dashboard>
     </Container>
   )

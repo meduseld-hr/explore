@@ -169,7 +169,7 @@ export default function Dashboard() {
       <SideBar>
         <SidebarWrapper>
             Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex}<br />
-            Trip Distance: {distance > 0 ? distance : "Add another destination!"}<br />
+            Trip Distance: {distance}<br />
             Trip Duration: {duration}
 
           <Search

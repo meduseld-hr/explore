@@ -12,7 +12,8 @@ export default function Trips () {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [tripsFromSearch, setTripsFromSearch] = useState([])
-  const [myTrips, setMyTrips] = useState([])
+  const [myTrips, setMyTrips] = useState([]);
+  const [completedTrips, setCompletedTrips] = useState([]);
   const [recommendedTrips, setRecommendedTrips] = useState([])
   const [recentTrips, setRecentTrips] = useState([])
   const [popularTrips, setPopularTrips] = useState([]);
@@ -22,7 +23,17 @@ export default function Trips () {
     //USER Trips for sidebar
     api.get('/trips/')
       .then((response) => {
-        setMyTrips(response.data);
+        const trips = [];
+        const completed = [];
+        for(const trip of response.data) {
+          if(trip.completed) {
+            completed.push(trip);
+          } else {
+            trips.push(trip);
+          }
+        }
+        setMyTrips(trips);
+        setCompletedTrips(completed);
       })
       .catch((err)=> {
         console.log(err);
@@ -80,7 +91,8 @@ export default function Trips () {
   const markAsComplete = (tripId) => {
     api.put(`/trips/${tripId}/completed`)
       .then(() => {
-        navigate(`../dashboard/${trip.id}/postTrip`)
+        setUpdate(update => !update);
+        navigate(`../dashboard/${tripId}/postTrip`)
       })
       .catch((err) => {
         console.log(err);
@@ -101,9 +113,11 @@ export default function Trips () {
           <Button onClick={()=>{makeSearch(search)}}>Go!</Button>
           <Button onClick={()=>{makeNewTrip(search)}}>Create New Trip</Button>
           <div>Your Plans</div>
-          {myTrips.length === 0 ? <div></div> : myTrips.map( (trip) => {
-            return <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip} markAsComplete={markAsComplete}/>
-          })}
+          {myTrips.map( (trip) => <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip} markAsComplete={markAsComplete}/>
+          )}
+          <div>Completed Plans</div>
+          {completedTrips.map( (trip) => <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip}/>
+          )}
         </SidebarWrapper>
       </SideBar>
       <Dashboard>

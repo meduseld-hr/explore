@@ -70,7 +70,7 @@ pool.searchTripsByName = (tripName) => {
     `
     SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url
     FROM trips AS t
-    WHERE t.trip_name LIKE $1
+    WHERE LOWER(t.trip_name) LIKE LOWER($1)
     `,
     [tripName]
     )

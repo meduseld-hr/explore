@@ -21,6 +21,7 @@ export default function Trips () {
     //USER Trips for sidebar
     api.get('/trips/')
       .then((response) => {
+        console.log('mytrips', response.data);
         setMyTrips(response.data);
       })
       .catch((err)=> {
@@ -30,6 +31,7 @@ export default function Trips () {
     //Recommended Trips
     api.get('/trips/recommended')
       .then((response) => {
+        console.log('recommended', response.data);
         setRecommendedTrips(response.data);
       })
       .catch(err => {

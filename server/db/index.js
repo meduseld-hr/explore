@@ -23,7 +23,7 @@ pool.getSingleTripInfo = (tripId, userId) => {
   return pool
     .query(
       `
-      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public
+      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public, t.likes
       FROM trips t
       INNER JOIN trips_users tu ON tu.trip_id = t.id
       WHERE t.id = $1 AND tu.user_id = $2

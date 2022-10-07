@@ -54,7 +54,7 @@ const Detail = styled.div`
   flex-direction: column;
   flex: 1;
   position: absolute;
-  left: 50%;
+  left: 35%;
 `;
 const Icons = styled.div`
   display: flex;

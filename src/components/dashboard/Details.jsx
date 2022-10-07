@@ -10,6 +10,7 @@ import StopDetails from './details/StopDetails';
 export default function Details() {
   const { stop } = useOutletContext();
   const navigate = useNavigate();
+  const {setDistance, setDuration} = useOutletContext();
 
   return (
 
@@ -41,6 +42,7 @@ const InfoContainer = styled.div`
   padding: 1.5em;
   background-color: ${(props) => props.theme.background};
   border: 1px solid ${(props) => props.theme.border};
+  flex: 1;
 `
 
 const InfoHeader = styled.div`

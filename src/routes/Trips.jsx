@@ -15,6 +15,7 @@ export default function Trips () {
   const [myTrips, setMyTrips] = useState([])
   const [recommendedTrips, setRecommendedTrips] = useState([])
   const [recentTrips, setRecentTrips] = useState([])
+  const [popularTrips, setPopularTrips] = useState([]);
 
   useEffect(()=> {
     //USER Trips for sidebar
@@ -28,10 +29,19 @@ export default function Trips () {
       });
 
     //Recommended Trips
-    api.get('/trips/popular')
+    api.get('/trips/recommended')
       .then((response) => {
         console.log('recommended', response.data);
         setRecommendedTrips(response.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+      api.get('/trips/popular')
+      .then((response) => {
+        console.log('popular trips include: ', response.data)
+        setPopularTrips(response.data);
       })
       .catch(err => {
         console.log(err);
@@ -86,6 +96,7 @@ export default function Trips () {
         {tripsFromSearch.length > 0 && <TripRecommendations type='Search Result' trips={tripsFromSearch} />}
         <TripRecommendations type='Recommended' trips={recommendedTrips} />
         <TripRecommendations type='Recent' trips={recentTrips} />
+        <TripRecommendations type='Popular' trips={popularTrips} />
       </Dashboard>
     </Container>
   )

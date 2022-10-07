@@ -1,4 +1,3 @@
-import logo from '/408006.webp';
 import explorer from '/Logo_Light_v2.png';
 import { useState } from 'react'
 import styled from 'styled-components';

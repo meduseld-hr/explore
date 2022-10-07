@@ -20,10 +20,13 @@ export default function Dashboard() {
   const [stopIndex, setStopIndex] = useState(0);
   const [stop, setStop] = useState(null);
   const [rerender, setRerender] = useState(false);
+  const [trip, setTrip] = useState(null);
 
   const [tripPublic, setTripPublic] = useState(true);
 
   const cursors = useRef({});
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
 
   function addStop(stop) {
     stop.stopOrder = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
@@ -156,10 +159,24 @@ export default function Dashboard() {
     setStop(stops[stopIndex])
   }, [stops, stopIndex])
 
+  useEffect(() => {
+    api.get(`trips/${tripId}/singleTripInfo`)
+      .then(response => setTrip(response.data[0])).catch(err => console.log(err))
+  },[tripId])
+
   return (
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
+            Trip Distance: {distance}<br />
+            Trip Duration: {duration}
+
+          {/* {(stopIndex > 1) ?
+            (Trip Distance: {distance},
+            Trip Duration: {duration})
+            : null
+          } */}
+
           <Search
             type='text'
             value={search}
@@ -189,7 +206,7 @@ export default function Dashboard() {
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} />
+      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} setDistance={setDistance} setDuration={setDuration} trip={trip}/>
     </DashContainer>
   );
 }

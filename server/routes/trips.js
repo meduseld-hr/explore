@@ -22,7 +22,7 @@ router.get('/:tripId/singleTripInfo' , (req, res) => {
 
 router.get('/', (req, res) => {
 
-
+  const userId = req.oidc.user.sub;
   db.getTrips(userId).then(response => {
     res.status(200).send(response);
   })

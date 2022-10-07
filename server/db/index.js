@@ -64,13 +64,14 @@ pool.searchTrips = (placeID) => {
 }
 
 pool.searchTripsByName = (tripName) => {
+  tripName = '%' + tripName
   return pool
     .query(
-      `
+    `
     SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url
     FROM trips AS t
-    WHERE t.trip_name LIKE $1 AND t.public = true;
-  `,
+    WHERE t.trip_name LIKE $1
+    `,
     [tripName]
     )
     .then((response) => response.rows)
@@ -155,15 +156,21 @@ pool.deleteTrip = (tripId, userId) => {
   return pool
     .query(
       `
-      DELETE FROM trips t
-      USING trips_users tu
-      WHERE t.trip_id = tu.trip_id AND t.id = $1 AND tu.user_id = $2 AND tu.owner = true
-      RETURNING *
+      SELECT t.id
+      FROM trips t
+      INNER JOIN trips_users tu ON tu.trip_id = t.id
+      WHERE tu.user_id = $1 AND tu.trip_owner = true
       `
-      , [tripId, userId]
+      , [userId]
     )
     .then((response) => {
-      if (response.rows.length > 0) {
+      var authCheck = false;
+      response.rows.forEach((trip) => {
+        if (trip.id === tripId) {
+          authCheck = true;
+        }
+      })
+      if (authCheck) {
         return pool
           .query(
             `
@@ -173,16 +180,18 @@ pool.deleteTrip = (tripId, userId) => {
             m AS (DELETE FROM messages
               WHERE trip_id = $1),
             c AS (DELETE FROM comments
+              WHERE trip_id = $1),
+            s AS (DELETE FROM stops
               WHERE trip_id = $1)
-            DELETE FROM stops
-              WHERE trip_id = $1
+            DELETE FROM trips
+            WHERE id = $1
             `
             , [tripId]
           )
           .then((response) => response.rows)
           .catch((err) => console.log(`Error deleting trip: `, tripId, err))
       } else {
-        return `Unauthorized user or not trip owner: ${userId} for Trip id: ${tripId}`;
+        return `Unauthorized user: ${userId} for Trip id: ${tripId}`;
       }
     })
     .catch((err) => console.log(`Error deleting trip: `, tripId, err))

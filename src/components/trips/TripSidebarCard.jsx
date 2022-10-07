@@ -14,7 +14,6 @@ export default function TripSidebarCard({ trip }) {
 
       <Detail>
         <div>{trip.trip_name}</div>
-        <div>Location here</div>
       </Detail>
       <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${trip.id}/details`)}/>
     </Card>
@@ -44,6 +43,10 @@ const Card = styled.div`
   position: relative;
 `;
 const Detail = styled.div`
+  font-weight: 500;
+  font-size: 2em;
+  opacity: 0.9;
+  font-style: italic;
   display: flex;
   flex-direction: column;
   flex: 1;

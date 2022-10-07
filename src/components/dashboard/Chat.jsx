@@ -74,6 +74,13 @@ const Chat = () => {
                 timeStamp: Date.now(),
               })
               .then(() => {
+                console.log({
+                  tripId,
+                  body,
+                  time_stamp: Date.now() / 1000,
+                  nickname: user.nickname,
+                  picture: user.picture,
+                })
                 socket.current.emit('chat message', {
                   tripId,
                   body,

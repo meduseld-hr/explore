@@ -12,9 +12,9 @@ export default function Root() {
 
   useEffect(() => {
     api
-      .get('/profile')
+      .get('/profileInfo/info')
       .then((response) => {
-        setUser(response.data);
+        setUser(response.data[0]);
       })
       .catch((err) => console.log(err));
   }, []);

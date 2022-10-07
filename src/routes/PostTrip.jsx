@@ -4,7 +4,7 @@ import TripRecommendations from "../components/trips/TripRecommendations";
 import TripSidebarCard from "../components/trips/TripSidebarCard";
 import SideBar from "../components/dashboard/Sidebar";
 import api from "../functions/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PostTrip from "../components/dashboard/Post-Trip/PostTrip.jsx";
 
 export default function Trips() {
@@ -16,6 +16,7 @@ export default function Trips() {
   const [recentTrips, setRecentTrips] = useState([]);
   const [popularTrips, setPopularTrips] = useState([]);
   const [update, setUpdate] = useState(false);
+  const {tripId} = useParams();
 
   useEffect(() => {
     //USER Trips for sidebar
@@ -91,12 +92,13 @@ export default function Trips() {
           ) : (
             myTrips.map((trip) => {
               return (
-                <TripSidebarCard
-                  key={trip.id}
-                  trip={trip}
-                  deleteTrip={deleteTrip}
-                  markAsComplete={markAsComplete}
-                />
+                <Wrapper key={trip.id} onClick={() => navigate('./../' + trip.id)}>
+                  <TripSidebarCard
+                    trip={trip}
+                    deleteTrip={deleteTrip}
+                    markAsComplete={markAsComplete}
+                  />
+                </Wrapper>
               );
             })
           )}
@@ -109,6 +111,9 @@ export default function Trips() {
   );
 }
 
+const Wrapper = styled.div`
+  cursor: pointer;
+`
 const Container = styled.div`
   height: 100%;
   width: 100%;

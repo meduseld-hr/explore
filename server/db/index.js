@@ -520,7 +520,7 @@ pool.searchUser = (searchTerm) => {
       `
       SELECT u.id, array_agg(tu.trip_id) AS trip_ids,  u.nickname, u.picture
       FROM users u
-      INNER JOIN trips_users tu ON tu.user_id = u.id
+      FULL JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1
       GROUP BY u.id
       `

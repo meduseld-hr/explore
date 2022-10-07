@@ -99,11 +99,11 @@ const UserProfile = styled.div`
 const AddUserButton = styled.button`
   height: 50%;
   width: 33%;
-  color: #020331fd;
-  background-color: #4a81efc3;
   border-radius: 12px;
   margin-left: auto;
   margin: auto;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
   cursor: pointer;
 `
 

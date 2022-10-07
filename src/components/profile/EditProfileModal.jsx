@@ -12,7 +12,7 @@ export default function EditProfileModal({ onSubmit, setEditInProgress }) {
         <label htmlFor="picture">Update PictureURL</label>
         <input type="text" />
         <br />
-        <Input type="submit" value="Update Picture" onClick={(e) => { onSubmit(e, "picture") }} />
+        <Input value="Update Picture" onClick={(e) => { onSubmit(e, "picture") }} />
       </Form>
   </CenterContainer>
 }
@@ -33,9 +33,9 @@ const Input = styled.input.attrs({
   type: 'submit'
 })`
   padding: 5px;
-  margin: 10px;
-  color: #020331fd;
-  border-radius: 20px;
-  background-color: #4a81efc3;
+  margin: .5em;
+  border-radius: 1em;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
   cursor: pointer;
 `;

@@ -292,9 +292,9 @@ const Save = styled.button`
   flex: 1;
   width: 15%;
   margin: auto;
-  color: ${(props) => props.theme.color}
-  background-color: ${(props) => props.theme.background};
   border-radius: 12px;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
   cursor: pointer;
 `;
 

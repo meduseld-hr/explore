@@ -22,7 +22,6 @@ export default function Trips () {
     //USER Trips for sidebar
     api.get('/trips/')
       .then((response) => {
-        console.log('mytrips', response.data);
         setMyTrips(response.data);
       })
       .catch((err)=> {
@@ -32,7 +31,6 @@ export default function Trips () {
     //Recommended Trips
     api.get('/trips/recommended')
       .then((response) => {
-        console.log('recommended', response.data);
         setRecommendedTrips(response.data);
       })
       .catch(err => {
@@ -41,7 +39,6 @@ export default function Trips () {
 
       api.get('/trips/popular')
       .then((response) => {
-        console.log('popular trips include: ', response.data)
         setPopularTrips(response.data);
       })
       .catch(err => {
@@ -80,6 +77,16 @@ export default function Trips () {
       })
   }
 
+  const markAsComplete = (tripId) => {
+    api.put(`/trips/${tripId}/completed`)
+      .then(() => {
+        navigate(`../dashboard/${trip.id}/postTrip`)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
   function deleteTrip(tripId) {
     api.delete(`/trips/${tripId}`).then(() => {
       setUpdate(update => !update);
@@ -95,7 +102,7 @@ export default function Trips () {
           <Button onClick={()=>{makeNewTrip(search)}}>Create New Trip</Button>
           <div>Your Plans</div>
           {myTrips.length === 0 ? <div></div> : myTrips.map( (trip) => {
-            return <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip}/>
+            return <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip} markAsComplete={markAsComplete}/>
           })}
         </SidebarWrapper>
       </SideBar>

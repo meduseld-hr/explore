@@ -111,12 +111,12 @@ export default function Trips () {
       <SideBar>
         <SidebarWrapper>
           <Search type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Where to next?"/>
-          <Button onClick={()=>{makeSearch(search)}}>Go!</Button>
+          <Button onClick={()=>{makeSearch(search)}}>Search</Button>
           <Button onClick={()=>{makeNewTrip(search)}}>Create New Trip</Button>
-          <div>Your Plans</div>
+          <div>Your Trips</div>
           {myTrips.map( (trip) => <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip} markAsComplete={markAsComplete}/>
           )}
-          <div>Completed Plans</div>
+          <div>Completed Trips</div>
           {completedTrips.map( (trip) => <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip}/>
           )}
         </SidebarWrapper>

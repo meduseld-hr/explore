@@ -25,8 +25,10 @@ export default function Dashboard() {
   const [tripPublic, setTripPublic] = useState(true);
 
   const cursors = useRef({});
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [distDurat, setDistDurat] = useState([]);
+  const [waypointsCardInfo, setWaypointsCardInfo] = useState([]);
+  const [totalDist, setTotalDist] = useState(null);
+  const [totalDur, setTotalDur] = useState(null);
 
   function addStop(stop) {
     stop.stopOrder = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
@@ -164,31 +166,94 @@ export default function Dashboard() {
       .then(response => setTrip(response.data[0])).catch(err => console.log(err))
   },[tripId])
 
+  const convertSecondstoHM = (seconds) => {
+    let hours   = Math.floor(sec / 3600);
+    let minutes = Math.floor((sec - (hours * 3600)) / 60);
+    return hours + 'hr : ' + minutes + ' min';
+  };
+
+  const convertMeterstoMi = (meters) => {
+    const miles = meters/1609;
+    return miles.toFixed(1).toString();
+  };
+
+  useEffect(() => {
+
+    console.log('distDurat: ', distDurat);
+    console.log('stops: ', stops);
+    if(stops.length > 1 && distDurat) {
+      const legsArr = distDurat.routes[0].legs;
+
+      const tempTotalDist = 0;
+      const tempTotalDur = 0;
+      const tempWaypointsArray = [];
+
+      //calculate total distance/duration
+      for (let i = 0; i < legsArr.length; i++) {
+        tempTotalDist += legsArr[i].distance.value;
+        tempTotalDur += legsArr[i].duration.value;
+      }
+
+      //create trip leg distance/duration array and convert to string
+      for (let i = 0; i < legsArr.length; i++) {
+        tempWaypointsArray.push({
+          duration: convertSecondstoHM(legsArr[i].duration.value),
+          distance: convertMeterstoMi(legsArr[i].distance.value),
+        });
+      }
+
+      tempTotalDist = convertMeterstoMi(tempTotalDist);
+      tempTotalDur = convertSecondstoHM(tempTotalDur);
+
+      setWaypointsCardInfo(tempWaypointsArray);
+      setTotalDist(tempTotalDist);
+      setTotalDur(tempTotalDur);
+
+    } else {
+      setWaypointsCardInfo([]);
+      setTotalDist(null);
+      setTotalDur(null);
+    }
+
+  }, stops);
+
   return (
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
-            Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex}<br />
-            Trip Distance: {distance}<br />
-            Trip Duration: {duration}
+            <p>
+            Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex} <br/>
+            Trip Distance: {totalDist} <br/>
+            Trip Duration: {totalDur} <br />
+            </p>
 
-          <Search
-            type='text'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
           {stops.map((stop, index) => (
             <StopSidebarCard
-              length={stops.length}
-              stop={stop}
-              key={index}
-              index={index}
-              selected={index === stopIndex}
-              changeIndex={() => setStopIndex(index)}
-              setStops={setStops}
-              socket={socket}
+            length={stops.length}
+            stop={stop}
+            key={index}
+            index={index}
+            selected={index === stopIndex}
+            changeIndex={() => setStopIndex(index)}
+            setStops={setStops}
+            socket={socket}
+            >
+            {(index < stops.length-1) && (distDurat) ?
+            <div>
+              waypointsCardInfo[index].distance;
+              waypointsCardInfo[index].duration;
+            </div>
+              : null
+            }
+
+            </StopSidebarCard>
+            ))}
+
+            <Search
+              type='text'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-          ))}
           <ActionBar>
             <Label>
               {tripPublic === false ? <div>Trip is Private</div> : <div>Trip is Public</div>}
@@ -201,7 +266,7 @@ export default function Dashboard() {
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} setDistance={setDistance} setDuration={setDuration} trip={trip}/>
+      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} setDistDurat={setDistDurat} trip={trip}/>
     </DashContainer>
   );
 }

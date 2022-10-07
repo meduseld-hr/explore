@@ -47,6 +47,7 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
       <Detail>
         <Name>{stop.stop_name}</Name>
         <Loc>{stop.greater_location}</Loc>
+
       </Detail>
       <Actions>
         {index > 0 && <Action icon={faArrowUp} onClick={(e) => {

@@ -18,9 +18,9 @@ export default function TripSidebarCard({ trip, deleteTrip, markAsComplete }) {
         <div>{trip.trip_name}</div>
       </Detail>
       <Icons>
+        <PostTrip icon={faCheck} onClick={()=> {markAsComplete(trip.id)}}/>
         <DeleteTrip icon={faTrash} onClick={() => deleteTrip(trip.id)} />
         <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${trip.id}/details`)}/>
-        <PostTrip icon={faCheck} onClick={()=> {markAsComplete(trip.id)}}/>
       </Icons>
     </Card>
   )
@@ -81,5 +81,6 @@ const DeleteTrip = styled(OpenTrip)`
 `
 
 const PostTrip = styled(OpenTrip)`
-  font-size: 1.6em;
+  color: green;
+  margin-right: -5px;
 `

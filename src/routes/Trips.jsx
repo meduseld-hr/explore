@@ -91,7 +91,8 @@ export default function Trips () {
   const markAsComplete = (tripId) => {
     api.put(`/trips/${tripId}/completed`)
       .then(() => {
-        navigate(`../dashboard/${trip.id}/postTrip`)
+        setUpdate(update => !update);
+        navigate(`../dashboard/${tripId}/postTrip`)
       })
       .catch((err) => {
         console.log(err);

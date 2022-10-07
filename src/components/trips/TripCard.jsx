@@ -22,8 +22,26 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
 
   };
 
-  const copyTrip = () => {
-    console.log('copy trip');
+  const copyTrip = (tripId) => {
+    console.log('copy in progress', tripId);
+    api.get(`trips/copyTrip/${tripId}`, { params: { tripId: tripId } })
+      .then((res) => {
+        console.log('copy successful data:', res.data)
+        let placeID = res.data[0].origin_google_place_id;
+        let thumbnailURL = res.data[0].thumbnail_url
+        let tripName = res.data[0].trip_name
+
+        api.post(`/trips/${tripId}`, { placeID: placeID, thumbnailURL: thumbnailURL, tripName: tripName})
+          .then((res)=> {
+            console.log("SUCCESS", res)
+          })
+          .catch((err) => {
+            console.log('if at first you dont succeed...', err);
+          })
+      })
+      .catch((err)=> {
+        console.log(err)
+      })
   };
 
   useEffect(() => {
@@ -63,7 +81,7 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
               }} />
           }
           <Plus icon={faPlus} onClick={() => {
-            copyTrip();
+            copyTrip(id);
           }}/>
         </Icons>
       </Info>

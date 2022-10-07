@@ -34,6 +34,20 @@ pool.getSingleTripInfo = (tripId, userId) => {
     .catch((err) => console.log(`Error getting single trip info `, err))
 }
 
+pool.getTripToCopy = (tripId) => {
+  return pool
+    .query(
+      `
+      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public
+      FROM trips t
+      WHERE t.id = $1
+      `
+      , [tripId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error getting single trip info `, err))
+}
+
 pool.getTrips = (userId) => {
   return pool
     .query(

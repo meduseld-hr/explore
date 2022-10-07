@@ -19,6 +19,38 @@ router.get('/:tripId/singleTripInfo' , (req, res) => {
     })
 })
 
+router.get('/copyTrip/:tripId', (req, res) => {
+  const { tripId } = req.params;
+  console.log('trip id?', req.params)
+  db.getTripToCopy(tripId)
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(err => {
+      res.status(404).send(err);
+    })
+})
+
+
+router.post('/:tripId', (req, res) => {
+  const tripData = req.body;
+  const googlePlaceId = req.body.placeID
+  const img_url = req.body.thumbnailURL
+  const userId = req.oidc.user.sub;
+  tripData.completed = false;
+  tripData.public = true;
+
+  db.addTrip(tripData, googlePlaceId, img_url, userId)
+  .then(response => {
+    console.log('I added a trip ln 32 in server/routes/trips.js ')
+    let tripId = response[0]
+    res.status(200).send(tripId);
+  })
+  .catch(err => {
+    console.log('no trip', err)
+    res.status(404).send(err);
+  })
+})
 
 router.get('/', (req, res) => {
 

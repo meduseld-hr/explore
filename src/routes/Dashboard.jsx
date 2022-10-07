@@ -168,14 +168,9 @@ export default function Dashboard() {
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
+            Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex}<br />
             Trip Distance: {distance}<br />
             Trip Duration: {duration}
-
-          {/* {(stopIndex > 1) ?
-            (Trip Distance: {distance},
-            Trip Duration: {duration})
-            : null
-          } */}
 
           <Search
             type='text'

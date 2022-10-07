@@ -26,7 +26,7 @@ const CommentContainer = () => {
   return (
     <CommentGrid>
       <CommentWrapper>
-        <CommentCont>
+        <CommentCont id="comments">
           {comments.map((comment, index) => (
             <Comment key={index}>
               <Pfp src={comment.picture} />
@@ -52,14 +52,21 @@ const CommentContainer = () => {
         ></Input>
         <Button
           onClick={() => {
-            api
-              .post(`/dashboard/${tripId}/comment`, {
-                body,
-                timeStamp: Date.now(),
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            if (body.length) {
+              api
+                .post(`/dashboard/${tripId}/comment`, {
+                  body,
+                  timeStamp: Date.now(),
+                })
+                .then(() => {
+                  const commentList = document.getElementById("comments");
+                  commentList.scrollTo(0, commentList.scrollHeight);
+                  scrollBottom.current = messageList.scrollTop;
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
           }}
         >
           Post
@@ -105,16 +112,14 @@ const CommentWrapper = styled.div`
   height: auto;
   overflow: auto;
   display: flex;
-  align-items: end;
+  /* align-items: end; */
 `;
 const CommentCont = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
   width: 100%;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  max-height: 10px;
 `;
 
 const Comment = styled.div`

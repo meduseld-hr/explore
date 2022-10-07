@@ -46,7 +46,10 @@ const CommentContainer = () => {
         </CommentCont>
       </CommentWrapper>
       <AddCommentWrapper>
-        <Input placeholder="Add Comment Here"></Input>
+        <Input
+          placeholder="Add Comment Here"
+          onChange={(e) => setBody(e.target.value)}
+        ></Input>
         <Button
           onClick={() => {
             api

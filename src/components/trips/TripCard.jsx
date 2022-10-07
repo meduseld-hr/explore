@@ -23,10 +23,8 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
   };
 
   const copyTrip = (tripId) => {
-    console.log('copy in progress', tripId);
     api.get(`trips/copyTrip/${tripId}`, { params: { tripId: tripId } })
       .then((res) => {
-        console.log('copy successful data:', res.data)
         let placeID = res.data[0].origin_google_place_id;
         let thumbnailURL = res.data[0].thumbnail_url
         let tripName = res.data[0].trip_name

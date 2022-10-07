@@ -21,7 +21,6 @@ router.get('/:tripId/singleTripInfo' , (req, res) => {
 
 router.get('/copyTrip/:tripId', (req, res) => {
   const { tripId } = req.params;
-  console.log('trip id?', req.params)
   db.getTripToCopy(tripId)
     .then(response => {
       res.status(200).send(response);

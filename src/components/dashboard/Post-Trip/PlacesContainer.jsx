@@ -35,14 +35,23 @@ const PlacesContainer = (props) => {
             !locationTypes.includes("food") &&
             !locationTypes.includes("lodging")
           ) {
-            locationBuckets.explored.push(response.data.result);
+            if (locationBuckets.explored.length < 3) {
+              locationBuckets.explored.push(response.data.result);
+            }
           } else if (
             locationTypes.includes("restraunt") ||
             locationTypes.includes("food")
           ) {
-            locationBuckets.dining.push(response.data.result);
+            if (
+              locationBuckets.dining.length < 3 &&
+              !locationBuckets.dining.includes(response.data.result)
+            ) {
+              locationBuckets.dining.push(response.data.result);
+            }
           } else if (locationTypes.includes("lodging")) {
-            locationBuckets.lodging.push(response.data.result);
+            if (locationBuckets.lodging.length < 3) {
+              locationBuckets.lodging.push(response.data.result);
+            }
           }
         });
         setBuckets(locationBuckets);

@@ -14,6 +14,7 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
   }
   const user = useContext(UserContext);
   const [stops, setStops] = useState([]);
+  const [liked, setLiked] = useState(false);
 
   const toggleLike = () => {
     console.log('toggle like');
@@ -32,6 +33,7 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
       .catch((err) => {
         console.log(err);
       });
+    api.get(``)
   }, [id])
 
   return (

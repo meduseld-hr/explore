@@ -233,6 +233,12 @@ const ActionBar = styled.div`
 const Slider = styled.input``;
 const Save = styled.button`
   flex: 1;
+  width: 15%;
+  margin: auto;
+  color: ${(props) => props.theme.color}
+  background-color: ${(props) => props.theme.background};
+  border-radius: 12px;
+  cursor: pointer;
 `;
 
 const Label = styled.label`

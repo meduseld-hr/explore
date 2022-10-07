@@ -27,7 +27,7 @@ const CommentContainer = () => {
     <CommentGrid>
       <CommentWrapper>
         <CommentCont id="comments">
-          {comments.map((comment, index) => (
+          {/* {comments.map((comment, index) => (
             <Comment key={index}>
               <Pfp src={comment.picture} />
               <CommentBody>
@@ -42,7 +42,7 @@ const CommentContainer = () => {
                 <div>{comment.body}</div>
               </CommentBody>
             </Comment>
-          ))}
+          ))} */}
         </CommentCont>
       </CommentWrapper>
       <AddCommentWrapper>
@@ -93,6 +93,9 @@ const CommentGrid = styled.div`
 const Button = styled.button`
   width: 20%;
   height: 100%;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
+  cursor: pointer;
 `;
 
 const Input = styled.input`

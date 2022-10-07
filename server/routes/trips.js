@@ -161,7 +161,6 @@ router.delete('/:tripId', (req, res) => {
 router.put('/:tripId/completed', (req, res) => {
   const { tripId } = req.params;
   const userId = req.oidc.user.sub;
-  console.log('COMPLETED TRIP ID:', tripId)
   db.markTripCompleted(tripId, userId)
   .then(response => {
     res.status(201).end();

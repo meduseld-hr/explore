@@ -22,7 +22,6 @@ export default function Trips () {
     //USER Trips for sidebar
     api.get('/trips/')
       .then((response) => {
-        console.log('mytrips', response.data);
         setMyTrips(response.data);
       })
       .catch((err)=> {
@@ -32,7 +31,6 @@ export default function Trips () {
     //Recommended Trips
     api.get('/trips/recommended')
       .then((response) => {
-        console.log('recommended', response.data);
         setRecommendedTrips(response.data);
       })
       .catch(err => {
@@ -41,7 +39,6 @@ export default function Trips () {
 
       api.get('/trips/popular')
       .then((response) => {
-        console.log('popular trips include: ', response.data)
         setPopularTrips(response.data);
       })
       .catch(err => {
@@ -83,7 +80,6 @@ export default function Trips () {
   const markAsComplete = (tripId) => {
     api.put(`/trips/${tripId}/completed`)
       .then(() => {
-        // console.log('I have successfully completed the trip?')
         navigate(`../dashboard/${trip.id}/postTrip`)
       })
       .catch((err) => {

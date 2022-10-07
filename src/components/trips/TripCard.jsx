@@ -15,6 +15,7 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
   const user = useContext(UserContext);
   const [stops, setStops] = useState([]);
   const [liked, setLiked] = useState(false);
+  const [hover, setHover] = useState(false);
 
   const toggleLike = () => {
     console.log('toggle like');
@@ -33,7 +34,6 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
       .catch((err) => {
         console.log(err);
       });
-    api.get(``)
   }, [id])
 
   return (
@@ -45,10 +45,23 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
           {stops.map(stop => <Stop key={stop.id}>{stop.stop_name}</Stop>)}
         </Stops>
         <Icons>
-          <div>{likes}</div>
-          <Heart icon={faHeart} onClick={() => {
-            toggleLike();
-          }} />
+          <span>{likes}</span>
+          {liked
+            ? <Heart icon={hover ? faHeart : filledHeart} onMouseOver={() => {
+                setHover(true);
+              }} onMouseOut={() => {
+                setHover(false);
+              }} onClick={() => {
+                toggleLike();
+              }} />
+            : <Heart icon={hover ? filledHeart : faHeart} onMouseOver={() => {
+                setHover(true);
+              }} onMouseOut={() => {
+                setHover(false);
+              }} onClick={() => {
+                toggleLike();
+              }} />
+          }
           <Plus icon={faPlus} onClick={() => {
             copyTrip();
           }}/>
@@ -108,12 +121,13 @@ const Heart = styled(FontAwesomeIcon)`
   font-size: 2em;
   color: red;
   &:hover {
-    icon: filledHeart;
+    cursor: pointer;
   }
 `
 const Plus = styled(FontAwesomeIcon)`
   font-size: 2em;
   &:hover {
+    cursor: pointer;
     color: gray;
   }
 `

@@ -16,18 +16,19 @@ const CommentContainer = () => {
     api
       .get(`/dashboard/${tripId}`)
       .then((response) => {
+        console.log(response.data);
         setComments(response.data[2]);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, tripId);
 
   return (
     <CommentGrid>
       <CommentWrapper>
         <CommentCont id="comments">
-          {/* {comments.map((comment, index) => (
+          {comments.map((comment, index) => (
             <Comment key={index}>
               <Pfp src={comment.picture} />
               <CommentBody>
@@ -42,7 +43,7 @@ const CommentContainer = () => {
                 <div>{comment.body}</div>
               </CommentBody>
             </Comment>
-          ))} */}
+          ))}
         </CommentCont>
       </CommentWrapper>
       <AddCommentWrapper>

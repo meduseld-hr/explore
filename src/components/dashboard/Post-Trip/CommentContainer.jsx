@@ -16,12 +16,13 @@ const CommentContainer = () => {
     api
       .get(`/dashboard/${tripId}`)
       .then((response) => {
+        console.log(response.data);
         setComments(response.data[2]);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, tripId);
 
   return (
     <CommentGrid>
@@ -93,6 +94,9 @@ const CommentGrid = styled.div`
 const Button = styled.button`
   width: 20%;
   height: 100%;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
+  cursor: pointer;
 `;
 
 const Input = styled.input`

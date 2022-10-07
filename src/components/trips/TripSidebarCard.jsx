@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function TripSidebarCard({ trip, deleteTrip, markAsComplete }) {
   const navigate = useNavigate();
+  const location = trip.completed ? `posttrip/${trip.id}` : `dashboard/${trip.id}/details`;
 
 
 
@@ -20,7 +21,7 @@ export default function TripSidebarCard({ trip, deleteTrip, markAsComplete }) {
       <Icons>
         <PostTrip icon={faCheck} onClick={()=> {markAsComplete(trip.id)}}/>
         <DeleteTrip icon={faTrash} onClick={() => deleteTrip(trip.id)} />
-        <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${trip.id}/details`)}/>
+        <OpenTrip icon={faPlay} onClick={() => navigate(`../${location}`)}/>
       </Icons>
     </Card>
   )

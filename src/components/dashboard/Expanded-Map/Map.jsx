@@ -51,6 +51,7 @@ export default function App({ small, navigateDirection = '../details'}) {
   const { stops, addStop, trip } = useOutletContext();
   const [showLocs, setShowLocs] = useState(true);
   const {setDistance, setDuration} = useOutletContext();
+  const [topInfo, setTopInfo] = useState(null);
 
   useEffect(() => { //Load trip center
     if(!trip) return;
@@ -167,8 +168,8 @@ export default function App({ small, navigateDirection = '../details'}) {
         options={mapOptions}
       >
         {showLocs && markers.map((marker, index) => (
-          <InfoWindow key={index} position={marker.geometry.location}>
-            <MapInfo addStop={addStop} marker={marker} />
+          <InfoWindow key={index} position={marker.geometry.location} zIndex={index === topInfo ? 1 : undefined}>
+            <MapInfo addStop={addStop} marker={marker} click={() => setTopInfo(index)}/>
           </InfoWindow>
         ))}
 

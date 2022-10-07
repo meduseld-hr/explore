@@ -9,25 +9,6 @@ import { completedTrip } from "./dummyData.js";
 
 const PostTrip = () => {
   const { tripId } = useParams();
-  // receieve an array of stops on a trip
-  // console.log(completedTrip);
-
-  // useEffect(() => {
-  //   let options = {
-  //     method: "GET",
-  //     url: "/googlePlaces/placesearch",
-  //     params: {
-  //       destination: "dennys",
-  //     },
-  //   };
-  //   api(options)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
 
   return (
     <PostTripContainer>

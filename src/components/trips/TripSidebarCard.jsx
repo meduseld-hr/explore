@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 export default function TripSidebarCard({ trip, deleteTrip }) {
@@ -18,6 +18,7 @@ export default function TripSidebarCard({ trip, deleteTrip }) {
       <Icons>
         <DeleteTrip icon={faTrash} onClick={() => deleteTrip(trip.id)} />
         <OpenTrip icon={faPlay} onClick={() => navigate(`../dashboard/${trip.id}/details`)}/>
+        <PostTrip icon={faCheck} onClick={()=> {navigate(`../dashboard/${trip.id}/postTrip`)}}/>
       </Icons>
     </Card>
   )
@@ -75,4 +76,8 @@ const OpenTrip = styled(FontAwesomeIcon)`
 const DeleteTrip = styled(OpenTrip)`
   font-size: 1.7em;
   color: darkred;
+`
+
+const PostTrip = styled(OpenTrip)`
+  font-size: 1.7em;
 `

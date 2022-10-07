@@ -6,7 +6,7 @@ import {useParams} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, setStops, socket }) {
+export default function StopSidebarCard({ length, index, stop, changeIndex, stopIndex, selected, setStops, socket, waypointCardInfo}) {
 
   const {tripId} = useParams();
   const navigate = useNavigate();
@@ -47,6 +47,10 @@ export default function StopSidebarCard({ length, index, stop, changeIndex, stop
       <Detail>
         <Name>{stop.stop_name}</Name>
         <Loc>{stop.greater_location}</Loc>
+        <div>
+        {waypointCardInfo ? waypointCardInfo.distance : null}
+        {waypointCardInfo ? waypointCardInfo.duration : null}
+        </div>
 
       </Detail>
       <Actions>

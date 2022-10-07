@@ -166,27 +166,13 @@ export default function Dashboard() {
       .then(response => setTrip(response.data[0])).catch(err => console.log(err))
   },[tripId])
 
-  const convertSecondstoHM = (seconds) => {
-    let hours   = Math.floor(sec / 3600);
-    let minutes = Math.floor((sec - (hours * 3600)) / 60);
-    return hours + 'hr : ' + minutes + ' min';
-  };
-
-  const convertMeterstoMi = (meters) => {
-    const miles = meters/1609;
-    return miles.toFixed(1).toString();
-  };
-
   useEffect(() => {
 
-    console.log('distDurat: ', distDurat);
-    console.log('stops: ', stops);
     if(stops.length >= 2 && distDurat) {
-      const legsArr = distDurat.routes[0].legs;
-
-      const tempTotalDist = 0;
-      const tempTotalDur = 0;
-      const tempWaypointsArray = [];
+      let legsArr = distDurat.routes[0].legs;
+      let tempTotalDist = 0;
+      let tempTotalDur = 0;
+      let tempWaypointsArray = [];
 
       //calculate total distance/duration
       for (let i = 0; i < legsArr.length; i++) {
@@ -215,7 +201,25 @@ export default function Dashboard() {
       setTotalDur(null);
     }
 
-  }, stops);
+  }, [distDurat])
+
+  const convertSecondstoHM = (seconds) => {
+    let hours   = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds - (hours * 3600)) / 60);
+
+    hours = Math.round(hours);
+    minutes = Math.round(minutes);
+    hours = hours === 0 ? '' : hours + ' hr ';
+    minutes = minutes === 0 ? '' : minutes + ' min';
+
+    return hours + minutes;
+  };
+
+  const convertMeterstoMi = (meters) => {
+    let miles = meters/1609;
+    miles = miles.toFixed(1).toString();
+    return miles + " mi";
+  };
 
   return (
     <DashContainer>
@@ -237,15 +241,8 @@ export default function Dashboard() {
             changeIndex={() => setStopIndex(index)}
             setStops={setStops}
             socket={socket}
+            waypointCardInfo={waypointsCardInfo[index]}
             >
-            {(index < stops.length-1) && (distDurat) ?
-            <div>
-              waypointsCardInfo[index].distance;
-              waypointsCardInfo[index].duration;
-            </div>
-              : null
-            }
-
             </StopSidebarCard>
             ))}
 

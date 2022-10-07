@@ -25,7 +25,7 @@ export default function Dashboard() {
   const [tripPublic, setTripPublic] = useState(true);
 
   const cursors = useRef({});
-  const [distDurat, setDistDurat] = useState([]);
+  const [distDurat, setDistDurat] = useState(null);
   const [waypointsCardInfo, setWaypointsCardInfo] = useState([]);
   const [totalDist, setTotalDist] = useState(null);
   const [totalDur, setTotalDur] = useState(null);
@@ -171,7 +171,7 @@ export default function Dashboard() {
   }, [tripId]);
 
   useEffect(() => {
-    if(!distDurat[0]) return;
+    if(!distDurat) return;
     if (stops.length >= 2 && distDurat.routes) {
       let legsArr = distDurat.routes[0].legs;
       let tempTotalDist = 0;

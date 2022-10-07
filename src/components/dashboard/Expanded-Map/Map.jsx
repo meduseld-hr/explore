@@ -53,7 +53,6 @@ export default function App({ small, navigateDirection = '../details'}) {
   const {setDistance, setDuration} = useOutletContext();
 
   useEffect(() => {
-    // console.log("useEffect called")
     if (stops.length >= 2) {
       const tempAllStops = [];
       for (const stop of stops) {
@@ -80,9 +79,6 @@ export default function App({ small, navigateDirection = '../details'}) {
             setTripRoute(directions);
             setDistance(directions.routes[0].legs[0].distance.text);
             setDuration(directions.routes[0].legs[0].duration.text);
-            console.log(directions);
-            // setDistance(directions.routes[0].legs[0].distance.text);
-            // setDuration(directions.routes[0].legs[0].duration.text);
           }
         );
       });
@@ -106,7 +102,6 @@ export default function App({ small, navigateDirection = '../details'}) {
   };
 
   function handleIdle() {
-    console.log("handleIdle called")
     var bounds = mapRef.current.state.map.getBounds();
     const loader = new Loader({ apiKey: MAPS_SECRET });
     loader.load().then(() => {
@@ -177,16 +172,6 @@ export default function App({ small, navigateDirection = '../details'}) {
           </div>
         </Autocomplete>
 
-        {/*Not needed because of Autocomplete functionality*/}
-        {/* <SearchButton
-          type="submit"
-          value="Search"
-          onClick={(e) => {
-            console.log(searchRef.current.value);
-            setLocationSearch(searchRef.current.value);
-            searchRef.current.value = '';
-          }}
-        /> */}
       </GoogleMap>
     </Container>
   );

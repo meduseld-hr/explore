@@ -122,6 +122,48 @@ pool.getPopularTrips = () => {
     .catch((err) => console.log(`Error retrieving popular trips`, err))
 }
 
+pool.getLikedTrips = (userId) => {
+  return pool
+    .query(
+      `
+      SELECT trip_id
+      FROM trips_users
+      WHERE user_id = $1 AND liked = true
+      `
+      , [userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error getting liked trips `, err))
+}
+
+pool.likeTrip = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips_users tu
+      SET liked = true
+      WHERE trip_id = $1 AND user_id = $2
+      `
+      , [tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error liking trip `, err))
+}
+
+pool.unlikeTrip = (tripId, userId) => {
+  return pool
+    .query(
+      `
+      UPDATE trips_users tu
+      SET liked = false
+      WHERE trip_id = $1 AND user_id = $2
+      `
+      , [tripId, userId]
+    )
+    .then((response) => response.rows)
+    .catch((err) => console.log(`Error unliking trip `, err))
+}
+
 pool.getRecentTrips = () => {
   return pool
     .query(

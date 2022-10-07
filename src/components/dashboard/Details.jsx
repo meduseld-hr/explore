@@ -42,6 +42,7 @@ const InfoContainer = styled.div`
   padding: 1.5em;
   background-color: ${(props) => props.theme.background};
   border: 1px solid ${(props) => props.theme.border};
+  flex: 1;
 `
 
 const InfoHeader = styled.div`

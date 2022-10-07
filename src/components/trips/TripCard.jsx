@@ -1,14 +1,27 @@
+import { useContext } from "react"
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faHeart as filledHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
+import api from '../../functions/api';
+import { UserContext } from '../../contexts/user';
 
-export default function TripCard({ title = '', image = 'https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg' }) {
+export default function TripCard({ title = '', image = 'https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg', likes = 0 }) {
   const upperTitle = title.toUpperCase();
   const titleLetters = [];
   for (let i = 0; i < upperTitle.length; i++) {
     titleLetters.push(<span key={i}>{upperTitle[i]}</span>);
   }
+  const user = useContext(UserContext);
+
+  const toggleLike = () => {
+    console.log('toggle like');
+
+  };
+
+  const copyTrip = () => {
+    console.log('copy trip');
+  };
 
   return (
     <Card>
@@ -22,8 +35,13 @@ export default function TripCard({ title = '', image = 'https://cdn.britannica.c
           <Stop>Vatican Museums</Stop>
         </Stops>
         <Icons>
-          <Icon icon={faHeart} />
-          <Icon icon={faPlus} />
+          <div>{likes}</div>
+          <Heart icon={faHeart} onClick={() => {
+            toggleLike();
+          }} />
+          <Plus icon={faPlus} onClick={() => {
+            copyTrip();
+          }}/>
         </Icons>
       </Info>
     </Card>
@@ -74,9 +92,16 @@ const Icons = styled.div`
   bottom: .2em;
   gap: .5em;
 `
-const Icon = styled(FontAwesomeIcon)`
+const Heart = styled(FontAwesomeIcon)`
   font-size: 2em;
-  &:hover{
-    filter: brightness(120%);
+  color: red;
+  &:hover {
+    icon: filledHeart;
+  }
+`
+const Plus = styled(FontAwesomeIcon)`
+  font-size: 2em;
+  &:hover {
+    color: gray;
   }
 `

@@ -13,7 +13,7 @@ export default function TripRecommendations({ type, trips }) {
     </TitleWrapper>
       <Cards>
         {trips.map((trip)=> {
-          return <TripCard key={trip.id} title={trip.trip_name} image={trip.thumbnail_url}/>
+          return <TripCard key={trip.id} title={trip.trip_name} image={trip.thumbnail_url} likes={trip.likes} />
         })}
       </Cards>
     </Container>

@@ -18,6 +18,7 @@ CREATE TABLE trips (
   thumbnail_url VARCHAR(10000),
   completed BOOLEAN,
   public BOOLEAN,
+  likes INT,
 
   PRIMARY KEY(id)
 

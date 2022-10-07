@@ -181,7 +181,7 @@ export default function Dashboard() {
 
     console.log('distDurat: ', distDurat);
     console.log('stops: ', stops);
-    if(stops.length > 1 && distDurat) {
+    if(stops.length >= 2 && distDurat) {
       const legsArr = distDurat.routes[0].legs;
 
       const tempTotalDist = 0;

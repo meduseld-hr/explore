@@ -107,10 +107,11 @@ pool.addTrip = ({ tripName, completed, public }, googlePlaceId, thumbnailUrl, us
 }
 
 pool.getPopularTrips = () => {
+  // (SELECT tu.liked WHERE tu.user_id = 'google-oauth2|111112963650790611628') AS liked
   return pool
     .query(
       `
-      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public, COUNT(tu.liked) AS count, (SELECT tu.liked WHERE tu.user_id = 'google-oauth2|111112963650790611628') AS liked
+      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public, COUNT(tu.liked) AS count
       FROM trips t
       INNER JOIN trips_users tu ON tu.trip_id = t.id
       WHERE tu.liked = true AND t.public = true
@@ -520,7 +521,7 @@ pool.searchUser = (searchTerm) => {
       `
       SELECT u.id, array_agg(tu.trip_id) AS trip_ids,  u.nickname, u.picture
       FROM users u
-      INNER JOIN trips_users tu ON tu.user_id = u.id
+      FULL JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1
       GROUP BY u.id
       `

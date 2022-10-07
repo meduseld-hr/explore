@@ -50,7 +50,7 @@ export default function App({ small, navigateDirection = '../details'}) {
   const mapRef = useRef();
   const { stops, addStop, trip } = useOutletContext();
   const [showLocs, setShowLocs] = useState(true);
-  const {setDistance, setDuration} = useOutletContext();
+  const {setDistDurat} = useOutletContext();
   const [topInfo, setTopInfo] = useState(null);
 
   useEffect(() => { //Load trip center
@@ -90,17 +90,15 @@ export default function App({ small, navigateDirection = '../details'}) {
           },
           (directions) => {
             setTripRoute(directions);
-            setDistance(directions.routes[0].legs[0].distance.text);
-            setDuration(directions.routes[0].legs[0].duration.text);
+            setDistDurat(directions);
           }
         );
       });
     } else {
       setTripRoute(null);
-      setDistance(null);
-      setDuration(null);
+      setDistDurat(null);
     }
-  }, [stops /*distance, duration*/]);
+  }, [stops]);
 
   if (loadError) {
     return 'Error loading maps';

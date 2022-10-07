@@ -25,8 +25,10 @@ export default function Dashboard() {
   const [tripPublic, setTripPublic] = useState(true);
 
   const cursors = useRef({});
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [distDurat, setDistDurat] = useState([]);
+  const [waypointsCardInfo, setWaypointsCardInfo] = useState([]);
+  const [totalDist, setTotalDist] = useState(null);
+  const [totalDur, setTotalDur] = useState(null);
 
   function addStop(stop) {
     stop.stopOrder = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
@@ -164,31 +166,91 @@ export default function Dashboard() {
       .then(response => setTrip(response.data[0])).catch(err => console.log(err))
   },[tripId])
 
+  useEffect(() => {
+
+    if(stops.length >= 2 && distDurat) {
+      let legsArr = distDurat.routes[0].legs;
+      let tempTotalDist = 0;
+      let tempTotalDur = 0;
+      let tempWaypointsArray = [];
+
+      //calculate total distance/duration
+      for (let i = 0; i < legsArr.length; i++) {
+        tempTotalDist += legsArr[i].distance.value;
+        tempTotalDur += legsArr[i].duration.value;
+      }
+
+      //create trip leg distance/duration array and convert to string
+      for (let i = 0; i < legsArr.length; i++) {
+        tempWaypointsArray.push({
+          duration: convertSecondstoHM(legsArr[i].duration.value),
+          distance: convertMeterstoMi(legsArr[i].distance.value),
+        });
+      }
+
+      tempTotalDist = convertMeterstoMi(tempTotalDist);
+      tempTotalDur = convertSecondstoHM(tempTotalDur);
+
+      setWaypointsCardInfo(tempWaypointsArray);
+      setTotalDist(tempTotalDist);
+      setTotalDur(tempTotalDur);
+
+    } else {
+      setWaypointsCardInfo([]);
+      setTotalDist(null);
+      setTotalDur(null);
+    }
+
+  }, [distDurat])
+
+  const convertSecondstoHM = (seconds) => {
+    let hours   = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds - (hours * 3600)) / 60);
+
+    hours = Math.round(hours);
+    minutes = Math.round(minutes);
+    hours = hours === 0 ? '' : hours + ' hr ';
+    minutes = minutes === 0 ? '' : minutes + ' min';
+
+    return hours + minutes;
+  };
+
+  const convertMeterstoMi = (meters) => {
+    let miles = meters/1609;
+    miles = miles.toFixed(1).toString();
+    return miles + " mi";
+  };
+
   return (
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
-            Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex}<br />
-            Trip Distance: {distance}<br />
-            Trip Duration: {duration}
+            <p>
+            Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex} <br/>
+            Trip Distance: {totalDist} <br/>
+            Trip Duration: {totalDur} <br />
+            </p>
 
-          <Search
-            type='text'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
           {stops.map((stop, index) => (
             <StopSidebarCard
-              length={stops.length}
-              stop={stop}
-              key={index}
-              index={index}
-              selected={index === stopIndex}
-              changeIndex={() => setStopIndex(index)}
-              setStops={setStops}
-              socket={socket}
+            length={stops.length}
+            stop={stop}
+            key={index}
+            index={index}
+            selected={index === stopIndex}
+            changeIndex={() => setStopIndex(index)}
+            setStops={setStops}
+            socket={socket}
+            waypointCardInfo={waypointsCardInfo[index]}
+            >
+            </StopSidebarCard>
+            ))}
+
+            <Search
+              type='text'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-          ))}
           <ActionBar>
             <Label>
               {tripPublic === false ? <div>Trip is Private</div> : <div>Trip is Public</div>}
@@ -201,7 +263,7 @@ export default function Dashboard() {
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} setDistance={setDistance} setDuration={setDuration} trip={trip}/>
+      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} setDistDurat={setDistDurat} trip={trip}/>
     </DashContainer>
   );
 }

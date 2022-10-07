@@ -9,8 +9,8 @@ const TileHolder = (props) => {
         <>
           <Title>Places You've {props.title}</Title>
           <Container>
-            {props.places.map((place) => {
-              return <ReviewTile place={place} />;
+            {props.places.map((place, index) => {
+              return <ReviewTile place={place} key={index} />;
             })}
           </Container>
         </>

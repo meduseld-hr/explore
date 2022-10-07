@@ -54,6 +54,7 @@ export default function App({ small, navigateDirection = '../details'}) {
 
   useEffect(() => { //Load trip center
     if(!trip) return;
+    if(!mapRef.current) return;
     let service = new google.maps.places.PlacesService(mapRef.current.state.map);
     service.getDetails({placeId: trip.origin_google_place_id, fields: ['geometry']}, (res => {
       setCenter({

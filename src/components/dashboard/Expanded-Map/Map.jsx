@@ -48,9 +48,21 @@ export default function App({ small, navigateDirection = '../details'}) {
   const destinationRef = useRef();
   const searchRef = useRef(null);
   const mapRef = useRef();
-  const { stops, addStop } = useOutletContext();
+  const { stops, addStop, trip } = useOutletContext();
   const [showLocs, setShowLocs] = useState(true);
   const {setDistance, setDuration} = useOutletContext();
+
+  useEffect(() => { //Load trip center
+    if(!trip) return;
+    if(!mapRef.current) return;
+    let service = new google.maps.places.PlacesService(mapRef.current.state.map);
+    service.getDetails({placeId: trip.origin_google_place_id, fields: ['geometry']}, (res => {
+      setCenter({
+        lat: res.geometry.location.lat(),
+        lng: res.geometry.location.lng(),
+      });
+    }))
+  }, [trip])
 
   useEffect(() => {
     if (stops.length >= 2) {

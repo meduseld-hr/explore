@@ -17,7 +17,7 @@ CREATE TABLE trips (
   origin_google_place_id VARCHAR(10000),
   thumbnail_url VARCHAR(10000),
   completed BOOLEAN,
-  public BOOLEAN,
+  public BOOLEAN
 
   PRIMARY KEY(id)
 

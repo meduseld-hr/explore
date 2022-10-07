@@ -29,11 +29,18 @@ const Title = styled.div`
   text-align: center;
   background-color: white;
   color: black;
+  height: -webkit-fill-available;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
 `;
 
 const Img = styled.img`
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  margin-top: auto;
 `;
 
 export default ReviewTile;

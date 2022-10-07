@@ -16,6 +16,7 @@ export default function Trips () {
   const [recommendedTrips, setRecommendedTrips] = useState([])
   const [recentTrips, setRecentTrips] = useState([])
   const [popularTrips, setPopularTrips] = useState([]);
+  const [update, setUpdate] = useState(false);
 
   useEffect(()=> {
     //USER Trips for sidebar
@@ -38,7 +39,6 @@ export default function Trips () {
 
       api.get('/trips/popular')
       .then((response) => {
-        console.log('popular trips include: ', response.data)
         setPopularTrips(response.data);
       })
       .catch(err => {
@@ -53,7 +53,7 @@ export default function Trips () {
       .catch(err => {
         console.log(err);
       });
-  }, [])
+  }, [update])
 
   const makeSearch = (destination) => {
     api.get('/trips/searchTripsByName', { params: { placeName: destination } })
@@ -77,6 +77,22 @@ export default function Trips () {
       })
   }
 
+  const markAsComplete = (tripId) => {
+    api.put(`/trips/${tripId}/completed`)
+      .then(() => {
+        navigate(`../dashboard/${trip.id}/postTrip`)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  function deleteTrip(tripId) {
+    api.delete(`/trips/${tripId}`).then(() => {
+      setUpdate(update => !update);
+    }).catch(err => console.log(err))
+  }
+
   return (
     <Container>
       <SideBar>
@@ -86,7 +102,7 @@ export default function Trips () {
           <Button onClick={()=>{makeNewTrip(search)}}>Create New Trip</Button>
           <div>Your Plans</div>
           {myTrips.length === 0 ? <div></div> : myTrips.map( (trip) => {
-            return <TripSidebarCard key={trip.id} trip={trip}/>
+            return <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip} markAsComplete={markAsComplete}/>
           })}
         </SidebarWrapper>
       </SideBar>

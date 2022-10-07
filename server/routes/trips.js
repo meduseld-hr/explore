@@ -149,7 +149,7 @@ router.delete('/:tripId', (req, res) => {
   const { tripId } = req.params;
   const userId = req.oidc.user.sub;
 
-  db.deleteTrip(tripId, userId)
+  db.deleteTrip(parseInt(tripId), userId)
   .then(response => {
     res.status(200).end();
   })
@@ -161,7 +161,6 @@ router.delete('/:tripId', (req, res) => {
 router.put('/:tripId/completed', (req, res) => {
   const { tripId } = req.params;
   const userId = req.oidc.user.sub;
-
   db.markTripCompleted(tripId, userId)
   .then(response => {
     res.status(201).end();

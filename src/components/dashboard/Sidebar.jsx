@@ -38,7 +38,7 @@ export default function SideBar({ children }) {
               onClick={() => navigate('../trips')}
             />
         }
-        <Profile src={userPic} onClick={() => { setOpenProfile(true) }}/>
+        {user ? <Profile src={userPic} onClick={() => { setOpenProfile(true) }}/> :  <a href={`${window.location.origin}/api/login?redirect_uri=${window.location.origin}`}>Login</a>}
         {openProfile && <ProfileInfo setOpenProfile={setOpenProfile}/>}
       </Header>
       <Container>{children}</Container>
@@ -70,6 +70,7 @@ const Header = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `
 const EndContainer = styled.div`
   display: flex;

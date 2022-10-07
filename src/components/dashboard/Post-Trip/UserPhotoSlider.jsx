@@ -17,8 +17,8 @@ const UserPhotoSlider = () => {
     <UserPhotos>
       <Row>
         <ImgGroup>
-          {userImgs.map((img) => {
-            return <Img src={img} alt="" />;
+          {userImgs.map((img, index) => {
+            return <Img src={img} key={index} alt="" />;
           })}
         </ImgGroup>
       </Row>

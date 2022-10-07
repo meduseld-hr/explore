@@ -25,14 +25,17 @@ export default function Dashboard() {
   const [tripPublic, setTripPublic] = useState(true);
 
   const cursors = useRef({});
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  const [distDurat, setDistDurat] = useState([]);
+  const [waypointsCardInfo, setWaypointsCardInfo] = useState([]);
+  const [totalDist, setTotalDist] = useState(null);
+  const [totalDur, setTotalDur] = useState(null);
 
   function addStop(stop) {
     stop.stopOrder = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
-    api.post(`/dashboard/${tripId}/stop`, {stop})
+    api
+      .post(`/dashboard/${tripId}/stop`, { stop })
       .then((response) => {
-        socket.current.emit('rerender', {tripId});
+        socket.current.emit('rerender', { tripId });
       })
       .catch((err) => {
         console.log(err);
@@ -41,27 +44,30 @@ export default function Dashboard() {
 
   const handleChange = (e) => {
     if (tripPublic === false) {
-      api.put(`/trips/${tripId}/public`)
-      .then((response) => {
-        setTripPublic(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      api
+        .put(`/trips/${tripId}/public`)
+        .then((response) => {
+          setTripPublic(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      api.put(`/trips/${tripId}/private`)
-      .then((response) => {
-        setTripPublic(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      api
+        .put(`/trips/${tripId}/private`)
+        .then((response) => {
+          setTripPublic(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
   useEffect(() => {
     if (user) {
-      api.get(`/dashboard/${tripId}`)
+      api
+        .get(`/dashboard/${tripId}`)
         .then((response) => {
           setMessages(response.data[1]);
         })
@@ -73,18 +79,14 @@ export default function Dashboard() {
       });
       socket.current.on('chat message', (message) => {
         if (parseInt(message.tripId) === parseInt(tripId)) {
-          setMessages((messages) => (
-            [...messages, message]
-          ));
+          setMessages((messages) => [...messages, message]);
         }
       });
       socket.current.on('rerender', (data) => {
         if (parseInt(data.tripId) === parseInt(tripId)) {
-          setRerender((rerender) => (
-            !rerender
-          ));
+          setRerender((rerender) => !rerender);
         }
-      })
+      });
       socket.current.on('mouse', (data) => {
         if (data.tripId === tripId) {
           let cursor = cursors.current[data.id];
@@ -92,7 +94,8 @@ export default function Dashboard() {
             cursor = cursors.current[data.id] = document.createElement('div');
             cursor.className = 'cursor';
             let cursorImg = document.createElement('img');
-            cursorImg.src = 'https://www.freeiconspng.com/uploads/white-mouse-cursor-arrow-by-qubodup-11.png';
+            cursorImg.src =
+              'https://www.freeiconspng.com/uploads/white-mouse-cursor-arrow-by-qubodup-11.png';
             cursorImg.height = 15;
             document.body.appendChild(cursor);
             let label = document.createElement('div');
@@ -118,65 +121,115 @@ export default function Dashboard() {
           document.body.removeChild(cursors.current[id]);
         }
       });
-        window.addEventListener('mousedown', (e) => {
-          socket.current.emit('mouse', {
-            tripId,
-            x: e.pageX - window.innerWidth / 2,
-            y: e.pageY - window.innerHeight / 2,
-            pressed: true,
-            nickname: user.nickname
-          });
+      window.addEventListener('mousedown', (e) => {
+        socket.current.emit('mouse', {
+          tripId,
+          x: e.pageX - window.innerWidth / 2,
+          y: e.pageY - window.innerHeight / 2,
+          pressed: true,
+          nickname: user.nickname,
         });
-        window.addEventListener('mousemove', (e) => {
-          socket.current.emit('mouse', {
-            tripId,
-            x: e.pageX - window.innerWidth / 2,
-            y: e.pageY - window.innerHeight / 2,
-            pressed: false,
-            nickname: user.nickname
-          });
+      });
+      window.addEventListener('mousemove', (e) => {
+        socket.current.emit('mouse', {
+          tripId,
+          x: e.pageX - window.innerWidth / 2,
+          y: e.pageY - window.innerHeight / 2,
+          pressed: false,
+          nickname: user.nickname,
         });
+      });
       return () => {
         socket.current.disconnect();
         for (let id in cursors.current) {
           document.body.removeChild(cursors.current[id]);
         }
-      }
+      };
     }
-  }, [user])
+  }, [user]);
 
   useEffect(() => {
-    api.get(`/dashboard/${tripId}`)
+    api
+      .get(`/dashboard/${tripId}`)
       .then((response) => {
-        setStops(response.data[0].sort((a, b) => (a.stop_order - b.stop_order)));
+        setStops(response.data[0].sort((a, b) => a.stop_order - b.stop_order));
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [rerender])
+  }, [rerender]);
 
   useEffect(() => {
-    setStop(stops[stopIndex])
-  }, [stops, stopIndex])
+    setStop(stops[stopIndex]);
+  }, [stops, stopIndex]);
 
   useEffect(() => {
-    api.get(`trips/${tripId}/singleTripInfo`)
-      .then(response => setTrip(response.data[0])).catch(err => console.log(err))
-  },[tripId])
+    api
+      .get(`trips/${tripId}/singleTripInfo`)
+      .then((response) => setTrip(response.data[0]))
+      .catch((err) => console.log(err));
+  }, [tripId]);
+
+  useEffect(() => {
+    if (stops.length >= 2 && distDurat) {
+      let legsArr = distDurat.routes[0].legs;
+      let tempTotalDist = 0;
+      let tempTotalDur = 0;
+      let tempWaypointsArray = [];
+
+      //calculate total distance/duration
+      for (let i = 0; i < legsArr.length; i++) {
+        tempTotalDist += legsArr[i].distance.value;
+        tempTotalDur += legsArr[i].duration.value;
+      }
+
+      //create trip leg distance/duration array and convert to string
+      for (let i = 0; i < legsArr.length; i++) {
+        tempWaypointsArray.push({
+          duration: convertSecondstoHM(legsArr[i].duration.value),
+          distance: convertMeterstoMi(legsArr[i].distance.value),
+        });
+      }
+
+      tempTotalDist = convertMeterstoMi(tempTotalDist);
+      tempTotalDur = convertSecondstoHM(tempTotalDur);
+
+      setWaypointsCardInfo(tempWaypointsArray);
+      setTotalDist(tempTotalDist);
+      setTotalDur(tempTotalDur);
+    } else {
+      setWaypointsCardInfo([]);
+      setTotalDist(null);
+      setTotalDur(null);
+    }
+  }, [distDurat]);
+
+  const convertSecondstoHM = (seconds) => {
+    let hours = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds - hours * 3600) / 60);
+
+    hours = Math.round(hours);
+    minutes = Math.round(minutes);
+    hours = hours === 0 ? '' : hours + ' hr ';
+    minutes = minutes === 0 ? '' : minutes + ' min';
+
+    return hours + minutes;
+  };
+
+  const convertMeterstoMi = (meters) => {
+    let miles = meters / 1609;
+    miles = miles.toFixed(1).toString();
+    return miles + ' mi';
+  };
 
   return (
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
-            Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex}<br />
-            Trip Distance: {distance}<br />
-            Trip Duration: {duration}
-
-          <Search
-            type='text'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <Row>
+            <div>Trip Distance: <strong>{totalDist}</strong></div>
+            <div>Trip Duration: <strong>{totalDur}</strong></div>
+          </Row>
           {stops.map((stop, index) => (
             <StopSidebarCard
               length={stops.length}
@@ -187,25 +240,57 @@ export default function Dashboard() {
               changeIndex={() => setStopIndex(index)}
               setStops={setStops}
               socket={socket}
-            />
+              waypointCardInfo={waypointsCardInfo[index]}
+            ></StopSidebarCard>
           ))}
+
+          <Search
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <ActionBar>
             <Label>
-              {tripPublic === false ? <div>Trip is Private</div> : <div>Trip is Public</div>}
-              <Input tripPublic={tripPublic} type="checkbox" onChange={handleChange} />
+              {tripPublic === false ? (
+                <div>Trip is Private</div>
+              ) : (
+                <div>Trip is Public</div>
+              )}
+              <Input
+                tripPublic={tripPublic}
+                type="checkbox"
+                onChange={handleChange}
+              />
               <Switch />
             </Label>
-            <Save onClick={() => {
-              navigate('/trips');
-            }}>Save Trip</Save>
+            <Save
+              onClick={() => {
+                navigate('/trips');
+              }}
+            >
+              Save Trip
+            </Save>
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} setDistance={setDistance} setDuration={setDuration} trip={trip}/>
+      <StagingArea
+        stops={stops}
+        addStop={addStop}
+        stop={stop}
+        messages={messages}
+        socket={socket}
+        setDistDurat={setDistDurat}
+        trip={trip}
+      />
     </DashContainer>
   );
 }
 
+const Row = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+`;
 const DashContainer = styled.div`
   flex: 1;
   width: 100%;
@@ -213,7 +298,7 @@ const DashContainer = styled.div`
   grid-template-columns: 1fr 3fr;
   padding: 1em;
   gap: 1em;
-`
+`;
 const SidebarWrapper = styled.div`
   width: 100%;
   grid-column: 1;
@@ -230,9 +315,9 @@ const Save = styled.button`
   flex: 1;
   width: 15%;
   margin: auto;
-  color: ${(props) => props.theme.color}
-  background-color: ${(props) => props.theme.background};
   border-radius: 12px;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
   cursor: pointer;
 `;
 
@@ -254,7 +339,7 @@ const Switch = styled.div`
 
   &:before {
     transition: 300ms all;
-    content: "";
+    content: '';
     position: absolute;
     width: 28px;
     height: 28px;
@@ -268,7 +353,7 @@ const Switch = styled.div`
   }
 `;
 
-  const Input = styled.input`
+const Input = styled.input`
   opacity: 0;
   position: absolute;
 

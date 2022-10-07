@@ -70,7 +70,7 @@ pool.searchTripsByName = (tripName) => {
     `
     SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url
     FROM trips AS t
-    WHERE t.trip_name LIKE $1
+    WHERE LOWER(t.trip_name) LIKE LOWER($1)
     `,
     [tripName]
     )
@@ -202,7 +202,7 @@ pool.markTripCompleted = (tripId, userId) => {
     .query(
       `
       UPDATE trips t
-      SET complete = true
+      SET completed = true
       FROM trips_users tu
       WHERE t.id = tu.trip_id AND t.id = $1 AND tu.user_Id = $2
       `
@@ -520,7 +520,7 @@ pool.searchUser = (searchTerm) => {
       `
       SELECT u.id, array_agg(tu.trip_id) AS trip_ids,  u.nickname, u.picture
       FROM users u
-      INNER JOIN trips_users tu ON tu.user_id = u.id
+      FULL JOIN trips_users tu ON tu.user_id = u.id
       WHERE nickname ILIKE $1
       GROUP BY u.id
       `

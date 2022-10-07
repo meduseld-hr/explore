@@ -2,7 +2,7 @@ import styled from "styled-components"
 import TripCard from "./TripCard"
 
 
-export default function TripRecommendations({ type, trips }) {
+export default function TripRecommendations({ type, trips = [] }) {
 
   const displayTrips = trips.slice(0, 4);
 

@@ -12,7 +12,7 @@ const PostTrip = () => {
 
   return (
     <PostTripContainer>
-      <UserPhotoContainer stops={completedTrip} />
+      <UserPhotoContainer />
       <PlacesContainer stops={completedTrip} />
       <CommentContainer />
     </PostTripContainer>

@@ -21,7 +21,7 @@ const DarkmodeToggle = () => {
 
   return (
     <Label>
-      <span>Curret theme is {theme}</span>
+      <span>Current theme is {theme}</span>
       <Input checked={checked} type="checkbox" onChange={handleChange} />
       <Switch />
     </Label>

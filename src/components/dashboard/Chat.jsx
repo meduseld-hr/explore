@@ -99,7 +99,7 @@ const Chat = () => {
           }
         }}
       >
-        <div>
+        <AddMessageWrapper>
           <Input
             type='text'
             value={body}
@@ -107,8 +107,13 @@ const Chat = () => {
               setBody(e.target.value);
             }}
           />
-          <input type='submit' />
-        </div>
+          <input id='submit' type='submit' style={{display: 'none'}} />
+          <Button onClick={() => {
+            document.getElementsbyId('submit').click();
+          }}>
+          Post
+        </Button>
+        </AddMessageWrapper>
       </Form>
     </ChatCont>
   );
@@ -186,5 +191,18 @@ const AddUserButton = styled.button`
   border-radius: 12px;
   cursor: pointer;
 `
+const AddMessageWrapper = styled.div`
+  width: 100%;
+  height: 5%;
+  margin-top: 5px;
+`;
+const Button = styled.button`
+  width: 15%;
+  margin: auto;
+  color: ${(props) => props.theme.color}
+  background-color: ${(props) => props.theme.background};
+  border-radius: 12px;
+  cursor: pointer;
+`;
 
 export default Chat;

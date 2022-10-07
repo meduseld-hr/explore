@@ -171,7 +171,7 @@ export default function Dashboard() {
   }, [tripId]);
 
   useEffect(() => {
-    if(!distDurat) return;
+    if(!distDurat[0]) return;
     if (stops.length >= 2 && distDurat.routes) {
       let legsArr = distDurat.routes[0].legs;
       let tempTotalDist = 0;

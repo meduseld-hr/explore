@@ -6,7 +6,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 export default function MapInfo ({marker: {name, photos = [], types, place_id, vicinity, geometry}, addStop, click}) {
   const photoUrl = photos.length > 0 ? photos[0].getUrl() : '';
   function handleAdd(e) {
-    e.preventPropagation();
+    e.stopPropagation();
     const stop = {
       stopName: name,
       type: types[0],

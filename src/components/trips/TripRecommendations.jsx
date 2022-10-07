@@ -2,7 +2,7 @@ import styled from "styled-components"
 import TripCard from "./TripCard"
 
 
-export default function TripRecommendations({ type, trips = [] }) {
+export default function TripRecommendations({ updatePage, type, trips = [] }) {
 
   const displayTrips = trips.slice(0, 4);
 
@@ -15,7 +15,7 @@ export default function TripRecommendations({ type, trips = [] }) {
     </TitleWrapper>
       <Cards>
         {displayTrips.map((trip)=> {
-          return <TripCard key={trip.id} id={trip.id} title={trip.trip_name} image={trip.thumbnail_url} likes={trip.count} />
+          return <TripCard updatePage={updatePage} key={trip.id} id={trip.id} title={trip.trip_name} image={trip.thumbnail_url} likes={trip.count} />
         })}
       </Cards>
     </Container>

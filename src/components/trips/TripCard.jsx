@@ -6,7 +6,7 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import api from '../../functions/api';
 import { UserContext } from '../../contexts/user';
 
-export default function TripCard({ id, title = '', image = 'https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg', likes = 0 }) {
+export default function TripCard({ updatePage, id, title = '', image = 'https://cdn.britannica.com/46/154246-050-7C72E12F/view-Rome.jpg', likes = 0 }) {
   const upperTitle = title.toUpperCase();
   const titleLetters = [];
   for (let i = 0; i < upperTitle.length; i++) {
@@ -32,6 +32,7 @@ export default function TripCard({ id, title = '', image = 'https://cdn.britanni
         api.post(`/trips/${tripId}`, { placeID: placeID, thumbnailURL: thumbnailURL, tripName: tripName})
           .then((res)=> {
             console.log("SUCCESS", res)
+            updatePage();
           })
           .catch((err) => {
             console.log('if at first you dont succeed...', err);

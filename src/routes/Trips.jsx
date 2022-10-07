@@ -20,6 +20,10 @@ export default function Trips () {
   const [popularTrips, setPopularTrips] = useState([]);
   const [update, setUpdate] = useState(false);
 
+
+  function updatePage() {
+    setUpdate(update => !update);
+  }
   useEffect(()=> {
     //USER Trips for sidebar
     api.get('/trips/')
@@ -123,9 +127,9 @@ export default function Trips () {
       </SideBar>
       <Dashboard>
         {tripsFromSearch.length > 0 && <TripRecommendations type='Search Result' trips={tripsFromSearch} />}
-        <TripRecommendations type='Recommended' trips={recommendedTrips} />
-        <TripRecommendations type='Recent' trips={recentTrips} />
-        <TripRecommendations type='Popular' trips={popularTrips} />
+        <TripRecommendations updatePage={updatePage} type='Recommended' trips={recommendedTrips} />
+        <TripRecommendations updatePage={updatePage} type='Recent' trips={recentTrips} />
+        <TripRecommendations updatePage={updatePage} type='Popular' trips={popularTrips} />
       </Dashboard>
     </Container>
   )

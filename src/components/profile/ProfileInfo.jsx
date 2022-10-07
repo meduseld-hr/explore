@@ -78,21 +78,20 @@ export default function ProfileInfo({ setOpenProfile }) {
             setEditInProgress={setEditInProgress}
           />
         ) : (
-          <div style={{ paddingTop: '30px' }}>
-            <RowContainer>
-              <Image src={profilePic} alt="profile pic" />
-              <p>
-                <b>{username} </b>
-              </p>
-            </RowContainer>
-            <Button
-              onClick={() => {
-                setEditInProgress(true);
-              }}
-            >
-              Update Profile
-            </Button>
-          </div>
+            <Profile>
+              <Username>{username}</Username>
+              <RowContainer>
+                <Image src={profilePic} alt="profile pic" />
+              </RowContainer>
+              <Button
+                onClick={() => {
+                  setEditInProgress(true);
+                }}
+              >
+                Update Profile
+              </Button>
+              <a href={`${window.location.origin}/api/logout?redirect_uri=${window.location.origin}`}>Logout</a>
+            </Profile>
         )}
       </TopModal>
     </>
@@ -103,11 +102,20 @@ const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
-
+const Profile = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const Username = styled.div`
+  font-size: 2em;
+  font-weight: 500;
+`
 const Image = styled.img`
   height: 10vw;
   width: 10vw;
-  border-radius: 10px;
+  border-radius: 2em;
+  border: 2px solid black;
   margin: 10px;
   object-fit: cover;
   object-position: 50% top;
@@ -138,8 +146,6 @@ const TopModal = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 101;
-  width: 35vw;
-  height: 45vh;
   overflow: auto;
   background-color: white;
   padding: 35px;

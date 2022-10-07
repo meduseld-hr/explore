@@ -202,7 +202,7 @@ pool.markTripCompleted = (tripId, userId) => {
     .query(
       `
       UPDATE trips t
-      SET complete = true
+      SET completed = true
       FROM trips_users tu
       WHERE t.id = tu.trip_id AND t.id = $1 AND tu.user_Id = $2
       `

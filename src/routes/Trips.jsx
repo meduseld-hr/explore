@@ -5,6 +5,7 @@ import TripSidebarCard from "../components/trips/TripSidebarCard";
 import SideBar from "../components/dashboard/Sidebar";
 import api from "../functions/api";
 import { useNavigate } from 'react-router-dom';
+import theme from "../components/themes";
 
 
 export default function Trips () {
@@ -12,7 +13,8 @@ export default function Trips () {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [tripsFromSearch, setTripsFromSearch] = useState([])
-  const [myTrips, setMyTrips] = useState([])
+  const [myTrips, setMyTrips] = useState([]);
+  const [completedTrips, setCompletedTrips] = useState([]);
   const [recommendedTrips, setRecommendedTrips] = useState([])
   const [recentTrips, setRecentTrips] = useState([])
   const [popularTrips, setPopularTrips] = useState([]);
@@ -22,8 +24,17 @@ export default function Trips () {
     //USER Trips for sidebar
     api.get('/trips/')
       .then((response) => {
-        console.log('mytrips', response.data);
-        setMyTrips(response.data);
+        const trips = [];
+        const completed = [];
+        for(const trip of response.data) {
+          if(trip.completed) {
+            completed.push(trip);
+          } else {
+            trips.push(trip);
+          }
+        }
+        setMyTrips(trips);
+        setCompletedTrips(completed);
       })
       .catch((err)=> {
         console.log(err);
@@ -32,7 +43,6 @@ export default function Trips () {
     //Recommended Trips
     api.get('/trips/recommended')
       .then((response) => {
-        console.log('recommended', response.data);
         setRecommendedTrips(response.data);
       })
       .catch(err => {
@@ -41,7 +51,6 @@ export default function Trips () {
 
       api.get('/trips/popular')
       .then((response) => {
-        console.log('popular trips include: ', response.data)
         setPopularTrips(response.data);
       })
       .catch(err => {
@@ -80,6 +89,17 @@ export default function Trips () {
       })
   }
 
+  const markAsComplete = (tripId) => {
+    api.put(`/trips/${tripId}/completed`)
+      .then(() => {
+        setUpdate(update => !update);
+        navigate(`../dashboard/${tripId}/postTrip`)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
   function deleteTrip(tripId) {
     api.delete(`/trips/${tripId}`).then(() => {
       setUpdate(update => !update);
@@ -94,9 +114,11 @@ export default function Trips () {
           <Button onClick={()=>{makeSearch(search)}}>Go!</Button>
           <Button onClick={()=>{makeNewTrip(search)}}>Create New Trip</Button>
           <div>Your Plans</div>
-          {myTrips.length === 0 ? <div></div> : myTrips.map( (trip) => {
-            return <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip}/>
-          })}
+          {myTrips.map( (trip) => <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip} markAsComplete={markAsComplete}/>
+          )}
+          <div>Completed Plans</div>
+          {completedTrips.map( (trip) => <TripSidebarCard key={trip.id} trip={trip} deleteTrip={deleteTrip}/>
+          )}
         </SidebarWrapper>
       </SideBar>
       <Dashboard>
@@ -157,7 +179,8 @@ const Selection = styled.div`
 const Button = styled.button`
   padding: 5px;
   margin: 10px;
-  color: #020331fd;
   border-radius: 20px;
-  background-color: #4a81efc3;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
+  cursor: pointer;
 `;

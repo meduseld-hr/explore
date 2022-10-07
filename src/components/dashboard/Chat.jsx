@@ -186,9 +186,9 @@ const Input = styled.input`
 const AddUserButton = styled.button`
   width: 33%;
   margin: auto;
-  color: ${(props) => props.theme.color}
-  background-color: ${(props) => props.theme.background};
   border-radius: 12px;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
   cursor: pointer;
 `
 const AddMessageWrapper = styled.div`
@@ -199,9 +199,9 @@ const AddMessageWrapper = styled.div`
 const Button = styled.button`
   width: 15%;
   margin: auto;
-  color: ${(props) => props.theme.color}
-  background-color: ${(props) => props.theme.background};
   border-radius: 12px;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
   cursor: pointer;
 `;
 

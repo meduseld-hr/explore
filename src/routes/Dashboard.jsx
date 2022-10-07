@@ -20,10 +20,13 @@ export default function Dashboard() {
   const [stopIndex, setStopIndex] = useState(0);
   const [stop, setStop] = useState(null);
   const [rerender, setRerender] = useState(false);
+  const [trip, setTrip] = useState(null);
 
   const [tripPublic, setTripPublic] = useState(true);
 
   const cursors = useRef({});
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
 
   function addStop(stop) {
     stop.stopOrder = stops.length > 0 ? stops.at(-1).stop_order + 1 : 0;
@@ -156,10 +159,19 @@ export default function Dashboard() {
     setStop(stops[stopIndex])
   }, [stops, stopIndex])
 
+  useEffect(() => {
+    api.get(`trips/${tripId}/singleTripInfo`)
+      .then(response => setTrip(response.data[0])).catch(err => console.log(err))
+  },[tripId])
+
   return (
     <DashContainer>
       <SideBar>
         <SidebarWrapper>
+            Current stop: {stopIndex === 0 ? "Trip Origin" : stopIndex}<br />
+            Trip Distance: {distance}<br />
+            Trip Duration: {duration}
+
           <Search
             type='text'
             value={search}
@@ -189,7 +201,7 @@ export default function Dashboard() {
           </ActionBar>
         </SidebarWrapper>
       </SideBar>
-      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} />
+      <StagingArea stops={stops} addStop={addStop} stop={stop} messages={messages} socket={socket} setDistance={setDistance} setDuration={setDuration} trip={trip}/>
     </DashContainer>
   );
 }
@@ -216,6 +228,12 @@ const ActionBar = styled.div`
 const Slider = styled.input``;
 const Save = styled.button`
   flex: 1;
+  width: 15%;
+  margin: auto;
+  color: ${(props) => props.theme.color}
+  background-color: ${(props) => props.theme.background};
+  border-radius: 12px;
+  cursor: pointer;
 `;
 
 const Label = styled.label`

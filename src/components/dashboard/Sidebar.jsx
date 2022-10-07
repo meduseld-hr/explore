@@ -89,4 +89,5 @@ const Profile = styled.img`
 const Img = styled.img`
   aspect-ratio: 1.77;
   width: 10em;
+  cursor: pointer;
 `;

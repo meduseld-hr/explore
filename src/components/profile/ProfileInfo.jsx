@@ -116,9 +116,10 @@ const Image = styled.img`
 const Button = styled.button`
   padding: 5px;
   margin: 10px;
-  color: #020331fd;
   border-radius: 20px;
-  background-color: #4a81efc3;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
+  cursor: pointer;
 `;
 
 const GreyBackground = styled.div`

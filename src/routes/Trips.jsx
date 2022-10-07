@@ -5,6 +5,7 @@ import TripSidebarCard from "../components/trips/TripSidebarCard";
 import SideBar from "../components/dashboard/Sidebar";
 import api from "../functions/api";
 import { useNavigate } from 'react-router-dom';
+import theme from "../components/themes";
 
 
 export default function Trips () {
@@ -148,7 +149,8 @@ const Selection = styled.div`
 const Button = styled.button`
   padding: 5px;
   margin: 10px;
-  color: #020331fd;
   border-radius: 20px;
-  background-color: #4a81efc3;
+  color: ${(props) => props.theme.buttonColor};
+  background-color: ${(props) => props.theme.button};
+  cursor: pointer;
 `;

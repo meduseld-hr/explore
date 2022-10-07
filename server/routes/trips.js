@@ -149,7 +149,7 @@ router.delete('/:tripId', (req, res) => {
   const { tripId } = req.params;
   const userId = req.oidc.user.sub;
 
-  db.deleteTrip(tripId, userId)
+  db.deleteTrip(parseInt(tripId), userId)
   .then(response => {
     res.status(200).end();
   })
@@ -226,19 +226,6 @@ router.put('/:tripId/public', (req, res) => {
 })
 
 router.put('/:tripId/private', (req, res) => {
-  const { tripId } = req.params;
-  const userId = req.oidc.user.sub;
-
-  db.markTripPrivate(tripId, userId)
-  .then(response => {
-    res.status(201).end();
-  })
-  .catch(err => {
-    res.status(404).end();
-  })
-})
-
-router.put('/:tripId/like', (req, res) => {
   const { tripId } = req.params;
   const userId = req.oidc.user.sub;
 

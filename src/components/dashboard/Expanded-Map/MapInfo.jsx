@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 
-export default function MapInfo ({marker: {name, photos = [], types, place_id, vicinity, geometry}, addStop}) {
+export default function MapInfo ({marker: {name, photos = [], types, place_id, vicinity, geometry}, addStop, click}) {
   const photoUrl = photos.length > 0 ? photos[0].getUrl() : '';
-  function handleAdd() {
+  function handleAdd(e) {
+    e.preventPropagation();
     const stop = {
       stopName: name,
       type: types[0],
@@ -18,11 +19,11 @@ export default function MapInfo ({marker: {name, photos = [], types, place_id, v
     addStop(stop);
   }
   return (
-    <Popup>
+    <Popup onClick={click}>
       <div>{name}</div>
       <Row>
         <Thumbnail src={photoUrl} />
-        <Icon icon={faPlus} onClick={handleAdd}/>
+        <Icon icon={faPlus} onClick={(e) => handleAdd(e)}/>
       </Row>
     </Popup>
   )

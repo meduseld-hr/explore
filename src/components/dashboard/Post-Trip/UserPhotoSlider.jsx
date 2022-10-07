@@ -56,6 +56,7 @@ const travel = keyframes`
 `;
 const ImgGroup = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
   animation-delay: 1s;
   animation: ${travel} 18s ease-in-out infinite;

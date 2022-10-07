@@ -236,3 +236,29 @@ router.put('/:tripId/private', (req, res) => {
     res.status(404).end();
   })
 })
+
+router.put('/:tripId/like', (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.likeTrip(tripId, userId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})
+
+router.put('/:tripId/unlike', (req, res) => {
+  const { tripId } = req.params;
+  const userId = req.oidc.user.sub;
+
+  db.unlikeTrip(tripId, userId)
+  .then(response => {
+    res.status(201).end();
+  })
+  .catch(err => {
+    res.status(404).end();
+  })
+})

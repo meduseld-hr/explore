@@ -7,7 +7,7 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "Austin Texas",
-    google_place_id: "ChIJSTKCCzZwQIYRPN4IGI8c6xY",
+    google_place_id: "ChIJ_5CoRebFxokR08ApAyF2KIs",
   },
   {
     id: 1,
@@ -27,7 +27,7 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "La La Land",
-    google_place_id: "ChIJgTwKgJcpQg0RaSKMYcHeNsQ",
+    google_place_id: "ChIJR7HjD-zFxokRLbpFP7Ixn1I",
   },
   {
     id: 1,
@@ -37,7 +37,7 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "Down the Rabbit Hole",
-    google_place_id: "ChIJ1eZQ292HxokR7xQ_Cg996rY",
+    google_place_id: "ChIJcyi5fSzGxokRE4Z2-OK6ogE",
   },
   {
     id: 1,
@@ -47,7 +47,7 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "Down the Rabbit Hole",
-    google_place_id: "ChIJRXSxYJ-QxokRJPj04_aevAU",
+    google_place_id: "ChIJMd064KnHxokRCTcp1DYABfQ",
   },
   {
     id: 1,
@@ -57,7 +57,7 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "Down the Rabbit Hole",
-    google_place_id: "ChIJ6SmmViw_xIkRlTUgLSZmszY",
+    google_place_id: "ChIJxz_iGfS4xokRgo1A_0OIjz0",
   },
   {
     id: 1,
@@ -67,6 +67,6 @@ export const completedTrip = [
     thumbnail_url: "https://via.placeholder.com/140x100",
     time_stamp: null,
     greater_location: "Down the Rabbit Hole",
-    google_place_id: "ChIJ2a6Vv9yPxokRHXfjsTNJb2I",
+    google_place_id: "ChIJKTDM4i_GxokRhTLAjRMs9sw",
   },
 ];

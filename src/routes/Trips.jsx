@@ -93,7 +93,7 @@ export default function Trips () {
     api.put(`/trips/${tripId}/completed`)
       .then(() => {
         setUpdate(update => !update);
-        navigate(`../dashboard/${tripId}/postTrip`)
+        navigate(`../posttrip/${tripId}/`)
       })
       .catch((err) => {
         console.log(err);

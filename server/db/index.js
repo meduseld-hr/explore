@@ -109,7 +109,7 @@ pool.getPopularTrips = () => {
   return pool
     .query(
       `
-      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public, COUNT(tu.liked) AS count
+      SELECT t.id, t.trip_name, t.origin_google_place_id, t.thumbnail_url, t.completed, t.public, COUNT(tu.liked) AS count, (SELECT tu.liked WHERE tu.user_id = 'google-oauth2|111112963650790611628') AS liked
       FROM trips t
       INNER JOIN trips_users tu ON tu.trip_id = t.id
       WHERE tu.liked = true AND t.public = true

@@ -1,57 +1,52 @@
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import themes from '../components/themes';
 import { Link, Outlet } from 'react-router-dom';
 import { useEffect, useState, createContext } from 'react';
 import api from '../functions/api';
 import { UserContext } from '../contexts/user';
+import ProfileInfo from '../components/profile/ProfileInfo.jsx';
 
 export default function Root() {
+  const [theme, setTheme] = useState('light')
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     api
-      .get('/profile')
+      .get('/profileInfo/info')
       .then((response) => {
-        setUser(response.data);
+        setUser(response.data[0]);
       })
       .catch((err) => console.log(err));
   }, []);
 
+
   return (
-    <UserContext.Provider value={user}>
-      <App>
-        <Header>
-          <H2>Explore {user && <span>for {user.name}</span>}</H2>
-          <Links>
-            <Link to={'dashboard'}>Dashboard</Link>
-            <Link to={'profile'}>Profile</Link>
-            <Link to={'landing'}>Landing</Link>
-            <Link to={'trips'}>Trips</Link>
-            {user ? (
-              <a href={window.location.origin + '/api/logout'}>Logout</a>
-            ) : (
-              <a href={window.location.origin + '/api/login'}>Login</a>
-            )}
-          </Links>
-        </Header>
-        <Outlet />
-      </App>
-    </UserContext.Provider>
+    <ThemeProvider theme={themes[theme]}>
+      <UserContext.Provider value={user}>
+        <App>
+          <Outlet context={{theme, setTheme}}/>
+        </App>
+      </UserContext.Provider>
+    </ThemeProvider>
   );
 }
 
 const App = styled.div`
-  max-width: 1000px;
+  color: ${(props) => props.theme.color};
   margin: auto;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   align-items: center;
   font-family: 'Poppins', sans-serif;
+  /* overflow: auto; */
 `;
 const Header = styled.header`
   width: 100%;
-  border: 1px solid;
+  /* border: 1px solid; */
   display: flex;
   align-items: center;
+  margin: 1em;
 `;
 const Links = styled.div`
   display: flex;

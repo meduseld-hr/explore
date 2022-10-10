@@ -51,7 +51,7 @@ The color theme of the app is intended to have a friendly, inviting, contemporar
 [Joseph Chou](https://github.com/JosephChou124)<br>
 [Brian Crouse](https://github.com/ItsCrousie)<br>
 [Grant Deedler](https://github.com/gdeedler)<br> 
-[Daniel Elliot](https://github.com/delliott33)<br>
+[Daniel Elliott](https://github.com/delliott33)<br>
 [Cathy Mosinski](https://github.com/CatMo9)<br>
 
 ## Tech Used
